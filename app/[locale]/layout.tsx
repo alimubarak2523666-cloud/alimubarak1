@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, setRequestLocale } from 'next-intl/server';
+import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 // Opt out of static optimization for locale routes — next-intl uses request headers
@@ -62,9 +62,6 @@ export default async function LocaleLayout({
   params: { locale: Locale };
 }) {
   if (!locales.includes(locale)) notFound();
-
-  // Tell next-intl which locale this request is for (needed for dynamic rendering)
-  setRequestLocale(locale);
 
   const messages = await getMessages();
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
