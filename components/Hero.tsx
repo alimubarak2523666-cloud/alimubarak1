@@ -16,7 +16,7 @@ export default function Hero() {
 
   // Photo bound to language — different facet of Ali for each audience
   const photoSrc =
-    locale === 'ar' ? '/ali-portrait-warm-ar.jpg' : '/ali-portrait-formal-en.jpg';
+    locale === 'ar' ? '/ali-portrait-ar.jpg' : '/ali-portrait-en.jpg';
   const photoAlt =
     locale === 'ar'
       ? 'علي عبدالله مبارك — صورة شخصية'
