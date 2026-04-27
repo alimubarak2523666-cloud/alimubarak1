@@ -1,0 +1,84 @@
+'use client';
+
+import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
+
+const VENTURES = [
+  { slug: 'eva', tKey: 'eva' },
+  { slug: 'koshari-bites', tKey: 'koshariBites' },
+  { slug: 'amc', tKey: 'amc' },
+  { slug: 'tni', tKey: 'tni' }
+] as const;
+
+export default function VenturesLanding() {
+  const t = useTranslations('ventures');
+  const tAbout = useTranslations('about.whatIDoToday');
+  const locale = useLocale();
+  const cards = [
+    {
+      slug: 'eva',
+      title: tAbout('card1Title'),
+      subtitle: tAbout('card1Subtitle'),
+      meta: tAbout('card1Meta'),
+      desc: tAbout('card1Desc'),
+      cta: tAbout('card1Cta')
+    },
+    {
+      slug: 'koshari-bites',
+      title: tAbout('card2Title'),
+      subtitle: '',
+      meta: tAbout('card2Meta'),
+      desc: tAbout('card2Desc'),
+      cta: tAbout('card2Cta')
+    },
+    {
+      slug: 'amc',
+      title: tAbout('card3Title'),
+      subtitle: tAbout('card3Subtitle'),
+      meta: tAbout('card3Meta'),
+      desc: tAbout('card3Desc'),
+      cta: tAbout('card3Cta')
+    },
+    {
+      slug: 'tni',
+      title: tAbout('card4Title'),
+      subtitle: '',
+      meta: tAbout('card4Meta'),
+      desc: tAbout('card4Desc'),
+      cta: tAbout('card4Cta')
+    }
+  ];
+
+  return (
+    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+      <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
+        <div className="gold-rule mb-4" />
+        <p className="eyebrow mb-5">{t('landing.eyebrow')}</p>
+        <h1 className={`text-4xl md:text-5xl text-emerald-700 font-medium leading-[1.1] mb-4 ${locale === 'ar' ? 'font-serif-ar' : 'font-serif'}`}>
+          {t('landing.title')}
+        </h1>
+        <p className="text-base text-ink leading-[1.7] max-w-xl">{t('landing.subtitle')}</p>
+      </section>
+
+      <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          {cards.map((card) => (
+            <Link
+              key={card.slug}
+              href={`/${locale}/ventures/${card.slug}`}
+              className="bg-cream-100 border border-cream-400 rounded-card p-7 min-h-[220px] flex flex-col hover:border-emerald-700 transition-colors group"
+            >
+              <p className={`font-serif text-xl text-emerald-700 font-medium leading-tight mb-1 ${locale === 'ar' ? 'font-serif-ar' : ''}`}>{card.title}</p>
+              {card.subtitle && (
+                <p className="text-xs text-ink-muted italic mb-3">{card.subtitle}</p>
+              )}
+              <p className="text-[10px] tracking-widest uppercase text-gold-400 mb-3">{card.meta}</p>
+              <p className="text-sm leading-[1.65] text-ink flex-1 mb-4">{card.desc}</p>
+              <p className="text-xs text-emerald-700 font-medium group-hover:text-emerald-500">{card.cta}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}

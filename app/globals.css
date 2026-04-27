@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #faf6ee;          /* cream-50 */
+  --color-bg-alt: #fbf8f2;      /* cream-100 */
+  --color-bg-warm: #e8dcc4;     /* cream-200 / sand */
+  --color-border: #d4cdb8;
+  --color-emerald: #0e4a3e;
+  --color-emerald-deep: #0a3329;
+  --color-emerald-hover: #2d7860;
+  --color-gold: #a17b3a;
+  --color-gold-deep: #856229;
+  --color-ink: #3a3a36;
+  --color-ink-muted: #8b7d5f;
+  --color-cream: #faf6ee;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-inter), 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* Arabic body text uses IBM Plex Sans Arabic */
+html[dir='rtl'] body {
+  font-family: var(--font-plex-ar), 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Reset focus styles to a subtle gold ring */
+*:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Eyebrow utility — used everywhere we need uppercase gold accent text */
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+html[dir='rtl'] .eyebrow {
+  /* In Arabic, no uppercase + tighter tracking + slightly larger size for legibility */
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
+
+/* Gold horizontal rule — used as decorative section divider */
+.gold-rule {
+  width: 40px;
+  height: 1px;
+  background: var(--color-gold);
+}
