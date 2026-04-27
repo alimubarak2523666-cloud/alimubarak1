@@ -7,11 +7,9 @@ import { locales, type Locale } from '@/i18n';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
-// Pre-render both /en and /ar at build time. unstable_setRequestLocale below
-// is what makes next-intl 3.x cooperate with the App Router's render cache.
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
+// Render every locale route per request — next-intl's WeakMap-keyed cache
+// blows up if Next.js tries to static-generate any of these pages.
+export const dynamic = 'force-dynamic';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
