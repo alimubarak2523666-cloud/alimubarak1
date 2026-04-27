@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 
 // About page — 9 sections per the locked sitemap.
@@ -52,8 +53,18 @@ function Intro() {
           <p className="text-base text-ink leading-[1.7] mb-2 max-w-md">{t('tagline')}</p>
         </div>
         <div className="bg-cream-200 flex items-center justify-center p-6">
-          <div className="bg-emerald-700 rounded-sm w-3/4 aspect-[3/4] flex items-center justify-center text-gold-400 font-serif text-6xl">
-            {locale === 'ar' ? 'ع.م' : 'AM'}
+          <div className="relative bg-emerald-700 rounded-sm w-3/4 aspect-[3/4] overflow-hidden">
+            <span className="absolute inset-0 flex items-center justify-center text-gold-400 font-serif text-6xl pointer-events-none z-0">
+              {locale === 'ar' ? 'ع.م' : 'AM'}
+            </span>
+            <Image
+              src={locale === 'ar' ? '/ali-portrait-ar.jpg' : '/ali-portrait-en.jpg'}
+              alt={locale === 'ar' ? 'علي عبدالله مبارك' : 'Ali Abdullah Mubarak'}
+              fill
+              priority
+              sizes="(max-width: 768px) 70vw, 30vw"
+              className="object-cover relative z-10"
+            />
           </div>
         </div>
       </div>
