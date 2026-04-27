@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+
+// Opt out of static optimization for locale routes — next-intl uses request headers
+// to resolve the locale, which makes these routes inherently dynamic. Without this
+// flag, Next.js tries to pre-render and fails with a dynamic-server-error.
+export const dynamic = 'force-dynamic';
 import { Playfair_Display, Inter, Noto_Naskh_Arabic, IBM_Plex_Sans_Arabic } from 'next/font/google';
 import { locales, type Locale } from '@/i18n';
 import Nav from '@/components/Nav';
@@ -57,6 +62,9 @@ export default async function LocaleLayout({
   params: { locale: Locale };
 }) {
   if (!locales.includes(locale)) notFound();
+
+  // Tell next-intl which locale this request is for (needed for dynamic rendering)
+  setRequestLocale(locale);
 
   const messages = await getMessages();
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
