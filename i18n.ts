@@ -6,11 +6,11 @@ export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'en';
 
 export default getRequestConfig(async ({ locale }) => {
-  // Validate the incoming locale
+  // Validate the incoming locale; do NOT also return a locale field
+  // (returning it conflicts with the param-based setup and the build fails).
   if (!locale || !locales.includes(locale as Locale)) notFound();
 
   return {
-    locale: locale as Locale,
     messages: (await import(`./messages/${locale}.json`)).default
   };
 });
