@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Playfair_Display, Inter, Noto_Naskh_Arabic, IBM_Plex_Sans_Arabic } from 'next/font/google';
 import { locales, type Locale } from '@/i18n';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
-// Render every locale route per request — next-intl's WeakMap-keyed cache
-// blows up if Next.js tries to static-generate any of these pages.
+// Render every locale route per request — both to bypass static-gen issues
+// AND because next-intl 3.x's server cache triggers a WeakMap bug when
+// Netlify's Next.js runtime tries to memoize locale messages.
 export const dynamic = 'force-dynamic';
 
 const playfair = Playfair_Display({
@@ -58,12 +58,10 @@ export default async function LocaleLayout({
 }) {
   if (!locales.includes(locale)) notFound();
 
-  // Tell next-intl which locale this request is for. Without this in
-  // 3.x, getMessages()/getTranslations() in nested server components
-  // throw "Invalid value used as weak map key" at runtime.
-  unstable_setRequestLocale(locale);
-
-  const messages = await getMessages();
+  // Load messages by direct dynamic import. We deliberately skip
+  // next-intl's getMessages() server helper because it runs through a
+  // React.cache() WeakMap that crashes on Netlify's Next.js runtime.
+  const messages = (await import(`@/messages/${locale}.json`)).default;
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
   return (
