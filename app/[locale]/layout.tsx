@@ -1,16 +1,17 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-
-// Opt out of static optimization for locale routes — next-intl uses request headers
-// to resolve the locale, which makes these routes inherently dynamic. Without this
-// flag, Next.js tries to pre-render and fails with a dynamic-server-error.
-export const dynamic = 'force-dynamic';
 import { Playfair_Display, Inter, Noto_Naskh_Arabic, IBM_Plex_Sans_Arabic } from 'next/font/google';
 import { locales, type Locale } from '@/i18n';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+
+// Pre-render both /en and /ar at build time. unstable_setRequestLocale below
+// is what makes next-intl 3.x cooperate with the App Router's render cache.
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -50,10 +51,6 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://alimubarak1.com')
 };
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
-
 export default async function LocaleLayout({
   children,
   params: { locale }
@@ -62,6 +59,11 @@ export default async function LocaleLayout({
   params: { locale: Locale };
 }) {
   if (!locales.includes(locale)) notFound();
+
+  // Tell next-intl which locale this request is for. Without this in
+  // 3.x, getMessages()/getTranslations() in nested server components
+  // throw "Invalid value used as weak map key" at runtime.
+  unstable_setRequestLocale(locale);
 
   const messages = await getMessages();
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
