@@ -393,5 +393,15 @@
     "ctaEyebrow": "Stay Connected",
     "ctaTitle": "Subscribe to the channel and never miss an episode.",
     "ctaButton": "Subscribe on YouTube →"
+  },
+  "partners": {
+    "eyebrow": "Sponsorships · Advertisements · Collaborations",
+    "title": "Brand Partners",
+    "subtitle": "A selection of the brands I have worked with across advertising campaigns, sponsorships, and media partnerships in Kuwait and the GCC.",
+    "gridEyebrow": "Brands I've Worked With",
+    "ctaEyebrow": "Work Together",
+    "ctaTitle": "Interested in a partnership or sponsorship?",
+    "ctaDesc": "I collaborate with brands that align with my values and audience. If you're looking to reach a professional Kuwaiti audience, let's talk.",
+    "ctaButton": "Get in Touch →"
   }
 }
