@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <!--
+      Netlify scans this static file at deploy time to register the "contact" form.
+      The actual submission is handled by WorkWithAliPage.tsx via fetch POST.
+    -->
+    <form name="contact" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input name="name" type="text" />
+      <input name="email" type="email" />
+      <input name="company" type="text" />
+      <select name="subject"></select>
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>

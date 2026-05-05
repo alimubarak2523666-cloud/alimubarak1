@@ -2,10 +2,40 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import ScrollReveal from './ScrollReveal';
+import { useState } from 'react';
+
+type Status = 'idle' | 'sending' | 'success' | 'error';
 
 export default function WorkWithAliPage() {
   const t = useTranslations('workWithAli');
   const locale = useLocale();
+  const [status, setStatus] = useState<Status>('idle');
+  const [form, setForm] = useState({ name: '', email: '', company: '', subject: '', message: '' });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('sending');
+    try {
+      const body = new URLSearchParams({ 'form-name': 'contact', ...form });
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+      if (res.ok) {
+        setStatus('success');
+        setForm({ name: '', email: '', company: '', subject: '', message: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  };
 
   const services = [
     { titleKey: 'service1Title', descKey: 'service1Desc' },
@@ -56,23 +86,35 @@ export default function WorkWithAliPage() {
           </h2>
           <p className="text-sm leading-[1.7] text-ink max-w-xl mb-7">{t('formDesc')}</p>
 
-          <div className="grid md:grid-cols-2 gap-2.5 mb-2.5">
-            <input type="text" placeholder={t('name')} className="bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors" />
-            <input type="email" placeholder={t('email')} className="bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors" />
-          </div>
-          <input type="text" placeholder={t('company')} className="w-full bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors mb-2.5" />
-          <select defaultValue="" className="w-full bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors mb-2.5">
-            <option value="" disabled>{t('subject')}</option>
-            <option>{t('subjectAdvisory')}</option>
-            <option>{t('subjectSpeaking')}</option>
-            <option>{t('subjectBoard')}</option>
-            <option>{t('subjectMedia')}</option>
-            <option>{t('subjectOther')}</option>
-          </select>
-          <textarea placeholder={t('message')} rows={5} className="w-full bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors mb-5 resize-y" />
-          <button className="btn-primary bg-emerald-700 text-cream-50 border border-emerald-700 rounded-md px-6 py-3 text-sm font-medium hover:bg-emerald-500">
-            {t('submit')}
-          </button>
+          {status === 'success' ? (
+            <div className="rounded-md bg-emerald-50 border border-emerald-200 px-6 py-5 text-sm text-emerald-800 leading-relaxed">
+              ✓&nbsp;&nbsp;{locale === 'ar' ? 'تم إرسال رسالتك بنجاح. سأتواصل معك قريباً.' : "Message sent — I'll be in touch soon."}
+            </div>
+          ) : (
+            <form name="contact" onSubmit={handleSubmit} data-netlify="true">
+              <input type="hidden" name="form-name" value="contact" />
+              <div className="grid md:grid-cols-2 gap-2.5 mb-2.5">
+                <input required name="name" type="text" value={form.name} onChange={handleChange} placeholder={t('name')} className="bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors" />
+                <input required name="email" type="email" value={form.email} onChange={handleChange} placeholder={t('email')} className="bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors" />
+              </div>
+              <input name="company" type="text" value={form.company} onChange={handleChange} placeholder={t('company')} className="w-full bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors mb-2.5" />
+              <select required name="subject" value={form.subject} onChange={handleChange} className="w-full bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors mb-2.5">
+                <option value="" disabled>{t('subject')}</option>
+                <option value="Advisory">{t('subjectAdvisory')}</option>
+                <option value="Speaking">{t('subjectSpeaking')}</option>
+                <option value="Board">{t('subjectBoard')}</option>
+                <option value="Media">{t('subjectMedia')}</option>
+                <option value="Other">{t('subjectOther')}</option>
+              </select>
+              <textarea required name="message" value={form.message} onChange={handleChange} placeholder={t('message')} rows={5} className="w-full bg-cream-100 border border-cream-400 rounded-md px-3.5 py-3 text-sm text-ink outline-none focus:border-emerald-700 transition-colors mb-5 resize-y" />
+              {status === 'error' && (
+                <p className="text-xs text-red-600 mb-3">{locale === 'ar' ? 'حدث خطأ. يرجى المحاولة مجدداً.' : 'Something went wrong — please try again.'}</p>
+              )}
+              <button type="submit" disabled={status === 'sending'} className="btn-primary bg-emerald-700 text-cream-50 border border-emerald-700 rounded-md px-6 py-3 text-sm font-medium hover:bg-emerald-500 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity">
+                {status === 'sending' ? (locale === 'ar' ? 'جارٍ الإرسال…' : 'Sending…') : t('submit')}
+              </button>
+            </form>
+          )}
         </section>
       </ScrollReveal>
     </div>
