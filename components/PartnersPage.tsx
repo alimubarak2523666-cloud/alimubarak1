@@ -57,6 +57,7 @@ const CATEGORIES: Category[] = [
       { id: 'abraj',       name: 'Abraj',         nameAr: 'أبراج مياه',  bgColor: '#ffffff', textColor: '#1565c0', instagram: 'https://www.instagram.com/abraajwater/' },
       { id: 'ghadana',     name: 'Ghadana',       nameAr: 'غذانا',       bgColor: '#ffffff', textColor: '#e65c00', instagram: 'https://www.instagram.com/mn_ghadana/' },
       { id: 'lofat',       name: 'Lofat',         nameAr: 'لوفات',       bgColor: '#ffffff', textColor: '#2e7d32', instagram: 'https://www.instagram.com/lofateats/' },
+      { id: 'tobo',         name: 'TOBO',         nameAr: 'توبو',        bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/mytobo/' },
     ],
   },
   {
@@ -67,7 +68,6 @@ const CATEGORIES: Category[] = [
     partners: [
       { id: 'eureka',       name: 'Eureka',       nameAr: 'يوريكا',      bgColor: '#ffffff', textColor: '#00843d', instagram: 'https://www.instagram.com/eurekakuwait/' },
       { id: 'mobile-2000',  name: 'Mobile 2000',  nameAr: 'موبايل 2000', bgColor: '#111111', textColor: '#00b4d8', instagram: 'https://www.instagram.com/mobile2000/' },
-      { id: 'tobo',         name: 'TOBO',         nameAr: 'توبو',        bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/mytobo/' },
     ],
   },
   {
@@ -94,10 +94,19 @@ const CATEGORIES: Category[] = [
 const ALL_PARTNERS = CATEGORIES.flatMap((c) => c.partners);
 
 function LogoCard({ partner, locale, size = 'normal' }: { partner: Partner; locale: string; size?: 'normal' | 'large' }) {
+  const [imgSrc, setImgSrc] = useState(`/logos/${partner.id}.png`);
   const [imgFailed, setImgFailed] = useState(false);
   const displayName = locale === 'ar' ? partner.nameAr : partner.name;
   const h = size === 'large' ? 'min-h-[160px]' : 'min-h-[120px]';
   const imgH = size === 'large' ? 'max-h-20' : 'max-h-14';
+
+  const handleImgError = () => {
+    if (imgSrc.endsWith('.png')) {
+      setImgSrc(`/logos/${partner.id}.svg`); // try SVG next
+    } else {
+      setImgFailed(true); // both failed → text fallback
+    }
+  };
 
   return (
     <a
@@ -114,10 +123,10 @@ function LogoCard({ partner, locale, size = 'normal' }: { partner: Partner; loca
         {!imgFailed ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={`/logos/${partner.id}.png`}
+            src={imgSrc}
             alt={partner.name}
             className={`${imgH} max-w-[180px] w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-300`}
-            onError={() => setImgFailed(true)}
+            onError={handleImgError}
             loading="lazy"
           />
         ) : (
