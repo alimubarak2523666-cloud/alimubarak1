@@ -5,6 +5,7 @@
     "influence": "Influence",
     "book": "Book",
     "workWithAli": "Work With Ali",
+    "youtube": "Watch",
     "languageToggle": "ع"
   },
   "hero": {
@@ -374,5 +375,19 @@
     "subjectOther": "Something else",
     "message": "Tell me more",
     "submit": "Send message →"
+  },
+  "youtube": {
+    "eyebrow": "Podcast · Live Shows · Interviews",
+    "title": "Watch Ali Live",
+    "subtitle": "Catch the live podcast, watch past episodes, and follow conversations on business, strategy, and leadership from Kuwait and the GCC.",
+    "liveBadge": "Live Now",
+    "liveTitle": "Live Stream",
+    "liveDesc": "Tune in to the live broadcast. When no live session is active, the latest video will play automatically.",
+    "liveNote": "Live sessions are announced on Instagram and X. Follow to get notified.",
+    "latestTitle": "Latest Episodes",
+    "latestDesc": "Browse all recent videos — podcast episodes, interviews, and talks.",
+    "ctaEyebrow": "Stay Connected",
+    "ctaTitle": "Subscribe to the channel and never miss an episode.",
+    "ctaButton": "Subscribe on YouTube →"
   }
 }
