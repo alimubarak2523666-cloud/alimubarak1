@@ -1,5 +1,3 @@
-import type { Handler, HandlerEvent } from '@netlify/functions';
-
 const SYSTEM_PROMPT = `You are Ali's personal AI assistant on his website (alimubarak1.com). You speak on behalf of Ali Abdullah Mubarak and help visitors learn about him, his work, and how to work with him.
 
 ## Who is Ali Abdullah Mubarak?
@@ -55,49 +53,46 @@ interface Message {
   content: string;
 }
 
-const handler: Handler = async (event: HandlerEvent) => {
-  // Only allow POST
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+interface NetlifyEvent {
+  httpMethod: string;
+  body: string | null;
+}
+
+interface NetlifyResponse {
+  statusCode: number;
+  headers?: Record<string, string>;
+  body: string;
+}
+
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Content-Type': 'application/json'
+};
+
+export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => {
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers: CORS_HEADERS, body: '' };
   }
 
-  // CORS headers
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json'
-  };
-
-  // Handle preflight
-  if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, headers: CORS_HEADERS, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: 'API key not configured' })
-    };
+    return { statusCode: 500, headers: CORS_HEADERS, body: JSON.stringify({ error: 'API key not configured' }) };
   }
 
   let messages: Message[];
   try {
     const body = JSON.parse(event.body || '{}');
     messages = body.messages;
-    if (!Array.isArray(messages) || messages.length === 0) {
-      throw new Error('Invalid messages');
-    }
+    if (!Array.isArray(messages) || messages.length === 0) throw new Error('Invalid messages');
   } catch {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({ error: 'Invalid request body' })
-    };
+    return { statusCode: 400, headers: CORS_HEADERS, body: JSON.stringify({ error: 'Invalid request body' }) };
   }
 
-  // Limit conversation history to last 10 messages to keep costs down
   const trimmedMessages = messages.slice(-10);
 
   try {
@@ -119,29 +114,14 @@ const handler: Handler = async (event: HandlerEvent) => {
     if (!response.ok) {
       const err = await response.text();
       console.error('Anthropic API error:', err);
-      return {
-        statusCode: 502,
-        headers,
-        body: JSON.stringify({ error: 'AI service error' })
-      };
+      return { statusCode: 502, headers: CORS_HEADERS, body: JSON.stringify({ error: 'AI service error' }) };
     }
 
     const data = await response.json();
     const reply = data.content?.[0]?.text ?? '';
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ reply })
-    };
+    return { statusCode: 200, headers: CORS_HEADERS, body: JSON.stringify({ reply }) };
   } catch (err) {
     console.error('Chat function error:', err);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: 'Internal server error' })
-    };
+    return { statusCode: 500, headers: CORS_HEADERS, body: JSON.stringify({ error: 'Internal server error' }) };
   }
 };
-
-export { handler };
