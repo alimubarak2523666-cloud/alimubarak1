@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
+import ScrollReveal from './ScrollReveal';
 
 // Locked TOC data — 12 chapters with bilingual titles, descriptions, and page counts.
 // Eastern Arabic-Indic numerals used for the Arabic version per locked design tokens.
@@ -477,18 +478,18 @@ function Contact() {
 
 export default function BookPage() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16 page-enter">
       <BookHero />
-      <AboutTheBook />
-      <FeaturedChapters />
-      <FullTOC />
-      <ChapterSample />
-      <AuthorBlock />
-      <Endorsements />
-      <Speaking />
-      <Preorder />
-      <Newsletter />
-      <Contact />
+      <ScrollReveal><AboutTheBook />   </ScrollReveal>
+      <ScrollReveal><FeaturedChapters /></ScrollReveal>
+      <ScrollReveal><FullTOC />        </ScrollReveal>
+      <ScrollReveal><ChapterSample />  </ScrollReveal>
+      <ScrollReveal><AuthorBlock />    </ScrollReveal>
+      <ScrollReveal><Endorsements />   </ScrollReveal>
+      <ScrollReveal><Speaking />       </ScrollReveal>
+      <ScrollReveal><Preorder />       </ScrollReveal>
+      <ScrollReveal><Newsletter />     </ScrollReveal>
+      <ScrollReveal><Contact />        </ScrollReveal>
     </div>
   );
 }

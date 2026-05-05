@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
+import ScrollReveal from './ScrollReveal';
 
 const VENTURES = [
   { slug: 'eva', tKey: 'eva' },
@@ -14,6 +15,7 @@ export default function VenturesLanding() {
   const t = useTranslations('ventures');
   const tAbout = useTranslations('about.whatIDoToday');
   const locale = useLocale();
+
   const cards = [
     {
       slug: 'eva',
@@ -50,35 +52,57 @@ export default function VenturesLanding() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16 page-enter">
+
+      {/* Header */}
       <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
         <div className="gold-rule mb-4" />
         <p className="eyebrow mb-5">{t('landing.eyebrow')}</p>
-        <h1 className={`text-4xl md:text-5xl text-emerald-700 font-medium leading-[1.1] mb-4 ${locale === 'ar' ? 'font-serif-ar' : 'font-serif'}`}>
+        <h1
+          className={`text-4xl md:text-5xl text-emerald-700 font-medium leading-[1.1] mb-4 ${
+            locale === 'ar' ? 'font-serif-ar' : 'font-serif'
+          }`}
+        >
           {t('landing.title')}
         </h1>
-        <p className="text-base text-ink leading-[1.7] max-w-xl">{t('landing.subtitle')}</p>
+        <p className="text-base text-ink leading-[1.7] max-w-xl">
+          {t('landing.subtitle')}
+        </p>
       </section>
 
-      <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
-        <div className="grid md:grid-cols-2 gap-4">
-          {cards.map((card) => (
-            <Link
-              key={card.slug}
-              href={`/${locale}/ventures/${card.slug}`}
-              className="bg-cream-100 border border-cream-400 rounded-card p-7 min-h-[220px] flex flex-col hover:border-emerald-700 transition-colors group"
-            >
-              <p className={`font-serif text-xl text-emerald-700 font-medium leading-tight mb-1 ${locale === 'ar' ? 'font-serif-ar' : ''}`}>{card.title}</p>
-              {card.subtitle && (
-                <p className="text-xs text-ink-muted italic mb-3">{card.subtitle}</p>
-              )}
-              <p className="text-[10px] tracking-widest uppercase text-gold-400 mb-3">{card.meta}</p>
-              <p className="text-sm leading-[1.65] text-ink flex-1 mb-4">{card.desc}</p>
-              <p className="text-xs text-emerald-700 font-medium group-hover:text-emerald-500">{card.cta}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {/* Cards grid — each card lifts on hover, staggered reveal */}
+      <ScrollReveal>
+        <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            {cards.map((card, i) => (
+              <Link
+                key={card.slug}
+                href={`/${locale}/ventures/${card.slug}`}
+                className="card-lift bg-cream-100 border border-cream-400 rounded-card p-7 min-h-[220px] flex flex-col hover:border-emerald-700 group"
+                style={{ transitionDelay: `${i * 60}ms` }}
+              >
+                <p
+                  className={`font-serif text-xl text-emerald-700 font-medium leading-tight mb-1 ${
+                    locale === 'ar' ? 'font-serif-ar' : ''
+                  }`}
+                >
+                  {card.title}
+                </p>
+                {card.subtitle && (
+                  <p className="text-xs text-ink-muted italic mb-3">{card.subtitle}</p>
+                )}
+                <p className="text-[10px] tracking-widest uppercase text-gold-400 mb-3">
+                  {card.meta}
+                </p>
+                <p className="text-sm leading-[1.65] text-ink flex-1 mb-4">{card.desc}</p>
+                <p className="text-xs text-emerald-700 font-medium group-hover:text-emerald-500 transition-colors">
+                  {card.cta} →
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </ScrollReveal>
     </div>
   );
 }

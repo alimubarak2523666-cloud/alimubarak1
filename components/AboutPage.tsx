@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
+import ScrollReveal from './ScrollReveal';
 
-// About page — 9 sections per the locked sitemap.
-// Content ported from project_about_page_copy.md memory file.
+// About page — 9 sections, each scroll-revealed as it enters the viewport.
 
 function GoldRule() {
   return <div className="gold-rule mb-4" />;
@@ -130,7 +130,7 @@ function WhatIDoToday() {
           <Link
             key={card.slug}
             href={`/${locale}/ventures/${card.slug}`}
-            className="bg-cream-100 border border-cream-400 rounded-card p-6 min-h-[200px] flex flex-col hover:border-emerald-700 transition-colors group"
+            className="card-lift bg-cream-100 border border-cream-400 rounded-card p-6 min-h-[200px] flex flex-col hover:border-emerald-700 group"
           >
             <p className={`font-serif text-xl text-emerald-700 font-medium leading-tight mb-1 ${locale === 'ar' ? 'font-serif-ar' : ''}`}>{card.title}</p>
             {card.subtitle && (
@@ -272,16 +272,16 @@ function ClosingCta() {
 
 export default function AboutPage() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16 page-enter">
       <Intro />
-      <TheStory />
-      <WhatIDoToday />
-      <PublicService />
-      <CareerJourney />
-      <Education />
-      <WritingAndVoice />
-      <Recognitions />
-      <ClosingCta />
+      <ScrollReveal delay={0}>   <TheStory />       </ScrollReveal>
+      <ScrollReveal delay={0}>   <WhatIDoToday />   </ScrollReveal>
+      <ScrollReveal delay={0}>   <PublicService />  </ScrollReveal>
+      <ScrollReveal delay={0}>   <CareerJourney />  </ScrollReveal>
+      <ScrollReveal delay={0}>   <Education />      </ScrollReveal>
+      <ScrollReveal delay={0}>   <WritingAndVoice /></ScrollReveal>
+      <ScrollReveal delay={0}>   <Recognitions />   </ScrollReveal>
+      <ScrollReveal delay={0}>   <ClosingCta />     </ScrollReveal>
     </div>
   );
 }
