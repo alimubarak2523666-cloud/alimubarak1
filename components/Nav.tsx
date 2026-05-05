@@ -68,7 +68,7 @@ export default function Nav() {
               >
                 {tab.label}
                 <span
-                  className={`absolute -bottom-0.5 left-0 h-px bg-gold-400 transition-all duration-300 ${
+                  className={`absolute -bottom-0.5 start-0 h-px bg-gold-400 transition-all duration-300 ${
                     active ? 'w-full' : 'w-0 group-hover:w-full'
                   }`}
                 />
