@@ -5,6 +5,7 @@ import { Playfair_Display, Inter, Noto_Naskh_Arabic, IBM_Plex_Sans_Arabic } from
 import { locales, type Locale } from '@/i18n';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import AliChat from '@/components/AliChat';
 
 // Render every locale route per request — both to bypass static-gen issues
 // AND because next-intl 3.x's server cache triggers a WeakMap bug when
@@ -75,6 +76,7 @@ export default async function LocaleLayout({
           <Nav />
           <main className="flex-1">{children}</main>
           <Footer />
+          <AliChat />
         </NextIntlClientProvider>
       </body>
     </html>
