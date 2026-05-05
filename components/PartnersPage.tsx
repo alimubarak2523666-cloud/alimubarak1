@@ -88,6 +88,15 @@ const PARTNERS: Partner[] = [
     textColor: '#2e7d32',
   },
   {
+    id: 'ali-alghanim',
+    name: 'Ali Alghanim & Sons Automotive',
+    nameAr: 'علي الغانم وأولاده للسيارات',
+    category: 'Automotive',
+    categoryAr: 'سيارات',
+    bgColor: '#ffffff',
+    textColor: '#0d2137',
+  },
+  {
     id: 'tobo',
     name: 'TOBO',
     nameAr: 'توبو',
@@ -184,7 +193,7 @@ export default function PartnersPage() {
           <div className="grid grid-cols-3 gap-6 text-center">
             <div>
               <p className={`text-3xl md:text-4xl text-cream-50 font-medium mb-1 ${locale === 'ar' ? 'font-serif-ar' : 'font-serif'}`}>
-                {PARTNERS.length}+
+                {PARTNERS.length}
               </p>
               <p className="text-xs tracking-[0.2em] uppercase text-gold-400">
                 {locale === 'ar' ? 'شراكة' : 'Partnerships'}
