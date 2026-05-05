@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 90" width="260" height="90">
+  <!-- The Regency Hotel Kuwait wordmark -->
+  <!-- Decorative top line -->
+  <line x1="65" y1="20" x2="195" y2="20" stroke="#9a7b3e" stroke-width="0.8" opacity="0.6"/>
+  <!-- THE -->
+  <text
+    x="130"
+    y="38"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="11"
+    font-weight="400"
+    fill="#9a7b3e"
+    text-anchor="middle"
+    letter-spacing="5"
+  >THE</text>
+  <!-- REGENCY -->
+  <text
+    x="130"
+    y="62"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="22"
+    font-weight="700"
+    fill="#9a7b3e"
+    text-anchor="middle"
+    letter-spacing="3"
+  >REGENCY</text>
+  <!-- KUWAIT -->
+  <text
+    x="130"
+    y="78"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="9"
+    font-weight="400"
+    fill="#9a7b3e"
+    text-anchor="middle"
+    letter-spacing="4"
+    opacity="0.75"
+  >KUWAIT</text>
+  <!-- Decorative bottom line -->
+  <line x1="65" y1="84" x2="195" y2="84" stroke="#9a7b3e" stroke-width="0.8" opacity="0.6"/>
+</svg>

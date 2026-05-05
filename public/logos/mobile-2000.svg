@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80" width="260" height="80">
+  <!-- Mobile 2000 wordmark -->
+  <!-- Blue square accent -->
+  <rect x="10" y="18" width="36" height="44" rx="4" fill="#00b4d8"/>
+  <text
+    x="28"
+    y="46"
+    font-family="Arial Black, Arial, sans-serif"
+    font-size="16"
+    font-weight="900"
+    fill="#ffffff"
+    text-anchor="middle"
+    letter-spacing="0"
+  >M</text>
+  <!-- MOBILE 2000 text -->
+  <text
+    x="155"
+    y="36"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="15"
+    font-weight="700"
+    fill="#00b4d8"
+    text-anchor="middle"
+    letter-spacing="3"
+  >MOBILE</text>
+  <text
+    x="155"
+    y="58"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="20"
+    font-weight="900"
+    fill="#ffffff"
+    text-anchor="middle"
+    letter-spacing="2"
+  >2000</text>
+</svg>
