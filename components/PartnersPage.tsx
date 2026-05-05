@@ -30,9 +30,9 @@ const CATEGORIES: Category[] = [
     partners: [
       { id: 'ali-alghanim',  name: 'Ali Alghanim & Sons Automotive', nameAr: 'علي الغانم وأولاده للسيارات', bgColor: '#ffffff', textColor: '#0d2137', instagram: 'https://www.instagram.com/alialghanimsons/' },
       { id: 'rolls-royce',   name: 'Rolls-Royce',   nameAr: 'رولز رويس',          bgColor: '#ffffff', textColor: '#1a0099', instagram: 'https://www.instagram.com/rollsroycekwt/' },
-      { id: 'bmw',           name: 'BMW',            nameAr: 'بي إم دبليو',        bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/bmwmiddleeast/' },
-      { id: 'mini',          name: 'MINI',           nameAr: 'ميني',               bgColor: '#111111', textColor: '#c0c0c0', instagram: 'https://www.instagram.com/mini_kuwaitofficial/' },
-      { id: 'land-rover',    name: 'Land Rover · Range Rover', nameAr: 'لاند روفر · رينج روفر', bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/alialghanimlandroverkuwait/' },
+      { id: 'bmw',           name: 'BMW',            nameAr: 'بي إم دبليو',        bgColor: '#ffffff', textColor: '#1c69d4', instagram: 'https://www.instagram.com/bmwmiddleeast/' },
+      { id: 'mini',          name: 'MINI',           nameAr: 'ميني',               bgColor: '#ffffff', textColor: '#111111', instagram: 'https://www.instagram.com/mini_kuwaitofficial/' },
+      { id: 'land-rover',    name: 'Land Rover · Range Rover', nameAr: 'لاند روفر · رينج روفر', bgColor: '#ffffff', textColor: '#111111', instagram: 'https://www.instagram.com/alialghanimlandroverkuwait/' },
     ],
   },
   {
@@ -43,7 +43,7 @@ const CATEGORIES: Category[] = [
     partners: [
       { id: 'warba-bank',  name: 'Warba Bank',    nameAr: 'بنك وربة',   bgColor: '#ffffff', textColor: '#5b2d8e', instagram: 'https://www.instagram.com/warba_bank/' },
       { id: 'gulf-bank',   name: 'Gulf Bank',     nameAr: 'بنك الخليج', bgColor: '#ffffff', textColor: '#c8102e', instagram: 'https://www.instagram.com/gulf_bank/' },
-      { id: 'boubyan',     name: 'Boubyan Bank',  nameAr: 'بنك بوبيان', bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/bankboubyan/' },
+      { id: 'boubyan',     name: 'Boubyan Bank',  nameAr: 'بنك بوبيان', bgColor: '#ffffff', textColor: '#111111', instagram: 'https://www.instagram.com/bankboubyan/' },
     ],
   },
   {
@@ -55,7 +55,7 @@ const CATEGORIES: Category[] = [
       { id: 'burger-king', name: 'Burger King',   nameAr: 'برغر كنج',    bgColor: '#ffffff', textColor: '#d62300', instagram: 'https://www.instagram.com/burgerkingkw/' },
       { id: 'koshari',     name: 'Koshari Bites', nameAr: 'كشري بايتس', bgColor: '#ffffff', textColor: '#2d6a4f', instagram: 'https://www.instagram.com/kosharibites/' },
       { id: 'abraj',       name: 'Abraj',         nameAr: 'أبراج مياه',  bgColor: '#ffffff', textColor: '#1565c0', instagram: 'https://www.instagram.com/abraajwater/' },
-      { id: 'ghadana',     name: 'Ghadana',       nameAr: 'غذانا',       bgColor: '#ffffff', textColor: '#e65c00', instagram: 'https://www.instagram.com/mn_ghadana/' },
+      { id: 'ghadana',     name: 'Ghadana',       nameAr: 'غذانا',       bgColor: '#e65c00', textColor: '#ffffff', instagram: 'https://www.instagram.com/mn_ghadana/' },
       { id: 'lofat',       name: 'Lofat',         nameAr: 'لوفات',       bgColor: '#ffffff', textColor: '#2e7d32', instagram: 'https://www.instagram.com/lofateats/' },
       { id: 'tobo',         name: 'TOBO',         nameAr: 'توبو',        bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/mytobo/' },
     ],
@@ -67,7 +67,7 @@ const CATEGORIES: Category[] = [
     icon: '📱',
     partners: [
       { id: 'eureka',       name: 'Eureka',       nameAr: 'يوريكا',      bgColor: '#ffffff', textColor: '#00843d', instagram: 'https://www.instagram.com/eurekakuwait/' },
-      { id: 'mobile-2000',  name: 'Mobile 2000',  nameAr: 'موبايل 2000', bgColor: '#111111', textColor: '#00b4d8', instagram: 'https://www.instagram.com/mobile2000/' },
+      { id: 'mobile-2000',  name: 'Mobile 2000',  nameAr: 'موبايل 2000', bgColor: '#ffffff', textColor: '#00b4d8', instagram: 'https://www.instagram.com/mobile2000/' },
     ],
   },
   {

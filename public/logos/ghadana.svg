@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 90" width="240" height="90">
+  <!-- Orange background matching Ghadana brand -->
+  <rect width="240" height="90" rx="6" fill="#e65c00"/>
+  <!-- Arabic wordmark: غذانا -->
+  <text
+    x="120"
+    y="52"
+    font-family="'Noto Naskh Arabic', 'Scheherazade New', 'Traditional Arabic', Arial, sans-serif"
+    font-size="38"
+    font-weight="700"
+    fill="#ffffff"
+    text-anchor="middle"
+    direction="rtl"
+  >غذانا</text>
+  <!-- Tagline -->
+  <text
+    x="120"
+    y="73"
+    font-family="'Noto Naskh Arabic', 'Scheherazade New', Arial, sans-serif"
+    font-size="11"
+    font-weight="400"
+    fill="#ffffff"
+    text-anchor="middle"
+    direction="rtl"
+    opacity="0.85"
+  >بذراكم وبياركم</text>
+</svg>
