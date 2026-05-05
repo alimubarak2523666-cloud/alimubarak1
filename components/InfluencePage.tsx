@@ -58,7 +58,7 @@ export default function InfluencePage() {
             {t('boutiqatDesc')}
           </h2>
           <a
-            href="https://boutiqaat.com"
+            href="https://boutiqaat.go.link/celeb_id/9508?adj_t=1ngwfzb0"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary inline-block bg-gold-400 text-cream-50 border border-gold-400 rounded-md px-6 py-3 text-sm font-medium hover:bg-gold-600"
