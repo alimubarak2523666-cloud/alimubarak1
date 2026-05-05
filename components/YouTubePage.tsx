@@ -50,11 +50,11 @@ export default function YouTubePage() {
           </h2>
           <p className="text-sm text-ink leading-[1.7] mb-6 max-w-xl">{t('liveDesc')}</p>
 
-          {/* YouTube live stream iframe */}
+          {/* Latest video / live fallback — playlist always shows latest upload */}
           <div className="relative w-full rounded-[10px] overflow-hidden bg-black" style={{ paddingBottom: '56.25%' }}>
             <iframe
-              src={`https://www.youtube.com/embed/live_stream?channel=${CHANNEL_ID}&autoplay=0&rel=0&modestbranding=1`}
-              title="Ali Mubarak — Live"
+              src={`https://www.youtube.com/embed/videoseries?list=${UPLOADS_PLAYLIST}&rel=0&modestbranding=1`}
+              title="Ali Mubarak — Watch"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               className="absolute inset-0 w-full h-full border-0"
