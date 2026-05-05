@@ -10,6 +10,7 @@ interface Partner {
   nameAr: string;
   bgColor: string;
   textColor: string;
+  instagram: string;
 }
 
 interface Category {
@@ -27,11 +28,11 @@ const CATEGORIES: Category[] = [
     labelAr: 'السيارات',
     icon: '🚗',
     partners: [
-      { id: 'ali-alghanim',  name: 'Ali Alghanim & Sons Automotive', nameAr: 'علي الغانم وأولاده للسيارات', bgColor: '#ffffff', textColor: '#0d2137' },
-      { id: 'rolls-royce',   name: 'Rolls-Royce',   nameAr: 'رولز رويس',          bgColor: '#ffffff', textColor: '#1a0099' },
-      { id: 'bmw',           name: 'BMW',            nameAr: 'بي إم دبليو',        bgColor: '#111111', textColor: '#ffffff' },
-      { id: 'mini',          name: 'MINI',           nameAr: 'ميني',               bgColor: '#111111', textColor: '#c0c0c0' },
-      { id: 'land-rover',    name: 'Land Rover · Range Rover', nameAr: 'لاند روفر · رينج روفر', bgColor: '#111111', textColor: '#ffffff' },
+      { id: 'ali-alghanim',  name: 'Ali Alghanim & Sons Automotive', nameAr: 'علي الغانم وأولاده للسيارات', bgColor: '#ffffff', textColor: '#0d2137', instagram: 'https://www.instagram.com/alialghanimsons/' },
+      { id: 'rolls-royce',   name: 'Rolls-Royce',   nameAr: 'رولز رويس',          bgColor: '#ffffff', textColor: '#1a0099', instagram: 'https://www.instagram.com/rollsroycekwt/' },
+      { id: 'bmw',           name: 'BMW',            nameAr: 'بي إم دبليو',        bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/bmwmiddleeast/' },
+      { id: 'mini',          name: 'MINI',           nameAr: 'ميني',               bgColor: '#111111', textColor: '#c0c0c0', instagram: 'https://www.instagram.com/mini_kuwaitofficial/' },
+      { id: 'land-rover',    name: 'Land Rover · Range Rover', nameAr: 'لاند روفر · رينج روفر', bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/alialghanimlandroverkuwait/' },
     ],
   },
   {
@@ -40,9 +41,9 @@ const CATEGORIES: Category[] = [
     labelAr: 'البنوك والمال',
     icon: '🏦',
     partners: [
-      { id: 'warba-bank',  name: 'Warba Bank',    nameAr: 'بنك وربة',   bgColor: '#ffffff', textColor: '#5b2d8e' },
-      { id: 'gulf-bank',   name: 'Gulf Bank',     nameAr: 'بنك الخليج', bgColor: '#ffffff', textColor: '#c8102e' },
-      { id: 'boubyan',     name: 'Boubyan Bank',  nameAr: 'بنك بوبيان', bgColor: '#111111', textColor: '#ffffff' },
+      { id: 'warba-bank',  name: 'Warba Bank',    nameAr: 'بنك وربة',   bgColor: '#ffffff', textColor: '#5b2d8e', instagram: 'https://www.instagram.com/warba_bank/' },
+      { id: 'gulf-bank',   name: 'Gulf Bank',     nameAr: 'بنك الخليج', bgColor: '#ffffff', textColor: '#c8102e', instagram: 'https://www.instagram.com/gulf_bank/' },
+      { id: 'boubyan',     name: 'Boubyan Bank',  nameAr: 'بنك بوبيان', bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/bankboubyan/' },
     ],
   },
   {
@@ -51,11 +52,11 @@ const CATEGORIES: Category[] = [
     labelAr: 'المأكولات والمشروبات',
     icon: '🍔',
     partners: [
-      { id: 'burger-king', name: 'Burger King',   nameAr: 'برغر كنج',    bgColor: '#ffffff', textColor: '#d62300' },
-      { id: 'koshari',     name: 'Koshari Bites', nameAr: 'كشري بايتس', bgColor: '#ffffff', textColor: '#2d6a4f' },
-      { id: 'abraj',       name: 'Abraj',         nameAr: 'أبراج مياه',  bgColor: '#ffffff', textColor: '#1565c0' },
-      { id: 'ghadana',     name: 'Ghadana',       nameAr: 'غذانا',       bgColor: '#ffffff', textColor: '#e65c00' },
-      { id: 'lofat',       name: 'Lofat',         nameAr: 'لوفات',       bgColor: '#ffffff', textColor: '#2e7d32' },
+      { id: 'burger-king', name: 'Burger King',   nameAr: 'برغر كنج',    bgColor: '#ffffff', textColor: '#d62300', instagram: 'https://www.instagram.com/burgerkingkw/' },
+      { id: 'koshari',     name: 'Koshari Bites', nameAr: 'كشري بايتس', bgColor: '#ffffff', textColor: '#2d6a4f', instagram: 'https://www.instagram.com/kosharibites/' },
+      { id: 'abraj',       name: 'Abraj',         nameAr: 'أبراج مياه',  bgColor: '#ffffff', textColor: '#1565c0', instagram: 'https://www.instagram.com/abraajwater/' },
+      { id: 'ghadana',     name: 'Ghadana',       nameAr: 'غذانا',       bgColor: '#ffffff', textColor: '#e65c00', instagram: 'https://www.instagram.com/mn_ghadana/' },
+      { id: 'lofat',       name: 'Lofat',         nameAr: 'لوفات',       bgColor: '#ffffff', textColor: '#2e7d32', instagram: 'https://www.instagram.com/lofateats/' },
     ],
   },
   {
@@ -64,9 +65,9 @@ const CATEGORIES: Category[] = [
     labelAr: 'التقنية والإلكترونيات',
     icon: '📱',
     partners: [
-      { id: 'eureka',       name: 'Eureka',       nameAr: 'يوريكا',      bgColor: '#ffffff', textColor: '#00843d' },
-      { id: 'mobile-2000',  name: 'Mobile 2000',  nameAr: 'موبايل 2000', bgColor: '#111111', textColor: '#00b4d8' },
-      { id: 'tobo',         name: 'TOBO',         nameAr: 'توبو',        bgColor: '#111111', textColor: '#ffffff' },
+      { id: 'eureka',       name: 'Eureka',       nameAr: 'يوريكا',      bgColor: '#ffffff', textColor: '#00843d', instagram: 'https://www.instagram.com/eurekakuwait/' },
+      { id: 'mobile-2000',  name: 'Mobile 2000',  nameAr: 'موبايل 2000', bgColor: '#111111', textColor: '#00b4d8', instagram: 'https://www.instagram.com/mobile2000/' },
+      { id: 'tobo',         name: 'TOBO',         nameAr: 'توبو',        bgColor: '#111111', textColor: '#ffffff', instagram: 'https://www.instagram.com/mytobo/' },
     ],
   },
   {
@@ -75,8 +76,8 @@ const CATEGORIES: Category[] = [
     labelAr: 'الأزياء ونمط الحياة',
     icon: '👗',
     partners: [
-      { id: 'efashion',   name: 'eFashion',   nameAr: 'إي فاشن', bgColor: '#ffffff', textColor: '#111111' },
-      { id: 'boutiqaat',  name: 'Boutiqaat',  nameAr: 'بوتيكات', bgColor: '#ffffff', textColor: '#111111' },
+      { id: 'efashion',   name: 'eFashion',   nameAr: 'إي فاشن', bgColor: '#ffffff', textColor: '#111111', instagram: 'https://www.instagram.com/efashionq8/' },
+      { id: 'boutiqaat',  name: 'Boutiqaat',  nameAr: 'بوتيكات', bgColor: '#ffffff', textColor: '#111111', instagram: 'https://www.instagram.com/boutiqaat/' },
     ],
   },
   {
@@ -85,7 +86,7 @@ const CATEGORIES: Category[] = [
     labelAr: 'الضيافة',
     icon: '🏨',
     partners: [
-      { id: 'the-regency', name: 'The Regency', nameAr: 'الريجنسي', bgColor: '#ffffff', textColor: '#9a7b3e' },
+      { id: 'the-regency', name: 'The Regency', nameAr: 'الريجنسي', bgColor: '#ffffff', textColor: '#9a7b3e', instagram: 'https://www.instagram.com/theregency.kw/' },
     ],
   },
 ];
@@ -99,9 +100,15 @@ function LogoCard({ partner, locale, size = 'normal' }: { partner: Partner; loca
   const imgH = size === 'large' ? 'max-h-20' : 'max-h-14';
 
   return (
-    <div className={`group flex flex-col items-center card-lift rounded-[10px] overflow-hidden border border-cream-400 hover:border-emerald-700 transition-all duration-300 bg-cream-50`}>
+    <a
+      href={partner.instagram}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex flex-col items-center card-lift rounded-[10px] overflow-hidden border border-cream-400 hover:border-emerald-700 transition-all duration-300 bg-cream-50"
+      aria-label={`${partner.name} on Instagram`}
+    >
       <div
-        className={`w-full flex items-center justify-center px-6 py-6 ${h}`}
+        className={`w-full flex items-center justify-center px-6 py-6 ${h} relative`}
         style={{ backgroundColor: partner.bgColor }}
       >
         {!imgFailed ? (
@@ -121,11 +128,24 @@ function LogoCard({ partner, locale, size = 'normal' }: { partner: Partner; loca
             {partner.name}
           </span>
         )}
+        {/* Instagram hover badge */}
+        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <div className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm">
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="20" height="20" rx="5" stroke="#E1306C" strokeWidth="2"/>
+              <circle cx="12" cy="12" r="4" stroke="#E1306C" strokeWidth="2"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="#E1306C"/>
+            </svg>
+          </div>
+        </div>
       </div>
-      <div className="w-full px-4 py-2.5 border-t border-cream-400 bg-cream-50">
-        <p className="text-[11px] text-ink-muted text-center tracking-wide truncate">{displayName}</p>
+      <div className="w-full px-4 py-2.5 border-t border-cream-400 bg-cream-50 flex items-center justify-between gap-2">
+        <p className="text-[11px] text-ink-muted tracking-wide truncate">{displayName}</p>
+        <svg className="w-3 h-3 text-ink-muted/50 flex-shrink-0 group-hover:text-emerald-700 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
       </div>
-    </div>
+    </a>
   );
 }
 
