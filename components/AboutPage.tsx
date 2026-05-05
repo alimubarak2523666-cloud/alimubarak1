@@ -79,7 +79,7 @@ function TheStory() {
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
       <div className="max-w-2xl space-y-4">
         <p className="text-[15px] leading-[1.8] text-ink">{t('paragraph1')}</p>
-        <p className="text-[15px] leading-[1.8] text-ink" dangerouslySetInnerHTML={{ __html: t('paragraph2') }} />
+        <p className="text-[15px] leading-[1.8] text-ink">{t('paragraph2')}</p>
       </div>
     </SectionShell>
   );
