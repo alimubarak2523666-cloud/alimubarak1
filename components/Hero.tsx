@@ -30,8 +30,8 @@ export default function Hero() {
 
           {/* ── Text column ─────────────────────────── */}
           <div className="flex flex-col justify-center">
-            {/* Gold rule grows in — self-start keeps it at text-start in both LTR and RTL */}
-            <div className="gold-rule mb-3 md:mb-4 hero-rule self-start" />
+            {/* Gold rule — CSS handles RTL via margin-left:auto to anchor right */}
+            <div className="gold-rule mb-3 md:mb-4 hero-rule" />
 
             {/* Eyebrow */}
             <p className="eyebrow mb-3 md:mb-5 hero-item-1">
