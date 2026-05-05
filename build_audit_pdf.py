@@ -338,7 +338,7 @@ story.append(item('sitemap.xml + robots.txt', 'For Google indexing.', note_lines
 story.append(item('Google Analytics or Plausible', 'Track visits, where traffic comes from. Optional.', note_lines=1))
 
 story.append(Paragraph('Security & Hygiene', h3))
-story.append(item('Delete the GitHub PAT', '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 — created today for one-time push. Delete from GitHub settings → Tokens.'))
+story.append(item('Delete the GitHub PAT', '[TOKEN-REDACTED] — created today for one-time push. Delete from GitHub settings → Tokens.'))
 story.append(item('Set up local Git auth on Mac', 'So future pushes don\'t need a PAT.', note_lines=1))
 story.append(PageBreak())
 
