@@ -97,6 +97,15 @@ const PARTNERS: Partner[] = [
     textColor: '#0d2137',
   },
   {
+    id: 'land-rover',
+    name: 'Land Rover · Range Rover',
+    nameAr: 'لاند روفر · رينج روفر',
+    category: 'Automotive',
+    categoryAr: 'سيارات',
+    bgColor: '#111111',
+    textColor: '#ffffff',
+  },
+  {
     id: 'rolls-royce',
     name: 'Rolls-Royce',
     nameAr: 'رولز رويس',
