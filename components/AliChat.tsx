@@ -19,7 +19,7 @@ const PLACEHOLDER: Record<string, string> = {
 };
 
 const TITLE: Record<string, string> = {
-  en: 'Ask Ali's AI',
+  en: "Ask Ali's AI",
   ar: 'اسأل مساعد علي'
 };
 
