@@ -2,6 +2,7 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import ScrollReveal from './ScrollReveal';
+import type { VideoItem } from '@/app/[locale]/youtube/page';
 
 const CHANNEL_ID = 'UCU6B-Ujv1usqVYKGZy_43Zg';
 const CHANNEL_HANDLE = '@amubarak1';
@@ -14,7 +15,31 @@ function YoutubeIcon({ className }: { className?: string }) {
   );
 }
 
-export default function YouTubePage() {
+function PlayIcon() {
+  return (
+    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  );
+}
+
+function formatDate(iso: string, locale: string): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString(
+      locale === 'ar' ? 'ar-KW' : 'en-US',
+      { year: 'numeric', month: 'long', day: 'numeric' }
+    );
+  } catch {
+    return '';
+  }
+}
+
+interface Props {
+  videos?: VideoItem[];
+}
+
+export default function YouTubePage({ videos = [] }: Props) {
   const t = useTranslations('youtube');
   const locale = useLocale();
 
@@ -95,6 +120,60 @@ export default function YouTubePage() {
           </a>
         </section>
       </ScrollReveal>
+
+      {/* Latest videos thumbnail grid */}
+      {videos.length > 0 && (
+        <ScrollReveal delay={40}>
+          <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
+            <div className="gold-rule mb-4" />
+            <p className="eyebrow mb-5">
+              {locale === 'ar' ? 'أحدث الحلقات' : 'Latest Episodes'}
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {videos.map((video, i) => (
+                <a
+                  key={video.id}
+                  href={video.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group rounded-[10px] overflow-hidden border border-cream-400 hover:border-emerald-700 transition-colors duration-200 bg-cream-100 card-lift"
+                  style={{ transitionDelay: `${i * 50}ms` }}
+                >
+                  {/* Thumbnail */}
+                  <div className="relative aspect-video overflow-hidden bg-cream-200">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    {/* Dark overlay + play button on hover */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
+                        <PlayIcon />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Meta */}
+                  <div className="p-4">
+                    <p className="text-sm text-emerald-700 font-medium leading-[1.5] line-clamp-2 group-hover:text-emerald-500 transition-colors duration-200">
+                      {video.title}
+                    </p>
+                    {video.published && (
+                      <p className="text-[11px] text-ink-muted mt-1.5">
+                        {formatDate(video.published, locale)}
+                      </p>
+                    )}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        </ScrollReveal>
+      )}
 
       {/* Quick links grid */}
       <ScrollReveal delay={50}>
