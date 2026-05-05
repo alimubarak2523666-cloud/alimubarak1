@@ -29,6 +29,7 @@ export default function Nav() {
     { href: `/${locale}/about`,         label: t('about') },
     { href: `/${locale}/ventures`,      label: t('ventures') },
     { href: `/${locale}/influence`,     label: t('influence') },
+    { href: `/${locale}/partners`,      label: t('partners') },
     { href: `/${locale}/book`,          label: t('book') },
     { href: `/${locale}/youtube`,       label: t('youtube') },
     { href: `/${locale}/work-with-ali`, label: t('workWithAli') }
