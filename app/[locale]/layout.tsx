@@ -47,7 +47,30 @@ export const metadata: Metadata = {
   },
   description:
     'I build companies, advise executives, and bridge government and private sector across Kuwait and the GCC.',
-  metadataBase: new URL('https://alimubarak1.com')
+  metadataBase: new URL('https://alimubarak1.com'),
+  openGraph: {
+    title: 'Ali Mubarak — Engineer · Entrepreneur · Strategic Advisor · Author',
+    description:
+      'I build companies, advise executives, and bridge government and private sector across Kuwait and the GCC.',
+    url: 'https://alimubarak1.com',
+    siteName: 'Ali Mubarak',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Ali Mubarak — Engineer · Entrepreneur · Strategic Advisor · Author',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ali Mubarak — Engineer · Entrepreneur · Strategic Advisor · Author',
+    description:
+      'I build companies, advise executives, and bridge government and private sector across Kuwait and the GCC.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function LocaleLayout({
