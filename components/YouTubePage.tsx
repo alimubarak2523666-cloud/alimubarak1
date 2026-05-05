@@ -2,7 +2,13 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import ScrollReveal from './ScrollReveal';
-import type { VideoItem } from '@/app/[locale]/youtube/page';
+export interface VideoItem {
+  id: string;
+  title: string;
+  published: string;
+  thumbnail: string;
+  url: string;
+}
 
 const CHANNEL_ID = 'UCU6B-Ujv1usqVYKGZy_43Zg';
 const CHANNEL_HANDLE = '@amubarak1';

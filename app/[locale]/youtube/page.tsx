@@ -1,14 +1,6 @@
-import YouTubePage from '@/components/YouTubePage';
+import YouTubePage, { type VideoItem } from '@/components/YouTubePage';
 
 const CHANNEL_ID = 'UCU6B-Ujv1usqVYKGZy_43Zg';
-
-export interface VideoItem {
-  id: string;
-  title: string;
-  published: string;
-  thumbnail: string;
-  url: string;
-}
 
 async function getLatestVideos(): Promise<VideoItem[]> {
   try {
