@@ -30,11 +30,11 @@ export default function Hero() {
 
           {/* ── Text column ─────────────────────────── */}
           <div className="flex flex-col justify-center">
-            {/* Gold rule grows in */}
-            <div className="gold-rule mb-3 md:mb-4 hero-rule" />
+            {/* Gold rule grows in — self-start keeps it at text-start in both LTR and RTL */}
+            <div className="gold-rule mb-3 md:mb-4 hero-rule self-start" />
 
             {/* Eyebrow */}
-            <p className="eyebrow mb-3 md:mb-5 hero-item-1 text-[10px] md:text-xs">
+            <p className="eyebrow mb-3 md:mb-5 hero-item-1">
               {t('eyebrow')}
             </p>
 

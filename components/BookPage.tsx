@@ -92,11 +92,11 @@ function BookHero() {
               <p className="font-serif text-2xl text-emerald-700 font-medium leading-none">{t('statChapters')}</p>
               <p className="eyebrow mt-1">{t('statChaptersLabel')}</p>
             </div>
-            <div className="border-l border-cream-400 pl-6">
+            <div className="border-s border-cream-400 ps-6">
               <p className="font-serif text-2xl text-emerald-700 font-medium leading-none">{t('statPages')}</p>
               <p className="eyebrow mt-1">{t('statPagesLabel')}</p>
             </div>
-            <div className="border-l border-cream-400 pl-6">
+            <div className="border-s border-cream-400 ps-6">
               <p className="font-serif text-2xl text-emerald-700 font-medium leading-none">{t('statFrom')}</p>
               <p className="eyebrow mt-1">{t('statFromLabel')}</p>
             </div>
@@ -141,7 +141,7 @@ function AboutTheBook() {
   const t = useTranslations('book.about');
   return (
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
-      <div className="border-l-2 border-gold-400 ps-6 mb-7">
+      <div className="border-s-2 border-gold-400 ps-6 mb-7">
         <p className="font-serif text-lg leading-[1.55] text-emerald-700 font-medium italic mb-3">
           “{t('pullQuote')}”
         </p>
@@ -260,12 +260,12 @@ function AuthorBlock() {
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
       <div className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-start">
         <div>
-          <div className="border-l-2 border-gold-400 ps-6 mb-6">
+          <div className="border-s-2 border-gold-400 ps-6 mb-6">
             <p className="font-serif text-[18px] leading-[1.55] text-emerald-700 font-medium italic">“{t('pullQuote')}”</p>
           </div>
           <p className="text-[14.5px] leading-[1.8] text-ink mb-3">{t('paragraph1')}</p>
           <p className="text-[14.5px] leading-[1.8] text-ink mb-5">{t('paragraph2')}</p>
-          <div className="border-l-2 border-cream-400 ps-6 mb-7">
+          <div className="border-s-2 border-cream-400 ps-6 mb-7">
             <p className="font-serif text-[15.5px] leading-[1.7] text-ink italic">“{t('secondQuote')}”</p>
           </div>
           <div className="flex gap-2 flex-wrap">

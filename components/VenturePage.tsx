@@ -31,7 +31,7 @@ export default function VenturePage({
         <p className="text-sm text-ink-muted italic mb-8 max-w-2xl">{t('subtitle')}</p>
         <p className="text-[15px] leading-[1.85] text-ink max-w-2xl mb-8">{t('lead')}</p>
 
-        <div className="border-l-2 border-gold-400 ps-6 max-w-2xl">
+        <div className="border-s-2 border-gold-400 ps-6 max-w-2xl">
           <p className="text-[14px] leading-[1.75] text-ink-muted italic">{t('comingSoon')}</p>
         </div>
       </section>

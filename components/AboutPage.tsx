@@ -239,7 +239,7 @@ function Recognitions() {
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
       <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
         {[1, 2, 3, 4].map((n) => (
-          <div key={n} className="border-l-2 border-gold-400 ps-5 py-1">
+          <div key={n} className="border-s-2 border-gold-400 ps-5 py-1">
             <p className="font-serif text-[15px] text-emerald-700 font-medium mb-1">{t(`item${n}Title`)}</p>
             <p className="text-[13px] leading-[1.6] text-ink">{t(`item${n}Body`)}</p>
           </div>

@@ -81,7 +81,7 @@ export default function Nav() {
         <div className="flex items-center gap-3">
           <Link
             href={otherLocalePath}
-            className="text-xs tracking-widest text-ink-muted hover:text-emerald-700 transition-colors duration-200 border-l border-cream-400 pl-3"
+            className="text-xs tracking-widest text-ink-muted hover:text-emerald-700 transition-colors duration-200 border-s border-cream-400 ps-3"
             aria-label={`Switch to ${otherLocale === 'ar' ? 'Arabic' : 'English'}`}
           >
             {t('languageToggle')}
