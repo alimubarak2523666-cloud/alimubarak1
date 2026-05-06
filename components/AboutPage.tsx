@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import ScrollReveal from './ScrollReveal';
+import BusinessTools from './BusinessTools';
 
 // About page — 9 sections, each scroll-revealed as it enters the viewport.
 
@@ -37,35 +38,56 @@ function SectionShell({
   );
 }
 
-// Section 1 — Intro band
+// Section 1 — Full-screen personal landing hero
 function Intro() {
   const t = useTranslations('about.intro');
   const locale = useLocale();
   return (
-    <section className="bg-cream-50 border border-cream-400 rounded-[12px] overflow-hidden mb-4">
-      <div className="grid md:grid-cols-[1.2fr_1fr] min-h-[360px]">
-        <div className="p-9 md:p-10 flex flex-col justify-center">
-          <GoldRule />
-          <p className="eyebrow mb-5">{t('eyebrow')}</p>
-          <h1 className={`text-4xl md:text-5xl text-emerald-700 font-medium leading-[1.05] mb-5 ${locale === 'ar' ? 'font-serif-ar' : 'font-serif'}`}>
+    <section className="relative rounded-[12px] overflow-hidden mb-4 min-h-[92vh] flex flex-col bg-cream-50 border border-cream-400">
+      {/* Main layout: photo fills right, text anchored left */}
+      <div className="flex-1 grid md:grid-cols-[1fr_1fr] min-h-[92vh]">
+
+        {/* ── Text column ─── */}
+        <div className="flex flex-col justify-end md:justify-center p-10 md:p-16 order-2 md:order-1 pb-16 md:pb-16">
+          <div className="w-10 h-px bg-gold-400 mb-6" />
+          <p className="eyebrow mb-4 text-[10px]">{t('eyebrow')}</p>
+          <h1
+            className={`leading-[1.0] text-emerald-700 font-medium mb-6 ${
+              locale === 'ar'
+                ? 'font-serif-ar text-5xl md:text-6xl lg:text-7xl'
+                : 'font-serif text-5xl md:text-6xl lg:text-[80px]'
+            }`}
+          >
             {t('name')}
           </h1>
-          <p className="text-base text-ink leading-[1.7] mb-2 max-w-md">{t('tagline')}</p>
-        </div>
-        <div className="bg-cream-200 flex items-center justify-center p-6">
-          <div className="relative bg-emerald-700 rounded-sm w-3/4 aspect-[3/4] overflow-hidden">
-            <span className="absolute inset-0 flex items-center justify-center text-gold-400 font-serif text-6xl pointer-events-none z-0">
-              {locale === 'ar' ? 'ع.م' : 'AM'}
-            </span>
-            <Image
-              src={locale === 'ar' ? '/ali-portrait-ar.jpg' : '/ali-portrait-en.jpg'}
-              alt={locale === 'ar' ? 'علي عبدالله مبارك' : 'Ali Abdullah Mubarak'}
-              fill
-              priority
-              sizes="(max-width: 768px) 70vw, 30vw"
-              className="object-cover relative z-10"
-            />
+          <p className="text-sm md:text-base text-ink leading-[1.75] max-w-sm mb-8">
+            {t('tagline')}
+          </p>
+          {/* Scroll hint */}
+          <div className="flex items-center gap-3 text-ink-muted">
+            <div className="w-8 h-px bg-cream-400" />
+            <p className="text-[10px] tracking-widest uppercase">
+              {locale === 'ar' ? 'اسحب للأسفل' : 'Scroll'}
+            </p>
           </div>
+        </div>
+
+        {/* ── Photo column ─── */}
+        <div className="relative order-1 md:order-2 min-h-[50vh] md:min-h-full">
+          {/* Gradient overlay on bottom for text legibility on mobile */}
+          <div className="absolute inset-0 bg-gradient-to-t from-cream-50/60 via-transparent to-transparent z-10 md:hidden pointer-events-none" />
+          {/* Fallback monogram */}
+          <span className="absolute inset-0 flex items-center justify-center text-gold-400/40 font-serif text-[160px] pointer-events-none z-0 select-none">
+            {locale === 'ar' ? 'ع' : 'A'}
+          </span>
+          <Image
+            src={locale === 'ar' ? '/ali-portrait-ar.jpg' : '/ali-portrait-en.jpg'}
+            alt={locale === 'ar' ? 'علي عبدالله مبارك' : 'Ali Abdullah Mubarak'}
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-top relative z-10"
+          />
         </div>
       </div>
     </section>
@@ -272,7 +294,7 @@ function ClosingCta() {
 
 export default function AboutPage() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 md:py-16 page-enter">
+    <div className="max-w-5xl mx-auto px-6 pt-4 pb-12 md:pt-6 md:pb-16 page-enter">
       <Intro />
       <ScrollReveal delay={0}>   <TheStory />       </ScrollReveal>
       <ScrollReveal delay={0}>   <WhatIDoToday />   </ScrollReveal>
@@ -281,6 +303,7 @@ export default function AboutPage() {
       <ScrollReveal delay={0}>   <Education />      </ScrollReveal>
       <ScrollReveal delay={0}>   <WritingAndVoice /></ScrollReveal>
       <ScrollReveal delay={0}>   <Recognitions />   </ScrollReveal>
+      <ScrollReveal delay={0}>   <BusinessTools />  </ScrollReveal>
       <ScrollReveal delay={0}>   <ClosingCta />     </ScrollReveal>
     </div>
   );

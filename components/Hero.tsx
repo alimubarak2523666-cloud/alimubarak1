@@ -38,14 +38,16 @@ export default function Hero() {
               {t('eyebrow')}
             </p>
 
-            {/* Name */}
-            <h1
-              className={`text-3xl md:text-5xl lg:text-6xl text-emerald-700 font-medium leading-[1.05] mb-3 md:mb-5 hero-item-2 ${
-                locale === 'ar' ? 'font-serif-ar' : 'font-serif'
-              }`}
-            >
-              {t('name')}
-            </h1>
+            {/* Name — links to personal landing page */}
+            <Link href={`/${locale}/about`}>
+              <h1
+                className={`text-3xl md:text-5xl lg:text-6xl text-emerald-700 font-medium leading-[1.05] mb-3 md:mb-5 hero-item-2 hover:text-emerald-500 transition-colors cursor-pointer ${
+                  locale === 'ar' ? 'font-serif-ar' : 'font-serif'
+                }`}
+              >
+                {t('name')}
+              </h1>
+            </Link>
 
             {/* Tagline */}
             <p className="text-sm md:text-lg text-ink leading-[1.6] md:leading-[1.75] mb-5 md:mb-8 max-w-md hero-item-3">
