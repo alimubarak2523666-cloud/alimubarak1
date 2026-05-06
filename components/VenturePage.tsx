@@ -34,6 +34,24 @@ export default function VenturePage({
         <div className="border-s-2 border-gold-400 ps-6 max-w-2xl">
           <p className="text-[14px] leading-[1.75] text-ink-muted italic">{t('comingSoon')}</p>
         </div>
+
+        {tKey === 'koshariBites' && (
+          <div className="mt-8 pt-8 border-t border-cream-400">
+            <a
+              href="https://www.instagram.com/kosharibites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-ink-muted hover:text-pink-600 transition-colors font-medium"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+              {locale === 'ar' ? 'تابعنا على إنستغرام @kosharibites' : 'Follow on Instagram @kosharibites'}
+            </a>
+          </div>
+        )}
       </section>
 
       <section className="bg-emerald-700 rounded-[12px] p-10 md:p-12 text-center">

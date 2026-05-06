@@ -23,7 +23,8 @@ export default function VenturesLanding() {
       subtitle: tAbout('card1Subtitle'),
       meta: tAbout('card1Meta'),
       desc: tAbout('card1Desc'),
-      cta: tAbout('card1Cta')
+      cta: tAbout('card1Cta'),
+      instagram: null as string | null
     },
     {
       slug: 'koshari-bites',
@@ -31,7 +32,8 @@ export default function VenturesLanding() {
       subtitle: '',
       meta: tAbout('card2Meta'),
       desc: tAbout('card2Desc'),
-      cta: tAbout('card2Cta')
+      cta: tAbout('card2Cta'),
+      instagram: 'https://www.instagram.com/kosharibites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' as string | null
     },
     {
       slug: 'amc',
@@ -39,7 +41,8 @@ export default function VenturesLanding() {
       subtitle: tAbout('card3Subtitle'),
       meta: tAbout('card3Meta'),
       desc: tAbout('card3Desc'),
-      cta: tAbout('card3Cta')
+      cta: tAbout('card3Cta'),
+      instagram: null as string | null
     },
     {
       slug: 'tni',
@@ -47,7 +50,8 @@ export default function VenturesLanding() {
       subtitle: '',
       meta: tAbout('card4Meta'),
       desc: tAbout('card4Desc'),
-      cta: tAbout('card4Cta')
+      cta: tAbout('card4Cta'),
+      instagram: null as string | null
     }
   ];
 
@@ -98,6 +102,22 @@ export default function VenturesLanding() {
                 <p className="text-xs text-emerald-700 font-medium group-hover:text-emerald-500 transition-colors">
                   {card.cta} →
                 </p>
+                {card.instagram && (
+                  <a
+                    href={card.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-1.5 mt-3 text-[11px] text-ink-muted hover:text-pink-600 transition-colors"
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                      <circle cx="12" cy="12" r="4"/>
+                      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                    </svg>
+                    @kosharibites
+                  </a>
+                )}
               </Link>
             ))}
           </div>
