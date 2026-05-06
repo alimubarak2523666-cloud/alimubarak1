@@ -51,7 +51,7 @@ export default function VenturesLanding() {
       meta: tAbout('card4Meta'),
       desc: tAbout('card4Desc'),
       cta: tAbout('card4Cta'),
-      instagram: null as string | null
+      instagram: 'https://www.instagram.com/tnikw?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' as string | null
     }
   ];
 

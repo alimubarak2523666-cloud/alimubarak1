@@ -35,10 +35,14 @@ export default function VenturePage({
           <p className="text-[14px] leading-[1.75] text-ink-muted italic">{t('comingSoon')}</p>
         </div>
 
-        {tKey === 'koshariBites' && (
+        {(tKey === 'koshariBites' || tKey === 'tni') && (
           <div className="mt-8 pt-8 border-t border-cream-400">
             <a
-              href="https://www.instagram.com/kosharibites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              href={
+                tKey === 'koshariBites'
+                  ? 'https://www.instagram.com/kosharibites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
+                  : 'https://www.instagram.com/tnikw?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm text-ink-muted hover:text-pink-600 transition-colors font-medium"
@@ -48,7 +52,9 @@ export default function VenturePage({
                 <circle cx="12" cy="12" r="4"/>
                 <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
               </svg>
-              {locale === 'ar' ? 'تابعنا على إنستغرام @kosharibites' : 'Follow on Instagram @kosharibites'}
+              {locale === 'ar'
+                ? `تابعنا على إنستغرام @${tKey === 'koshariBites' ? 'kosharibites' : 'tnikw'}`
+                : `Follow on Instagram @${tKey === 'koshariBites' ? 'kosharibites' : 'tnikw'}`}
             </a>
           </div>
         )}
