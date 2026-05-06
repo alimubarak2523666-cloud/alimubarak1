@@ -94,16 +94,17 @@ export default function LogoStrip() {
         </p>
       </div>
 
-      {/* Scrolling track */}
+      {/* Scrolling track — always scrolls left regardless of locale */}
       <div
         className="relative w-full overflow-hidden py-3"
+        dir="ltr"
         style={{
           maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
           WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
         }}
       >
         <div
-          className={`flex items-center w-max ${isAr ? 'logo-scroll-rtl' : 'logo-scroll'}`}
+          className="flex items-center w-max logo-scroll"
           aria-hidden="true"
         >
           {doubled.map((logo, i) => (
@@ -117,18 +118,10 @@ export default function LogoStrip() {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        @keyframes logoScrollRTL {
-          0%   { transform: translateX(-50%); }
-          100% { transform: translateX(0); }
-        }
         .logo-scroll {
           animation: logoScrollLTR 38s linear infinite;
         }
-        .logo-scroll-rtl {
-          animation: logoScrollRTL 38s linear infinite;
-        }
-        .logo-scroll:hover,
-        .logo-scroll-rtl:hover {
+        .logo-scroll:hover {
           animation-play-state: paused;
         }
       `}</style>
