@@ -1,6 +1,7 @@
 {
   "nav": {
     "about": "About",
+    "network": "The Network",
     "ventures": "Ventures",
     "influence": "Influence",
     "book": "Book",
@@ -394,6 +395,16 @@
     "ctaEyebrow": "Stay Connected",
     "ctaTitle": "Subscribe to the channel and never miss an episode.",
     "ctaButton": "Subscribe on YouTube →"
+  },
+  "network": {
+    "eyebrow": "The Network",
+    "title": "The rooms I've been in.",
+    "subtitle": "Twenty-five years of building relationships at the highest levels — government, military, media, and international stages. The people you know define what you can build.",
+    "galleryEyebrow": "Events · Officials · Stages · International",
+    "ctaEyebrow": "Work With Ali",
+    "ctaTitle": "Access opens doors. The right partner opens the right doors.",
+    "ctaBody": "Whether it's navigating government partnerships, opening doors in the Gulf, or finding the right relationship for a strategic initiative — this is what I do.",
+    "ctaCta": "Work with Ali →"
   },
   "partners": {
     "eyebrow": "Sponsorships · Advertisements · Collaborations",

@@ -30,6 +30,7 @@ export default function Nav() {
 
   const tabs = [
     { href: `/${locale}/about`,         label: t('about') },
+    { href: `/${locale}/network`,       label: t('network') },
     { href: `/${locale}/ventures`,      label: t('ventures') },
     { href: `/${locale}/influence`,     label: t('influence') },
     { href: `/${locale}/partners`,      label: t('partners') },
