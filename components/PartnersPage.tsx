@@ -66,7 +66,6 @@ const CATEGORIES: Category[] = [
     labelAr: 'التقنية والإلكترونيات',
     icon: '📱',
     partners: [
-      { id: 'eureka',       name: 'Eureka',       nameAr: 'يوريكا',      bgColor: '#ffffff', textColor: '#00843d', instagram: 'https://www.instagram.com/eurekakuwait/' },
       { id: 'mobile-2000',  name: 'Mobile 2000',  nameAr: 'موبايل 2000', bgColor: '#ffffff', textColor: '#00b4d8', instagram: 'https://www.instagram.com/mobile2000/' },
     ],
   },
