@@ -277,7 +277,7 @@ function AuthorBlock() {
           </div>
         </div>
         <div className="bg-cream-200 rounded-sm p-6 flex items-center justify-center">
-          <div className="relative w-full aspect-[3/4] bg-emerald-700 rounded-sm overflow-hidden flex items-center justify-center text-gold-400 font-serif text-5xl">
+          <div className="relative w-full aspect-[3/4] bg-emerald-700 rounded-sm overflow-hidden">
             <Image
               src="/ali-portrait-en.jpg"
               alt="Eng. Ali Abdullah Mubarak"
@@ -285,7 +285,6 @@ function AuthorBlock() {
               sizes="(max-width: 768px) 70vw, 30vw"
               className="object-cover"
             />
-            <span className="absolute pointer-events-none">AM</span>
           </div>
         </div>
       </div>
