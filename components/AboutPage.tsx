@@ -43,9 +43,9 @@ function Intro() {
   const t = useTranslations('about.intro');
   const locale = useLocale();
   return (
-    <section className="relative rounded-[12px] overflow-hidden mb-4 min-h-[92vh] flex flex-col bg-cream-50 border border-cream-400">
+    <section className="relative rounded-[12px] overflow-hidden mb-4 min-h-[68vh] flex flex-col bg-cream-50 border border-cream-400">
       {/* Main layout: photo fills right, text anchored left */}
-      <div className="flex-1 grid md:grid-cols-[1fr_1fr] min-h-[92vh]">
+      <div className="flex-1 grid md:grid-cols-[1fr_1fr] min-h-[68vh]">
 
         {/* ── Text column ─── */}
         <div className="flex flex-col justify-end md:justify-center p-10 md:p-16 order-2 md:order-1 pb-16 md:pb-16">
@@ -296,6 +296,7 @@ export default function AboutPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 pt-4 pb-12 md:pt-6 md:pb-16 page-enter">
       <Intro />
+      <ScrollReveal delay={0}>   <BusinessTools />  </ScrollReveal>
       <ScrollReveal delay={0}>   <TheStory />       </ScrollReveal>
       <ScrollReveal delay={0}>   <WhatIDoToday />   </ScrollReveal>
       <ScrollReveal delay={0}>   <PublicService />  </ScrollReveal>
@@ -303,7 +304,6 @@ export default function AboutPage() {
       <ScrollReveal delay={0}>   <Education />      </ScrollReveal>
       <ScrollReveal delay={0}>   <WritingAndVoice /></ScrollReveal>
       <ScrollReveal delay={0}>   <Recognitions />   </ScrollReveal>
-      <ScrollReveal delay={0}>   <BusinessTools />  </ScrollReveal>
       <ScrollReveal delay={0}>   <ClosingCta />     </ScrollReveal>
     </div>
   );
