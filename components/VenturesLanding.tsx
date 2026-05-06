@@ -24,7 +24,8 @@ export default function VenturesLanding() {
       meta: tAbout('card1Meta'),
       desc: tAbout('card1Desc'),
       cta: tAbout('card1Cta'),
-      instagram: null as string | null
+      instagram: null as string | null,
+      instagramHandle: ''
     },
     {
       slug: 'koshari-bites',
@@ -33,7 +34,8 @@ export default function VenturesLanding() {
       meta: tAbout('card2Meta'),
       desc: tAbout('card2Desc'),
       cta: tAbout('card2Cta'),
-      instagram: 'https://www.instagram.com/kosharibites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' as string | null
+      instagram: 'https://www.instagram.com/kosharibites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' as string | null,
+      instagramHandle: 'kosharibites'
     },
     {
       slug: 'amc',
@@ -42,7 +44,8 @@ export default function VenturesLanding() {
       meta: tAbout('card3Meta'),
       desc: tAbout('card3Desc'),
       cta: tAbout('card3Cta'),
-      instagram: null as string | null
+      instagram: null as string | null,
+      instagramHandle: ''
     },
     {
       slug: 'tni',
@@ -51,7 +54,8 @@ export default function VenturesLanding() {
       meta: tAbout('card4Meta'),
       desc: tAbout('card4Desc'),
       cta: tAbout('card4Cta'),
-      instagram: 'https://www.instagram.com/tnikw?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' as string | null
+      instagram: 'https://www.instagram.com/tnikw?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' as string | null,
+      instagramHandle: 'tnikw'
     }
   ];
 
@@ -115,7 +119,7 @@ export default function VenturesLanding() {
                       <circle cx="12" cy="12" r="4"/>
                       <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
                     </svg>
-                    @kosharibites
+                    @{card.instagramHandle}
                   </a>
                 )}
               </Link>
