@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
+import { useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
 // Locked TOC data — 12 chapters with bilingual titles, descriptions, and page counts.
@@ -72,6 +73,29 @@ function SectionShell({
 function BookHero() {
   const t = useTranslations('book.hero');
   const locale = useLocale();
+  const parallaxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = parallaxRef.current;
+    if (!el) return;
+    let ticking = false;
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (el) {
+            const offset = -(window.scrollY * 0.18);
+            el.style.transform = `translateY(${offset}px)`;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <section className="bg-cream-50 border border-cream-400 rounded-[12px] overflow-hidden mb-4">
@@ -115,18 +139,21 @@ function BookHero() {
         <div className="bg-cream-200 flex items-center justify-center p-8 book-float-stage">
           {/*
             3D levitating book cover — CSS perspective + bookLevitate keyframe.
+            Parallax wrapper drifts the cover at 18% scroll rate for a floating feel.
             The actual cover image is displayed as-is per the cover spec — never recolor.
           */}
-          <div className="book-float-inner">
-            <div className="relative w-full max-w-[240px] aspect-[5/7]">
-              <Image
-                src="/book-cover.jpg"
-                alt={locale === 'ar' ? 'غلاف كتاب «تزوّج الحكومة»' : 'Get Married with the Government — book cover'}
-                fill
-                priority
-                sizes="(max-width: 768px) 70vw, 240px"
-                className="object-cover rounded-sm"
-              />
+          <div ref={parallaxRef} style={{ willChange: 'transform' }}>
+            <div className="book-float-inner">
+              <div className="relative w-full max-w-[240px] aspect-[5/7]">
+                <Image
+                  src="/book-cover.jpg"
+                  alt={locale === 'ar' ? 'غلاف كتاب «تزوّج الحكومة»' : 'Get Married with the Government — book cover'}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 70vw, 240px"
+                  className="object-cover rounded-sm"
+                />
+              </div>
             </div>
           </div>
         </div>
