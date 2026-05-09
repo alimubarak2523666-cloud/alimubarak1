@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
-import ScrollReveal from './ScrollReveal';
+import TiltCard from './TiltCard';
 
 const VENTURES = [
   { slug: 'eva', tKey: 'eva' },
@@ -78,54 +78,59 @@ export default function VenturesLanding() {
         </p>
       </section>
 
-      {/* Cards grid — each card lifts on hover, staggered reveal */}
-      <ScrollReveal>
-        <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
-          <div className="grid md:grid-cols-2 gap-4 stagger-cards">
+      {/* Cards grid — each card fans in on page load, tilts on hover */}
+      <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
+          <div className="grid md:grid-cols-2 gap-4 cards-enter">
             {cards.map((card) => (
-              <Link
+              <TiltCard
                 key={card.slug}
-                href={`/${locale}/ventures/${card.slug}`}
-                className="card-lift bg-cream-100 border border-cream-400 rounded-card p-7 min-h-[220px] flex flex-col hover:border-emerald-700 group"
+                className="bg-cream-100 border border-cream-400 rounded-card hover:border-emerald-700 group transition-colors duration-200"
               >
-                <p
-                  className={`font-serif text-xl text-emerald-700 font-medium leading-tight mb-1 ${
-                    locale === 'ar' ? 'font-serif-ar' : ''
-                  }`}
-                >
-                  {card.title}
-                </p>
-                {card.subtitle && (
-                  <p className="text-xs text-ink-muted italic mb-3">{card.subtitle}</p>
-                )}
-                <p className="text-[10px] tracking-widest uppercase text-gold-400 mb-3">
-                  {card.meta}
-                </p>
-                <p className="text-sm leading-[1.65] text-ink flex-1 mb-4">{card.desc}</p>
-                <p className="text-xs text-emerald-700 font-medium group-hover:text-emerald-500 transition-colors">
-                  {card.cta} →
-                </p>
-                {card.instagram && (
-                  <a
-                    href={card.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-1.5 mt-3 text-[11px] text-ink-muted hover:text-pink-600 transition-colors"
+                {/* Outer div — flex column so instagram link sits below the Link block */}
+                <div className="flex flex-col p-7" style={{ minHeight: '220px' }}>
+                  <Link
+                    href={`/${locale}/ventures/${card.slug}`}
+                    className="flex flex-col flex-1"
                   >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                      <circle cx="12" cy="12" r="4"/>
-                      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-                    </svg>
-                    @{card.instagramHandle}
-                  </a>
-                )}
-              </Link>
+                    <p
+                      className={`font-serif text-xl text-emerald-700 font-medium leading-tight mb-1 ${
+                        locale === 'ar' ? 'font-serif-ar' : ''
+                      }`}
+                    >
+                      {card.title}
+                    </p>
+                    {card.subtitle && (
+                      <p className="text-xs text-ink-muted italic mb-3">{card.subtitle}</p>
+                    )}
+                    <p className="text-[10px] tracking-widest uppercase text-gold-400 mb-3">
+                      {card.meta}
+                    </p>
+                    <p className="text-sm leading-[1.65] text-ink flex-1 mb-4">{card.desc}</p>
+                    <p className="text-xs text-emerald-700 font-medium group-hover:text-emerald-500 transition-colors">
+                      {card.cta} →
+                    </p>
+                  </Link>
+                  {/* Instagram link lives OUTSIDE <Link> to avoid <a> inside <a> */}
+                  {card.instagram && (
+                    <a
+                      href={card.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 mt-3 text-[11px] text-ink-muted hover:text-pink-600 transition-colors w-fit"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                      </svg>
+                      @{card.instagramHandle}
+                    </a>
+                  )}
+                </div>
+              </TiltCard>
             ))}
           </div>
         </section>
-      </ScrollReveal>
     </div>
   );
 }

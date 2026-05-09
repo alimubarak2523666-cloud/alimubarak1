@@ -27,22 +27,39 @@ export default function ScrollReveal({
     const el = ref.current;
     if (!el) return;
 
+    let revealed = false;
+
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      setTimeout(() => el.classList.add('sr-visible'), delay);
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const timer = setTimeout(() => {
-            el.classList.add('sr-visible');
-          }, delay);
+          reveal();
           observer.unobserve(el);
-          // cleanup timer if component unmounts before it fires
-          return () => clearTimeout(timer);
         }
       },
-      { threshold: 0.06, rootMargin: '-48px 0px 0px 0px' }
+      { threshold: 0, rootMargin: '0px 0px 0px 0px' }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+
+    // Fallback: if already in viewport when JS runs, reveal after next paint
+    const raf = requestAnimationFrame(() => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        reveal();
+        observer.unobserve(el);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(raf);
+    };
   }, [delay]);
 
   return (

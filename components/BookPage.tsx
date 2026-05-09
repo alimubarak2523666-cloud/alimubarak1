@@ -112,20 +112,22 @@ function BookHero() {
           </div>
         </div>
 
-        <div className="bg-cream-200 flex items-center justify-center p-8">
+        <div className="bg-cream-200 flex items-center justify-center p-8 book-float-stage">
           {/*
-            Real cover image displayed as-is per the cover spec — never recolor.
-            Falls back to nothing if /public/book-cover.jpg isn't there yet.
+            3D levitating book cover — CSS perspective + bookLevitate keyframe.
+            The actual cover image is displayed as-is per the cover spec — never recolor.
           */}
-          <div className="relative w-full max-w-[280px] aspect-[5/7] shadow-[0_20px_50px_rgba(14,74,62,0.15)]">
-            <Image
-              src="/book-cover.jpg"
-              alt={locale === 'ar' ? 'غلاف كتاب «تزوّج الحكومة»' : 'Get Married with the Government — book cover'}
-              fill
-              priority
-              sizes="(max-width: 768px) 70vw, 280px"
-              className="object-cover rounded-sm"
-            />
+          <div className="book-float-inner">
+            <div className="relative w-full max-w-[240px] aspect-[5/7]">
+              <Image
+                src="/book-cover.jpg"
+                alt={locale === 'ar' ? 'غلاف كتاب «تزوّج الحكومة»' : 'Get Married with the Government — book cover'}
+                fill
+                priority
+                sizes="(max-width: 768px) 70vw, 240px"
+                className="object-cover rounded-sm"
+              />
+            </div>
           </div>
         </div>
       </div>

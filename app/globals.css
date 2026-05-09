@@ -126,7 +126,7 @@ html[dir='rtl'] .gold-rule {
 .sr-d3 { transition-delay: 0.24s; }
 .sr-d4 { transition-delay: 0.32s; }
 
-/* ── Card-grid stagger ──────────────────────
+/* ── Card-grid stagger (scroll-triggered) ───
    Add class="stagger-cards" to any grid whose parent will get .sr-visible
    from a ScrollReveal wrapper. Children fan in sequentially.            */
 .stagger-cards > * {
@@ -140,10 +140,21 @@ html[dir='rtl'] .gold-rule {
 .sr-visible .stagger-cards > *:nth-child(5) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.38s both; }
 .sr-visible .stagger-cards > *:nth-child(6) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.44s both; }
 
+/* ── Card-grid stagger (page-load, no scroll needed) ───────────────────
+   Use class="cards-enter" on any grid that is already above the fold.
+   Children fan in automatically after page transition settles.         */
+.cards-enter > *:nth-child(1) { animation: heroFadeUp 0.65s var(--ease-out-quart) 0.30s both; }
+.cards-enter > *:nth-child(2) { animation: heroFadeUp 0.65s var(--ease-out-quart) 0.42s both; }
+.cards-enter > *:nth-child(3) { animation: heroFadeUp 0.65s var(--ease-out-quart) 0.54s both; }
+.cards-enter > *:nth-child(4) { animation: heroFadeUp 0.65s var(--ease-out-quart) 0.64s both; }
+.cards-enter > *:nth-child(5) { animation: heroFadeUp 0.65s var(--ease-out-quart) 0.72s both; }
+.cards-enter > *:nth-child(6) { animation: heroFadeUp 0.65s var(--ease-out-quart) 0.80s both; }
+
 /* Accessibility: honour prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .sr-hidden { opacity: 1; transform: none; transition: none; }
   .stagger-cards > * { opacity: 1; transform: none; }
+  .cards-enter > * { animation: none; opacity: 1; transform: none; }
   .hero-rule, .hero-item-1, .hero-item-2,
   .hero-item-3, .hero-item-4, .hero-photo { animation: none; }
 }
@@ -161,12 +172,92 @@ html[dir='rtl'] .gold-rule {
   box-shadow: 0 18px 44px -8px rgba(14, 74, 62, 0.14);
 }
 
-/* ── Button pulse ─────────────────────────── */
+/* ── Button pulse + gold ripple ───────────── */
 .btn-primary {
+  position: relative;
+  overflow: hidden;
   transition: transform 0.2s var(--ease-out-quart), background-color 0.2s ease;
 }
 .btn-primary:hover  { transform: scale(1.03); }
 .btn-primary:active { transform: scale(0.98); }
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(161, 123, 58, 0.22);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+.btn-primary:active::after {
+  animation: btnGoldRipple 0.55s ease-out forwards;
+}
+@keyframes btnGoldRipple {
+  0%   { width: 0;     height: 0;     opacity: 0.6; }
+  100% { width: 320px; height: 320px; opacity: 0;   }
+}
+
+/* ── Gradient orb background (Hero) ───────── */
+@keyframes orbDrift1 {
+  0%,100% { transform: translate(0, 0) scale(1); }
+  33%     { transform: translate(-22px, 16px) scale(1.04); }
+  66%     { transform: translate(14px, -10px) scale(0.97); }
+}
+@keyframes orbDrift2 {
+  0%,100% { transform: translate(0, 0) scale(1); }
+  40%     { transform: translate(18px, 14px) scale(1.07); }
+  70%     { transform: translate(-10px, -8px) scale(0.96); }
+}
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-orb-1 {
+  width: 540px;
+  height: 540px;
+  background: radial-gradient(circle, rgba(14,74,62,0.10), transparent 70%);
+  top: -170px;
+  right: 4%;
+  animation: orbDrift1 14s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(161,123,58,0.08), transparent 70%);
+  bottom: -90px;
+  left: -2%;
+  animation: orbDrift2 18s ease-in-out infinite;
+}
+.hero-orb-3 {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(14,74,62,0.06), transparent 70%);
+  top: 25%;
+  left: 28%;
+  animation: orbDrift1 24s ease-in-out infinite reverse;
+}
+
+/* ── 3D Book levitate (Book page hero) ──────── */
+@keyframes bookLevitate {
+  0%,100% { transform: perspective(900px) rotateY(-22deg) rotateX(5deg) translateY(0); }
+  50%     { transform: perspective(900px) rotateY(-22deg) rotateX(5deg) translateY(-14px); }
+}
+.book-float-inner {
+  animation: bookLevitate 5.5s ease-in-out infinite;
+  transition: transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
+  filter: drop-shadow(0 28px 38px rgba(14,74,62,0.22));
+  transform-origin: center center;
+}
+.book-float-inner:hover {
+  animation-play-state: paused;
+  filter: drop-shadow(0 38px 52px rgba(14,74,62,0.28));
+}
 
 /* ── Section fade for page transitions ───── */
 @keyframes pageFadeIn {
@@ -175,4 +266,11 @@ html[dir='rtl'] .gold-rule {
 }
 .page-enter {
   animation: pageFadeIn 0.5s var(--ease-out-quart) both;
+}
+
+/* ── prefers-reduced-motion additions ──────── */
+@media (prefers-reduced-motion: reduce) {
+  .hero-orb { animation: none; }
+  .book-float-inner { animation: none; filter: none; transform: perspective(900px) rotateY(-22deg) rotateX(5deg); }
+  .btn-primary::after { animation: none; }
 }

@@ -22,8 +22,12 @@ export default function Hero() {
       : 'Ali Abdullah Mubarak — portrait';
 
   return (
-    <section className="bg-cream-50 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-24">
+    <section className="bg-cream-50 overflow-hidden relative">
+      {/* Gradient orbs — soft emerald + gold glows, CSS-only, no JS */}
+      <div className="hero-orb hero-orb-1" aria-hidden="true" />
+      <div className="hero-orb hero-orb-2" aria-hidden="true" />
+      <div className="hero-orb hero-orb-3" aria-hidden="true" />
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-24 relative z-10">
         {/* Mobile: 2 col [text | compact photo] — both visible above fold.
             Desktop: 2 col [1.2fr | 1fr] — full portrait. */}
         <div className="grid grid-cols-[1fr_130px] md:grid-cols-[1.2fr_1fr] gap-5 md:gap-16 items-center md:min-h-[460px]">
