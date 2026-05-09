@@ -144,13 +144,13 @@ function BookHero() {
           */}
           <div ref={parallaxRef} style={{ willChange: 'transform' }}>
             <div className="book-float-inner">
-              <div className="relative w-full max-w-[240px] aspect-[5/7]">
+              <div className="relative w-[200px] md:w-[240px] aspect-[5/7]">
                 <Image
                   src="/book-cover.jpg"
                   alt={locale === 'ar' ? 'غلاف كتاب «تزوّج الحكومة»' : 'Get Married with the Government — book cover'}
                   fill
                   priority
-                  sizes="(max-width: 768px) 70vw, 240px"
+                  sizes="(max-width: 768px) 200px, 240px"
                   className="object-cover rounded-sm"
                 />
               </div>
