@@ -168,7 +168,7 @@ function FeaturedChapters() {
   ];
   return (
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 stagger-cards">
         {cards.map((card) => (
           <div key={card.num} className="bg-cream-100 border border-cream-400 rounded-card p-6 min-h-[200px]">
             <p className="font-serif text-4xl text-gold-400 font-medium leading-none mb-3">{card.num}</p>
@@ -302,7 +302,7 @@ function Endorsements() {
   ];
   return (
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-4 stagger-cards">
         {items.map((item, i) => (
           <div key={i} className="bg-cream-100 border border-cream-400 rounded-card p-6 flex flex-col">
             <p className="font-serif text-3xl text-gold-400 font-medium leading-[0.5] mb-5">“</p>
@@ -336,7 +336,7 @@ function Speaking() {
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
       <p className="text-[15px] leading-[1.8] text-ink mb-7 max-w-2xl">{t('body')}</p>
       <p className="eyebrow mb-3">{t('topicsLabel')}</p>
-      <div className="grid md:grid-cols-2 gap-3 mb-7">
+      <div className="grid md:grid-cols-2 gap-3 mb-7 stagger-cards">
         {topics.map((topic) => (
           <div key={topic.title} className="bg-cream-100 border border-cream-400 rounded-card p-5">
             <p className="font-serif text-base text-emerald-700 font-medium">{topic.title}</p>

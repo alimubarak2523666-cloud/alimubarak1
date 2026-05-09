@@ -126,6 +126,28 @@ html[dir='rtl'] .gold-rule {
 .sr-d3 { transition-delay: 0.24s; }
 .sr-d4 { transition-delay: 0.32s; }
 
+/* ── Card-grid stagger ──────────────────────
+   Add class="stagger-cards" to any grid whose parent will get .sr-visible
+   from a ScrollReveal wrapper. Children fan in sequentially.            */
+.stagger-cards > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.sr-visible .stagger-cards > *:nth-child(1) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.00s both; }
+.sr-visible .stagger-cards > *:nth-child(2) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.10s both; }
+.sr-visible .stagger-cards > *:nth-child(3) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.20s both; }
+.sr-visible .stagger-cards > *:nth-child(4) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.30s both; }
+.sr-visible .stagger-cards > *:nth-child(5) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.38s both; }
+.sr-visible .stagger-cards > *:nth-child(6) { animation: heroFadeUp 0.6s var(--ease-out-quart) 0.44s both; }
+
+/* Accessibility: honour prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .sr-hidden { opacity: 1; transform: none; transition: none; }
+  .stagger-cards > * { opacity: 1; transform: none; }
+  .hero-rule, .hero-item-1, .hero-item-2,
+  .hero-item-3, .hero-item-4, .hero-photo { animation: none; }
+}
+
 /* ── Card lift on hover ───────────────────── */
 .card-lift {
   transition:

@@ -147,7 +147,7 @@ function WhatIDoToday() {
   ];
   return (
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 stagger-cards">
         {cards.map((card) => (
           <Link
             key={card.slug}
@@ -217,7 +217,7 @@ function Education() {
   const t = useTranslations('about.education');
   return (
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 stagger-cards">
         {[1, 2].map((n) => (
           <div key={n} className="bg-cream-100 border border-cream-400 rounded-card p-6">
             <p className="text-[10px] tracking-widest uppercase text-gold-400 mb-2">{t(`school${n}Year`)}</p>
@@ -238,7 +238,7 @@ function WritingAndVoice() {
   return (
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
       <p className="text-[15px] leading-[1.8] text-ink mb-7 max-w-2xl">{t('body')}</p>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 stagger-cards">
         {[1, 2, 3, 4].map((n) => (
           <div key={n} className="bg-cream-100 border border-cream-400 rounded-card p-5">
             <p className="text-[10px] tracking-widest uppercase text-gold-400 mb-2">{t(`item${n}Eyebrow`)}</p>
@@ -259,7 +259,7 @@ function Recognitions() {
   const t = useTranslations('about.recognitions');
   return (
     <SectionShell eyebrow={t('eyebrow')} title={t('title')}>
-      <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
+      <div className="grid md:grid-cols-2 gap-x-8 gap-y-4 stagger-cards">
         {[1, 2, 3, 4].map((n) => (
           <div key={n} className="border-s-2 border-gold-400 ps-5 py-1">
             <p className="font-serif text-[15px] text-emerald-700 font-medium mb-1">{t(`item${n}Title`)}</p>

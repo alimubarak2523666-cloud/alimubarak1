@@ -59,12 +59,11 @@ export default function WorkWithAliPage() {
       {/* Service cards */}
       <ScrollReveal>
         <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
-          <div className="grid md:grid-cols-3 gap-4">
-            {services.map((service, i) => (
+          <div className="grid md:grid-cols-3 gap-4 stagger-cards">
+            {services.map((service) => (
               <div
                 key={service.titleKey}
                 className="card-lift bg-cream-100 border border-cream-400 rounded-card p-6 flex flex-col"
-                style={{ transitionDelay: `${i * 70}ms` }}
               >
                 <p className={`font-serif text-lg text-emerald-700 font-medium leading-tight mb-3 ${locale === 'ar' ? 'font-serif-ar' : ''}`}>
                   {t(service.titleKey)}

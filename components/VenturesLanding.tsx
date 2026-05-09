@@ -81,13 +81,12 @@ export default function VenturesLanding() {
       {/* Cards grid — each card lifts on hover, staggered reveal */}
       <ScrollReveal>
         <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            {cards.map((card, i) => (
+          <div className="grid md:grid-cols-2 gap-4 stagger-cards">
+            {cards.map((card) => (
               <Link
                 key={card.slug}
                 href={`/${locale}/ventures/${card.slug}`}
                 className="card-lift bg-cream-100 border border-cream-400 rounded-card p-7 min-h-[220px] flex flex-col hover:border-emerald-700 group"
-                style={{ transitionDelay: `${i * 60}ms` }}
               >
                 <p
                   className={`font-serif text-xl text-emerald-700 font-medium leading-tight mb-1 ${

@@ -31,12 +31,11 @@ export default function InfluencePage() {
       {/* Media cards — staggered reveal */}
       <ScrollReveal>
         <section className="bg-cream-50 border border-cream-400 rounded-[12px] p-10 md:p-12 mb-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            {cards.map((card, i) => (
+          <div className="grid md:grid-cols-2 gap-4 stagger-cards">
+            {cards.map((card) => (
               <div
                 key={card.titleKey}
                 className="card-lift bg-cream-100 border border-cream-400 rounded-card p-6"
-                style={{ transitionDelay: `${i * 60}ms` }}
               >
                 <p className={`font-serif text-xl text-emerald-700 font-medium mb-3 leading-tight ${locale === 'ar' ? 'font-serif-ar' : ''}`}>
                   {t(card.titleKey)}
