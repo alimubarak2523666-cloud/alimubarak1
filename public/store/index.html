@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>THE EDIT · by ALI MUBARAK — a store, curated</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060507;--bg2:#0C0B0E;--ink:#FFFFFF;--muted:#B8B5AD;--line:rgba(244,241,234,.10);--gold:#C9A86A;--gold-2:#E7D3A6}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"IBM Plex Sans Arabic",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:"Helvetica Neue",Arial,"Reem Kufi",sans-serif}
+  [dir="rtl"],.ar,.f-arb{font-family:"IBM Plex Sans Arabic","Helvetica Neue",sans-serif}
+  h1[dir="rtl"],h2[dir="rtl"],h3[dir="rtl"],.f-arh{font-family:"Reem Kufi","Helvetica Neue",sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  #gl{position:fixed;inset:0;z-index:0;display:block;transition:opacity .4s linear}
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 90% at 50% 50%,transparent 42%,rgba(6,5,7,.85) 100%)}
+  .content{position:relative;z-index:2}
+  .eyebrow{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+  .progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);width:0;z-index:30}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;transition:background .4s,backdrop-filter .4s,border-color .4s;border-bottom:1px solid transparent}
+  .alitab{border:1px solid rgba(201,168,106,.5);color:var(--gold-2)!important;border-radius:40px;padding:7px 16px;font-weight:600;transition:all .25s}
+  .alitab:hover{background:rgba(201,168,106,.14);color:#fff!important}
+  nav.solid{background:rgba(6,5,7,.62);backdrop-filter:blur(18px) saturate(140%);border-bottom:1px solid var(--line)}
+  .brand{font-weight:700;letter-spacing:.22em;font-size:14px}.brand span{color:var(--gold)}
+  .navlinks{display:flex;gap:28px;font-size:13px;color:var(--muted)}
+  .navlinks a{color:var(--muted);text-decoration:none;transition:color .25s}.navlinks a:hover{color:var(--ink)}
+  .cart{border:1px solid var(--line);padding:7px 14px;border-radius:40px;font-size:12px}
+  .scrollcue{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:20;font-size:11px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;animation:bob 2.4s ease-in-out infinite;transition:opacity .4s}
+  @keyframes bob{0%,100%{transform:translate(-50%,0);opacity:.4}50%{transform:translate(-50%,8px);opacity:1}}
+
+  /* ===== PORTAL (3D front door) ===== */
+  .screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  .portal-hero h1{font-size:clamp(48px,9vw,118px);font-weight:700;letter-spacing:-.035em;line-height:.94}
+  .portal-hero h1 .lt{color:#FFFFFF}
+  .portal-hero .sub{margin-top:24px;font-size:clamp(16px,2vw,21px);color:var(--muted);max-width:560px}
+  .portal-hero .ar{margin-top:10px;font-size:15px;color:#FFFFFF}
+
+  .vstage{text-align:center;align-items:center}
+  .vstage h2{font-size:clamp(30px,5vw,60px);font-weight:700;letter-spacing:-.02em;line-height:1.02;max-width:760px}
+  .vstage p{color:var(--muted);margin-top:16px;font-size:18px;max-width:560px}
+  .videoframe{margin-top:42px;width:min(820px,90vw);aspect-ratio:16/9;border-radius:22px;border:1px solid var(--line);
+    background:linear-gradient(160deg,#15120e,#08080a);position:relative;overflow:hidden;cursor:pointer;box-shadow:0 40px 120px rgba(0,0,0,.6)}
+  .videoframe .label{position:absolute;top:18px;left:20px;font-size:11px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .videoframe .play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+  .playbtn{width:78px;height:78px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;transition:transform .25s,background .25s}
+  .videoframe:hover .playbtn{transform:scale(1.08);background:rgba(201,168,106,.12)}
+  .playbtn::before{content:"";border-left:20px solid var(--gold);border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px}
+  .play .cap{font-size:14px;color:var(--muted);letter-spacing:.04em}
+
+  .how h2{font-size:clamp(28px,4.5vw,54px);font-weight:700;letter-spacing:-.02em}
+  .how .lead{color:var(--muted);max-width:560px;margin:16px 0 50px;font-size:18px}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .step{border:1px solid var(--line);border-radius:20px;padding:26px 20px;background:rgba(255,255,255,.02);backdrop-filter:blur(6px)}
+  .step .n{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.2em}
+  .step h4{margin-top:12px;font-size:18px;font-weight:600}.step p{margin-top:8px;color:#FFFFFF;font-size:14px}
+
+  .enter{text-align:center;align-items:center}
+  .enter h2{font-size:clamp(34px,6vw,72px);font-weight:700;letter-spacing:-.03em}
+  .enter p{color:var(--muted);margin-top:14px;font-size:17px}
+  .enterbtn{margin-top:34px;padding:16px 40px;border-radius:44px;border:1px solid var(--gold);background:var(--gold);color:#1a1407;font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s,background .25s}
+  .enterbtn:hover{transform:translateY(-2px);background:var(--gold-2)}
+
+  /* ===== STORE (solid bg, product scroll) ===== */
+  .store{position:relative;z-index:2;background:var(--bg);border-top:1px solid var(--line)}
+  .store::before{content:"";position:absolute;top:-160px;left:0;right:0;height:160px;background:linear-gradient(to bottom,transparent,var(--bg))}
+  .store-tag{text-align:center;padding:90px 0 0}
+  .pin-stage{height:300vh;position:relative}
+  .pin-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .prod-shot{position:relative;width:min(560px,80vw);height:min(560px,80vw);border-radius:34px;overflow:hidden;box-shadow:0 50px 140px rgba(0,0,0,.6);will-change:transform}
+  .prod-shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .prod-fallback{position:absolute;inset:0;background:linear-gradient(150deg,#1c1813,#070707);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;letter-spacing:.2em}
+  .pin-caption{position:absolute;z-index:3;text-align:center;pointer-events:none}
+  .pin-caption h2{font-size:clamp(30px,5vw,60px);font-weight:700;letter-spacing:-.02em}
+  .pin-caption p{color:var(--muted);margin-top:8px;font-size:16px}
+  .cap-1{top:13vh}.cap-2{bottom:13vh}
+
+  .feat{padding:130px 0}
+  .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .feat-grid.flip .ftxt{order:2}
+  .ftxt h3{font-size:clamp(28px,4vw,46px);font-weight:700;letter-spacing:-.02em;line-height:1.05}
+  .ftxt p{color:var(--muted);margin-top:18px;font-size:17px;max-width:440px}
+  .fcard{aspect-ratio:4/3;border-radius:26px;overflow:hidden;border:1px solid var(--line);position:relative;background:var(--bg2)}
+  .fcard img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.2s ease}
+  .fcard:hover img{transform:scale(1)}
+  .fcard .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.2em}
+
+  .curator{padding:120px 0;text-align:center}
+  .curator .quote{font-size:clamp(26px,3.6vw,44px);font-weight:600;letter-spacing:-.01em;max-width:880px;margin:0 auto;line-height:1.25}
+  .curator .quote em{color:#FFFFFF;font-style:normal}
+  .curator .by{margin-top:26px;display:inline-flex;align-items:center;gap:12px;color:var(--muted);font-size:14px}
+  .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#5a4a2a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#1a1407;font-size:13px}
+
+  .price{padding:140px 0;text-align:center}
+  .amt{font-size:clamp(50px,9vw,110px);font-weight:700;letter-spacing:-.03em}
+  .amt small{font-size:.3em;color:var(--muted);font-weight:600;vertical-align:super;letter-spacing:.1em}
+  .buy{margin-top:36px;display:inline-flex;gap:14px}
+  .btn{padding:16px 34px;border-radius:44px;font-size:15px;font-weight:600;cursor:pointer;border:1px solid var(--gold);transition:transform .2s,background .25s}
+  .btn-primary{background:var(--gold);color:#1a1407}.btn-primary:hover{transform:translateY(-2px);background:var(--gold-2)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}.btn-ghost:hover{border-color:var(--ink)}
+  .pvideo{padding:120px 0 0;text-align:center}
+  .pvideo h2{font-size:clamp(28px,4.5vw,52px);font-weight:700;letter-spacing:-.02em;margin-top:10px}
+  .pvideo .frame{margin:34px auto 0;width:min(820px,90vw);aspect-ratio:16/9;border-radius:22px;border:1px solid var(--line);background:linear-gradient(160deg,#15120e,#08080a);position:relative;overflow:hidden;cursor:pointer;box-shadow:0 40px 120px rgba(0,0,0,.55)}
+  .pvideo .frame .label{position:absolute;top:18px;left:20px;font-size:11px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .pvideo .frame .play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+  .pvideo .frame:hover .playbtn{transform:scale(1.08);background:rgba(201,168,106,.12)}
+  .stock{max-width:430px;margin:28px auto 0;text-align:left}
+  .stock .row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:11px}
+  .stock .live{display:inline-flex;align-items:center;gap:8px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;font-size:11px}
+  .stock .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+  .stock .left{color:var(--ink);font-weight:600;font-size:15px}
+  .bar{height:6px;border-radius:6px;background:rgba(244,241,234,.12);overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:0;transition:width 1.5s cubic-bezier(.16,1,.3,1)}
+  .stock .sub{margin-top:11px;color:var(--muted);font-size:12.5px}
+
+  .drops{padding:0 0 140px}
+  .drops h2{font-size:clamp(26px,3.4vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:40px}
+  .dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .dcard{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--bg2);transition:transform .4s,border-color .4s}
+  .dcard:hover{transform:translateY(-6px);border-color:rgba(201,168,106,.4)}
+  .dthumb{aspect-ratio:1/1;background:linear-gradient(160deg,#161310,#0a0a0a);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.2em}
+  .dbody{padding:20px}.dbody .tag{font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+  .dbody h4{margin-top:8px;font-size:18px;font-weight:600}.dbody p{color:var(--muted);font-size:13.5px;margin-top:6px}
+
+  /* ===== Drop ritual countdown ===== */
+  .portal-hero{position:relative}
+  .ritual-wrap{position:absolute;bottom:78px;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+  .ritual{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border:1px solid rgba(201,168,106,.35);border-radius:40px;font-size:12.5px;letter-spacing:.12em;color:var(--gold-2);text-transform:uppercase;background:rgba(6,5,7,.45);backdrop-filter:blur(8px)}
+  .ritual .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 1.6s ease-in-out infinite}
+  .countdown{margin:34px 0 50px;border:1px solid var(--line);border-radius:24px;padding:30px 28px;background:rgba(255,255,255,.02);display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .countdown .cd-l .eyebrow{display:block;margin-bottom:8px}
+  .countdown .cd-l h3{font-size:clamp(20px,2.6vw,28px);font-weight:700;letter-spacing:-.01em}
+  .countdown .cd-l p{color:var(--muted);font-size:13.5px;margin-top:6px}
+  .cd-digits{display:flex;gap:14px;text-align:center}
+  .cd-cell{min-width:74px;border:1px solid var(--line);border-radius:16px;padding:14px 10px;background:rgba(6,5,7,.5)}
+  .cd-cell b{display:block;font-size:clamp(26px,3.4vw,38px);font-weight:700;color:var(--gold-2);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .cd-cell span{display:block;margin-top:4px;font-size:10px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+
+  /* ===== Notify-me waitlist on drop cards ===== */
+  .notify{margin-top:14px}
+  .notify .count{font-size:12px;color:var(--gold);letter-spacing:.06em;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .notify .count .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.6s ease-in-out infinite}
+  .nbtn{width:100%;padding:11px 0;border-radius:40px;border:1px solid rgba(201,168,106,.45);background:transparent;color:var(--gold-2);font-size:13px;font-weight:600;cursor:pointer;transition:background .25s,transform .2s}
+  .nbtn:hover{background:rgba(201,168,106,.12);transform:translateY(-1px)}
+  .nform{display:flex;gap:8px}
+  .nform input{flex:1;height:42px;background:#0F0E12;border:1px solid var(--line);border-radius:40px;color:#fff;padding:0 16px;font-size:13.5px;outline:none;font-family:inherit}
+  .nform input:focus{border-color:rgba(201,168,106,.5)}
+  .nform button{width:42px;height:42px;border-radius:50%;border:0;background:var(--gold);color:#1a1407;font-size:16px;font-weight:700;cursor:pointer;flex:none}
+  .ndone{font-size:13px;color:var(--gold-2);border:1px solid rgba(201,168,106,.35);border-radius:40px;padding:11px 0;text-align:center;letter-spacing:.04em}
+
+  /* ===== The Archive (past drops) ===== */
+  .archive{padding:0 0 140px}
+  .archive h2{font-size:clamp(26px,3.4vw,40px);font-weight:700;letter-spacing:-.02em}
+  .archive .alead{color:var(--muted);font-size:15px;margin:12px 0 40px;max-width:520px}
+  .agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .acard{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--bg2);position:relative}
+  .athumb{aspect-ratio:1/1;position:relative;overflow:hidden;background:linear-gradient(160deg,#161310,#0a0a0a)}
+  .athumb img{width:100%;height:100%;object-fit:cover;filter:grayscale(.85) brightness(.7);transition:filter .6s,transform .6s}
+  .acard:hover .athumb img{filter:grayscale(.3) brightness(.85);transform:scale(1.04)}
+  .soldout{position:absolute;top:14px;left:14px;background:rgba(6,5,7,.78);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:6px 14px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#fff}
+  .abody{padding:20px}
+  .abody h4{font-size:18px;font-weight:600}
+  .abody .gone{margin-top:8px;color:var(--gold);font-size:13px;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+  .abody .gone::before{content:"";width:18px;height:1px;background:var(--gold)}
+  .abody .meta{margin-top:6px;color:var(--muted);font-size:12.5px}
+
+  .buybar{position:fixed;left:0;right:0;bottom:0;z-index:25;transform:translateY(120%);transition:transform .5s cubic-bezier(.16,1,.3,1);background:rgba(12,11,14,.85);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+  .buybar.show{transform:none}
+  .buybar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px}
+  .buybar .bl{display:flex;align-items:center;gap:14px}.buybar .nm{font-weight:600;font-size:15px}.buybar .pr{color:var(--gold);font-size:14px}
+  .buybar .btn{padding:11px 26px;font-size:14px}
+
+  footer{position:relative;z-index:2;background:var(--bg);border-top:1px solid var(--line);padding:60px 0 90px;text-align:center;color:var(--muted);font-size:13px}
+  footer .fl{margin-top:16px;display:flex;gap:24px;justify-content:center}footer a{color:var(--muted);text-decoration:none}
+  .loadnote{position:fixed;bottom:14px;right:16px;z-index:30;font-size:11px;color:var(--muted);letter-spacing:.1em}
+
+  /* ===== gold-text option (toggle bottom-left) ===== */
+  .goldtext .portal-hero h1,.goldtext .portal-hero h1 .lt,
+  .goldtext .vstage h2,.goldtext .how h2,.goldtext .enter h2{
+    background:linear-gradient(135deg,#F2E3BC 0%,#E7D3A6 45%,#C9A86A 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+  .goldtext .portal-hero .ar{color:var(--gold-2)}
+  .goldtext .portal-hero .sub{color:var(--gold-2)}
+  .txtoggle{position:fixed;left:22px;bottom:20px;z-index:40;display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:40px;background:rgba(12,11,14,.78);backdrop-filter:blur(14px);overflow:hidden;font-size:12px;font-weight:600}
+  .txtoggle button{border:0;background:transparent;color:var(--muted);padding:10px 16px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;transition:all .25s}
+  .txtoggle button.on{background:var(--gold);color:#1a1407}
+  .txtoggle .lbl{padding:0 4px 0 14px;color:var(--muted);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase}
+
+  @media(max-width:780px){
+    .navlinks{display:flex;gap:0}.navlinks a{display:none}
+    .navlinks .alitab{display:inline-block;font-size:11px;padding:6px 12px;letter-spacing:.04em}
+    .steps{grid-template-columns:1fr 1fr}.feat-grid{grid-template-columns:1fr;gap:30px}.feat-grid.flip .ftxt{order:0}.dgrid{grid-template-columns:1fr}.feat{padding:90px 0}.agrid{grid-template-columns:1fr}
+    .countdown{flex-direction:column;align-items:flex-start}.cd-cell{min-width:60px;padding:11px 8px}
+    .ritual{font-size:10px;letter-spacing:.08em;padding:8px 12px;max-width:92vw;white-space:normal;text-align:center;line-height:1.5}
+    .txtoggle{bottom:150px}
+    nav{padding:12px 14px}.brand{font-size:12px;letter-spacing:.16em;white-space:nowrap}.brand .bn{display:none}
+    .cart{padding:6px 10px;font-size:11px;white-space:nowrap}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="gl"></canvas>
+<div class="vignette"></div>
+<div class="progress" id="progress"></div>
+<div class="scrollcue" id="cue">Scroll</div>
+<div class="loadnote" id="loadnote">rendering 3D…</div>
+
+<script>document.body.classList.add('goldtext');</script>
+<form name="waitlist" data-netlify="true" netlify hidden><input type="text" name="phone"/><input type="text" name="drop"/></form>
+
+<nav id="nav">
+  <div class="brand"><span class="bn">ALI MUBARAK ·</span> <span>THE EDIT</span></div>
+  <div class="navlinks"><a href="#how">How it works</a><a href="#store">The store</a><a href="#price">Drop 01</a><a href="#archive">Archive</a><a class="alitab" href="/en">ALI MUBARAK</a></div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <div class="cart">Bag · 0</div>
+  </div>
+</nav>
+
+<div class="content">
+
+  <!-- ===== PORTAL ===== -->
+  <section class="screen portal-hero wrap">
+    <div class="eyebrow reveal in">ALI MUBARAK · THE EDIT</div>
+    <h1 class="reveal in d1">A store,<br><span class="lt">curated by Ali.</span></h1>
+    <p class="sub reveal in d2">Welcome. This is the front door. Watch how it works, then step inside the store.</p>
+    <div class="ritual-wrap reveal in d3"><span class="ritual"><span class="dot"></span>New drop every Thursday · 8:00 PM Kuwait</span></div>
+  </section>
+
+  <section class="screen vstage wrap">
+    <div class="eyebrow reveal">In 60 seconds</div>
+    <h2 class="reveal d1">What this place is.</h2>
+    <p class="reveal d2">Not an ad agency. A curator. I take one product, tell its story, and bring it to your door.</p>
+    <div class="videoframe reveal d2" id="vf">
+      <div class="label">Intro film · placeholder</div>
+      <div class="play"><div class="playbtn"></div><div class="cap">Play the intro (your video goes here)</div></div>
+    </div>
+  </section>
+
+  <section class="screen how wrap" id="how">
+    <div class="eyebrow reveal">How to use it</div>
+    <h2 class="reveal d1">Four steps. That's it.</h2>
+    <p class="lead reveal d1">You'll find me on Instagram, TikTok and Snapchat — every post points here.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><h4>I pick it</h4><p>One product from a brand I believe in, featured here.</p></div>
+      <div class="step reveal d1"><div class="n">02</div><h4>You discover it</h4><p>My socials send you to its page — story, reel, snap.</p></div>
+      <div class="step reveal d2"><div class="n">03</div><h4>You pay here</h4><p>Secure checkout on my site. No redirect.</p></div>
+      <div class="step reveal d3"><div class="n">04</div><h4>We deliver</h4><p>My team handles fulfilment to your door.</p></div>
+    </div>
+  </section>
+
+  <section class="screen enter wrap">
+    <div class="eyebrow reveal">Ready?</div>
+    <h2 class="reveal d1">Enter the store.</h2>
+    <p class="reveal d2">This month's drop is waiting.</p>
+    <button class="enterbtn reveal d2" id="enterBtn">Step inside ↓</button>
+  </section>
+
+  <!-- ===== STORE ===== -->
+  <div class="store" id="store">
+    <div class="store-tag wrap">
+      <div class="eyebrow reveal">Now entering · THE EDIT</div>
+    </div>
+
+    <section class="pin-stage" id="product">
+      <div class="pin-sticky">
+        <div class="pin-caption cap-1 reveal"><h2>The Aurora</h2><p>Drop 01 · Limited to 200</p></div>
+        <div class="prod-shot" id="shot">
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=80" alt="Featured product" onerror="this.style.display='none'">
+          <div class="prod-fallback">PRODUCT IMAGE</div>
+        </div>
+        <div class="pin-caption cap-2 reveal"><h2>Engineered to be worn.</h2><p>Scroll to explore</p></div>
+      </div>
+    </section>
+
+    <section class="feat wrap">
+      <div class="feat-grid">
+        <div class="ftxt reveal"><h3>I don't sell.<br>I curate.</h3><p>Brands send me products. I keep only what's worth your money, put it here, and tell you exactly why. If it's not on this page, it didn't make the cut.</p></div>
+        <div class="fcard reveal d1"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1000&q=80" alt="" onerror="this.style.display='none'"><div class="ph">LIFESTYLE SHOT</div></div>
+      </div>
+    </section>
+
+    <section class="feat wrap" style="padding-top:0">
+      <div class="feat-grid flip">
+        <div class="ftxt reveal"><h3>Photographed like Apple.<br>Priced for you.</h3><p>Every drop gets a cinematic page like this one. You watch, you decide, you pay here — no middleman, no inflated agency markup.</p></div>
+        <div class="fcard reveal d1"><img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=1000&q=80" alt="" onerror="this.style.display='none'"><div class="ph">DETAIL SHOT</div></div>
+      </div>
+    </section>
+
+    <section class="curator wrap" id="why">
+      <div class="quote reveal">"My audience trusts me. So I only put my name on things <em>I'd buy twice.</em>"</div>
+      <div class="by reveal d1"><span class="avatar">AM</span> Ali Abdullah Mubarak · Influencer & curator</div>
+    </section>
+
+    <section class="pvideo wrap" id="pvideo">
+      <div class="eyebrow reveal">The Aurora · the film</div>
+      <h2 class="reveal d1">See it in motion.</h2>
+      <div class="frame reveal d1" id="pvf">
+        <div class="label">Product film · placeholder</div>
+        <div class="play"><div class="playbtn"></div><div class="cap">Play the drop video (your product clip goes here)</div></div>
+      </div>
+    </section>
+
+    <section class="price wrap" id="price">
+      <div class="eyebrow reveal">Drop 01 · The Aurora</div>
+      <div class="amt reveal d1"><span id="priceAmt">89</span> <small>KWD</small></div>
+      <div class="stock reveal d1">
+        <div class="row"><span class="live"><span class="dot"></span>Live stock</span><span><span class="left" id="leftCount">47</span><span style="color:var(--muted)" id="stockTotal"> / 200 left</span></span></div>
+        <div class="bar"><i id="stockBar"></i></div>
+        <div class="sub" id="stockSub">153 claimed · selling fast · free delivery in Kuwait</div>
+      </div>
+      <div class="buy reveal d2"><button class="btn btn-primary">Get first access</button><button class="btn btn-ghost">Watch the story</button></div>
+    </section>
+
+    <section class="drops wrap" id="drops">
+      <h2 class="reveal">Next drops</h2>
+      <div class="countdown reveal">
+        <div class="cd-l">
+          <span class="eyebrow">The ritual</span>
+          <h3>Next drop in</h3>
+          <p>Every Thursday · 8:00 PM Kuwait. Miss it, and it's gone to the Archive.</p>
+        </div>
+        <div class="cd-digits" id="cd">
+          <div class="cd-cell"><b id="cdD">0</b><span>Days</span></div>
+          <div class="cd-cell"><b id="cdH">00</b><span>Hours</span></div>
+          <div class="cd-cell"><b id="cdM">00</b><span>Min</span></div>
+          <div class="cd-cell"><b id="cdS">00</b><span>Sec</span></div>
+        </div>
+      </div>
+      <div class="dgrid">
+        <div class="dcard reveal"><div class="dthumb">DROP 02</div><div class="dbody"><div class="tag">Coming soon</div><h4>The Field Bag</h4><p>Everyday carry, rebuilt.</p></div></div>
+        <div class="dcard reveal d1"><div class="dthumb">DROP 03</div><div class="dbody"><div class="tag">Coming soon</div><h4>Desk Series</h4><p>The objects on my desk.</p></div></div>
+        <div class="dcard reveal d2"><div class="dthumb">DROP 04</div><div class="dbody"><div class="tag">Coming soon</div><h4>Signature Scent</h4><p>A collaboration I've been waiting to share.</p></div></div>
+      </div>
+    </section>
+
+    <section class="archive wrap" id="archive">
+      <div class="eyebrow reveal">The Archive</div>
+      <h2 class="reveal d1">Gone, not forgotten.</h2>
+      <p class="alead reveal d1">Every drop that sold out lives here. When it's gone, it's gone — that's the deal.</p>
+      <div class="agrid">
+        <div class="acard reveal">
+          <div class="athumb"><img src="https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&w=900&q=80" alt="" onerror="this.style.display='none'"><span class="soldout">Sold out</span></div>
+          <div class="abody"><h4>The Slate Wallet</h4><div class="gone">Gone in 41 minutes</div><div class="meta">Drop 00 · 150 made · never restocked</div></div>
+        </div>
+        <div class="acard reveal d1">
+          <div class="athumb"><img src="https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=900&q=80" alt="" onerror="this.style.display='none'"><span class="soldout">Sold out</span></div>
+          <div class="abody"><h4>The Monogram Cap</h4><div class="gone">Gone in 2 hours 14 min</div><div class="meta">Pre-launch · 120 made · never restocked</div></div>
+        </div>
+        <div class="acard reveal d2">
+          <div class="athumb"><img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=80" alt="" onerror="this.style.display='none'"><span class="soldout">Sold out</span></div>
+          <div class="abody"><h4>The Velvet Hours Candle</h4><div class="gone">Gone in 19 minutes</div><div class="meta">Pre-launch · 80 made · never restocked</div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="brand"><span class="bn">ALI MUBARAK ·</span> <span>THE EDIT</span></div>
+    <div class="fl"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Snapchat</a><a href="#">Contact</a></div>
+    <p style="margin-top:20px">THE EDIT · Drop 01 opens soon · <a href="/en" style="color:var(--gold)">About Ali Mubarak</a></p>
+  </footer>
+</div>
+
+<div class="buybar" id="buybar">
+  <div class="wrap"><div class="bl"><span class="nm">The Aurora</span><span class="pr" id="barPrice">89 KWD</span></div><button class="btn btn-primary">Get first access</button></div>
+</div>
+
+<script src="theedit-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script>
+(function(){
+  const loadnote=document.getElementById('loadnote');
+  const canvas=document.getElementById('gl');
+  const glOK=(typeof THREE!=='undefined');
+  if(!glOK){loadnote.textContent='3D failed to load — check connection';canvas.style.display='none';}
+
+  let composer=null,bloom=null,knot=null,particles=null,camera=null,renderer=null,scene=null;
+  let morph=null,SHP=null,rotY=0;
+  const easeIO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  if(glOK){
+    renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+    renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.1,100);camera.position.set(0,0,6.2);
+    function envTexture(){const c=document.createElement('canvas');c.width=64;c.height=256;const g=c.getContext('2d');
+      const grd=g.createLinearGradient(0,0,0,256);grd.addColorStop(0,'#1a1814');grd.addColorStop(.45,'#3a3326');grd.addColorStop(.62,'#c9a86a');grd.addColorStop(.78,'#e7d3a6');grd.addColorStop(1,'#0a0908');
+      g.fillStyle=grd;g.fillRect(0,0,64,256);const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+    let envMap=null;try{const p=new THREE.PMREMGenerator(renderer);envMap=p.fromEquirectangular(envTexture()).texture;scene.environment=envMap;}catch(e){}
+    // ===== MORPH OBJECT (Option 4): knot → dust → AM, driven by portal scroll =====
+    (function buildMorph(){
+      const N=9000;
+      function sampleKnot(){const g=new THREE.TorusKnotGeometry(1.15,.38,220,36,2,3),pos=g.attributes.position,out=new Float32Array(N*3);
+        for(let i=0;i<N;i++){const j=(Math.random()*pos.count)|0;out[i*3]=pos.getX(j);out[i*3+1]=pos.getY(j);out[i*3+2]=pos.getZ(j);}g.dispose();return out;}
+      function sampleSphere(r){const out=new Float32Array(N*3);
+        for(let i=0;i<N;i++){const u=Math.random()*Math.PI*2,v=Math.acos(2*Math.random()-1),rr=r*(0.4+Math.random()*0.6);
+          out[i*3]=rr*Math.sin(v)*Math.cos(u);out[i*3+1]=rr*Math.sin(v)*Math.sin(u);out[i*3+2]=rr*Math.cos(v);}return out;}
+      function sampleAM(){const c=document.createElement('canvas');c.width=1000;c.height=520;const g=c.getContext('2d');
+        g.fillStyle='#000';g.fillRect(0,0,c.width,c.height);
+        g.fillStyle='#fff';g.font='700 340px "Helvetica Neue", Arial, sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('AM',c.width/2,c.height/2+16);
+        const img=g.getImageData(0,0,c.width,c.height).data,pts=[];
+        for(let y=0;y<c.height;y+=3)for(let x=0;x<c.width;x+=3)
+          if(img[(y*c.width+x)*4]>120)pts.push([(x-c.width/2)/c.width*4.6,-(y-c.height/2)/c.width*4.6,(Math.random()-.5)*.3]);
+        const out=new Float32Array(N*3);
+        for(let i=0;i<N;i++){const s=pts[(Math.random()*pts.length)|0]||[0,0,0];out[i*3]=s[0];out[i*3+1]=s[1];out[i*3+2]=s[2];}return out;}
+      SHP={A:sampleKnot(),B:sampleSphere(4.2),C:sampleAM()};
+      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(N*3),3));
+      morph=new THREE.Points(g,new THREE.PointsMaterial({color:0xE7D3A6,size:.035,transparent:true,opacity:.92,blending:THREE.AdditiveBlending,depthWrite:false}));
+      scene.add(morph);
+    })();
+    function lerpMorph(a,b,t,time){const p=morph.geometry.attributes.position.array,n=p.length/3;
+      for(let i=0;i<n;i++){const k=i*3,w=Math.sin(time*1.4+i*.37)*.016;
+        p[k]=a[k]+(b[k]-a[k])*t+w;p[k+1]=a[k+1]+(b[k+1]-a[k+1])*t+w;p[k+2]=a[k+2]+(b[k+2]-a[k+2])*t;}
+      morph.geometry.attributes.position.needsUpdate=true;}
+    window._lerpMorph=lerpMorph;
+    const key=new THREE.DirectionalLight(0xfff0d0,2.2);key.position.set(4,5,5);scene.add(key);
+    const rim=new THREE.DirectionalLight(0x6688ff,1.1);rim.position.set(-5,-2,-4);scene.add(rim);
+    const warm=new THREE.PointLight(0xc9a86a,1.4,30);warm.position.set(0,0,4);scene.add(warm);scene.add(new THREE.AmbientLight(0x222028,.6));
+    const pc=800,pg=new THREE.BufferGeometry(),pp=new Float32Array(pc*3);
+    for(let i=0;i<pc;i++){pp[i*3]=(Math.random()-.5)*22;pp[i*3+1]=(Math.random()-.5)*22;pp[i*3+2]=(Math.random()-.5)*18-3;}
+    pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+    particles=new THREE.Points(pg,new THREE.PointsMaterial({color:0xc9a86a,size:.02,transparent:true,opacity:.5}));scene.add(particles);
+    try{composer=new THREE.EffectComposer(renderer);composer.addPass(new THREE.RenderPass(scene,camera));
+      bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.9,.7,.85);composer.addPass(bloom);}catch(e){composer=null;}
+    window._warm=warm;
+    loadnote.style.opacity='0';loadnote.style.transition='opacity 1s';setTimeout(()=>loadnote.remove(),1200);
+  }
+
+  const nav=document.getElementById('nav');
+  const progress=document.getElementById('progress');
+  const cue=document.getElementById('cue');
+  const buybar=document.getElementById('buybar');
+  const store=document.getElementById('store');
+  const drops=document.getElementById('drops');
+  const price=document.getElementById('price');
+  let target=0,cur=0,portalP=0,renderOn=true;
+  const maxScroll=()=>document.documentElement.scrollHeight-innerHeight;
+
+  function onScroll(){
+    const y=scrollY;target=y/Math.max(maxScroll(),1);
+    nav.classList.toggle('solid',y>40);
+    progress.style.width=(target*100)+'%';
+    // portal progress (0 at top → 1 when store begins)
+    const sTop=store.offsetTop;portalP=Math.min(y/Math.max(sTop-innerHeight*0.4,1),1);
+    // fade the 3D out as we approach the store, pause render when fully hidden
+    const op=Math.max(0,1-Math.max(0,(y-(sTop-innerHeight))/innerHeight));
+    if(glOK){canvas.style.opacity=op.toFixed(2);renderOn=op>0.02;}
+    cue.style.opacity=y>innerHeight*0.6?'0':'';
+    // pinned product scale (store)
+    const stage=document.getElementById('product');
+    if(stage){const r=stage.getBoundingClientRect();const total=stage.offsetHeight-innerHeight;const p=Math.min(Math.max(-r.top/total,0),1);
+      const shot=document.getElementById('shot');if(shot){shot.style.transform=`scale(${0.8+p*0.45}) rotateY(${(p-0.5)*8}deg)`;}}
+    // sticky buy bar
+    const showFrom=price.offsetTop+price.offsetHeight*0.4,hideAt=drops.offsetTop+drops.offsetHeight-200;
+    buybar.classList.toggle('show',y>showFrom&&y<hideAt);
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+
+  document.getElementById('enterBtn').addEventListener('click',()=>store.scrollIntoView({behavior:'smooth'}));
+  document.getElementById('vf').addEventListener('click',function(){this.querySelector('.cap').textContent='▶ Your intro film plays here on the live site';});
+
+  const clock=glOK?new THREE.Clock():null;let visible=true;
+  document.addEventListener('visibilitychange',()=>visible=!document.hidden);
+  function frame(){
+    requestAnimationFrame(frame);
+    if(!glOK||!visible||!renderOn)return;
+    const t=clock.getElapsedTime();cur+=(target-cur)*.06;
+    // ----- Option 4 morph: 0→.45 knot dissolves to dust · .55→1 dust settles into AM -----
+    let a,b,tt;
+    if(portalP<.55){a=SHP.A;b=SHP.B;tt=easeIO(Math.min(portalP/.45,1));}
+    else{a=SHP.B;b=SHP.C;tt=easeIO(Math.min((portalP-.55)/.45,1));}
+    window._lerpMorph(a,b,tt,t);
+    const targetRot=portalP>.55?0:(cur*Math.PI*3+t*.15);
+    rotY+=(targetRot-rotY)*.05;morph.rotation.y=rotY;
+    morph.rotation.x=Math.sin(t*.3)*.12*(1-easeIO(Math.min(portalP*1.8,1)));
+    morph.scale.setScalar(THREE.MathUtils.clamp(.85+Math.sin(portalP*Math.PI)*.22,.7,1.15));
+    camera.position.z=6.2-portalP*2.2;camera.lookAt(0,0,0);
+    particles.rotation.y=t*.02;particles.rotation.x=portalP*.4;
+    if(window._warm)window._warm.position.x=Math.sin(t*.4)*3;
+    if(bloom)bloom.strength=0.6+Math.sin(portalP*Math.PI)*0.7;
+    if(composer)composer.render();else renderer.render(scene,camera);
+  }
+  if(glOK)frame();
+
+  addEventListener('resize',()=>{if(!glOK)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);if(composer)composer.setSize(innerWidth,innerHeight);});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.18});
+  document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+
+  // ---- shared data: real YouTube videos + live stock/price/coming-soon (synced with admin & supplier) ----
+  function ytEmbed(frameId,which){const f=document.getElementById(frameId);if(!f)return;
+    f.addEventListener('click',()=>{const url=(window.TE?TE.state().videos[which]:'')||'';const id=(url.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/)||[])[1];
+      if(id)f.innerHTML='<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0" src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay" allowfullscreen></iframe>';});}
+  ytEmbed('vf','intro');ytEmbed('pvf','product');
+  function renderShared(){
+    if(!window.TE)return;const p=TE.product();
+    const lc=document.getElementById('leftCount');if(lc)lc.textContent=p.left;
+    const tot=document.getElementById('stockTotal');if(tot)tot.textContent=' / '+p.total+' left';
+    const pa=document.getElementById('priceAmt');if(pa)pa.textContent=p.price;
+    const pb=document.getElementById('barPrice');if(pb)pb.textContent=p.price+' KWD';
+    const bar=document.getElementById('stockBar');if(bar)bar.style.width=((p.total-p.left)/p.total*100).toFixed(1)+'%';
+    const sub=document.getElementById('stockSub');if(sub)sub.textContent=(p.total-p.left)+' claimed · selling fast · free delivery in Kuwait';
+    const grid=document.querySelector('.dgrid');
+    if(grid){
+      const BASE={cs1:247,cs2:132,cs3:389}; // demo seed counts — real counts come from the waitlist
+      grid.innerHTML=TE.state().comingSoon.map((s,i)=>{
+        const n=(BASE[s.id]||90)+(TE.waitlistCount?TE.waitlistCount(s.id):0);
+        const joined=joinedDrops[s.id];
+        const notify=joined
+          ?`<div class="ndone">✓ You're on the list — we'll WhatsApp you</div>`
+          :(openForms[s.id]
+            ?`<div class="nform" data-id="${s.id}"><input type="tel" placeholder="WhatsApp number · +965" data-id="${s.id}"><button data-go="${s.id}">→</button></div>`
+            :`<button class="nbtn" data-notify="${s.id}">Notify me first</button>`);
+        return `<div class="dcard reveal in"><div class="dthumb" ${s.img?`style="background:url('${s.img}') center/cover"`:''}>${s.img?'':'DROP 0'+(i+2)}</div><div class="dbody"><div class="tag">${s.tag||'Coming soon'}</div><h4>${s.title}</h4><p>${s.tease}</p><div class="notify"><div class="count"><span class="dot"></span>${n} people waiting</div>${notify}</div></div></div>`;
+      }).join('');
+    }
+  }
+  // ---- waitlist interactions (event delegation — grid re-renders on data change) ----
+  const openForms={},joinedDrops={};
+  try{(JSON.parse(localStorage.getItem('theedit_joined')||'[]')).forEach(id=>joinedDrops[id]=true);}catch(e){}
+  document.addEventListener('click',e=>{
+    const nb=e.target.closest('[data-notify]');
+    if(nb){openForms[nb.dataset.notify]=true;renderShared();const inp=document.querySelector(`.nform input[data-id="${nb.dataset.notify}"]`);if(inp)inp.focus();return;}
+    const go=e.target.closest('[data-go]');
+    if(go){submitWait(go.dataset.go);}
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&e.target.matches('.nform input'))submitWait(e.target.dataset.id);
+  });
+  window.postWait=function(phone,drop){
+    try{fetch('/store/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:new URLSearchParams({'form-name':'waitlist',phone:phone,drop:drop}).toString()});}catch(e){}
+  };
+  function submitWait(id){
+    const inp=document.querySelector(`.nform input[data-id="${id}"]`);
+    const phone=(inp?inp.value:'').trim();
+    if(phone.replace(/\D/g,'').length<7){if(inp){inp.style.borderColor='#c96a6a';inp.placeholder='Enter a valid number';}return;}
+    postWait(phone,id);
+    if(window.TE&&TE.addWaitlist)TE.addWaitlist(id,phone);
+    joinedDrops[id]=true;delete openForms[id];
+    try{localStorage.setItem('theedit_joined',JSON.stringify(Object.keys(joinedDrops)));}catch(e){}
+    renderShared();
+  }
+  if(window.TE){TE.on(renderShared);renderShared();}
+
+  // ---- drop ritual countdown: every Thursday 20:00 Kuwait (UTC+3) ----
+  function nextDropTime(){
+    const now=new Date();
+    const kw=new Date(now.getTime()+(180+now.getTimezoneOffset())*60000); // shift to Kuwait clock
+    const d=new Date(kw);d.setHours(20,0,0,0);
+    let add=(4-d.getDay()+7)%7;                 // 4 = Thursday
+    if(add===0&&kw.getTime()>=d.getTime())add=7;
+    d.setDate(d.getDate()+add);
+    return now.getTime()+(d.getTime()-kw.getTime());
+  }
+  let dropAt=nextDropTime();
+  function tick(){
+    let ms=dropAt-Date.now();
+    if(ms<=0){dropAt=nextDropTime();ms=dropAt-Date.now();}
+    const s=Math.floor(ms/1000),pad=n=>String(n).padStart(2,'0');
+    const el=(id,v)=>{const x=document.getElementById(id);if(x&&x.textContent!==String(v))x.textContent=v;};
+    el('cdD',Math.floor(s/86400));el('cdH',pad(Math.floor(s/3600)%24));el('cdM',pad(Math.floor(s/60)%60));el('cdS',pad(s%60));
+  }
+  tick();setInterval(tick,1000);
+
+  onScroll();
+})();
+</script>
+<div id="checkout" style="position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:16px">
+  <div style="width:100%;max-width:470px;max-height:94vh;overflow-y:auto;background:#0C0B0E;border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:26px;font-family:'Inter',-apple-system,sans-serif">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-weight:700;letter-spacing:.18em;font-size:12px">ALI MUBARAK <span style="color:#C9A86A">· THE EDIT</span></div>
+      <button id="coClose" style="background:transparent;border:1px solid rgba(255,255,255,.15);color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">×</button>
+    </div>
+    <div id="coBody"></div>
+  </div>
+</div>
+<script>
+(function(){
+  if(!window.TE)return;
+  const modal=document.getElementById('checkout'),body=document.getElementById('coBody');
+  const fld="width:100%;height:46px;background:#0F0E12;border:1px solid rgba(255,255,255,.12);border-radius:11px;color:#fff;padding:0 13px;font-size:14.5px;outline:none;font-family:inherit;margin-bottom:10px";
+  const lab="font-size:12px;color:#9A968C;margin:2px 0 6px;display:block";
+  function form(){
+    const p=TE.product();
+    const countries=TE.COUNTRIES.map(c=>`<option>${c}</option>`).join('');
+    body.innerHTML=`
+      <h2 style="font-size:22px;margin:6px 0 2px">Checkout</h2>
+      <div style="color:#9A968C;font-size:13px;margin-bottom:16px">${p.name} · ${p.price} KWD</div>
+      <label style="${lab}">Ship to country</label><select id="coCountry" style="${fld}">${countries}</select>
+      <label style="${lab}">Full name</label><input id="coName" style="${fld}" placeholder="Your name">
+      <label style="${lab}">Phone (with country code)</label><input id="coPhone" style="${fld}" placeholder="+965 ...">
+      <div id="coAddr"></div>
+      <label style="${lab}">Payment</label>
+      <div id="coPayWrap" style="display:flex;gap:10px;margin-bottom:14px"></div>
+      <div style="background:#15120e;border:1px solid rgba(201,168,106,.25);border-radius:12px;padding:13px 15px;font-size:13.5px;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span style="color:#9A968C">Item</span><span>${p.price} KWD</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span style="color:#9A968C" id="coFeeLbl">Delivery</span><span id="coFee">0 KWD</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0 0;font-weight:600;border-top:1px solid rgba(255,255,255,.1);margin-top:6px"><span>Total</span><span id="coTotal">${p.price} KWD</span></div>
+      </div>
+      <button id="coPlace" style="width:100%;height:50px;border:0;border-radius:40px;background:#C9A86A;color:#1a1407;font-weight:700;font-size:15px;cursor:pointer">Place order</button>`;
+    const cSel=document.getElementById('coCountry');
+    function feeNow(){const c=cSel.value;if(c==='Kuwait'){const g=document.getElementById('coGov');return TE.feeFor(g?g.value:'Capital');}return TE.feeForCountry(c);}
+    function updTotal(){const fee=feeNow();document.getElementById('coFee').textContent=fee+' KWD';document.getElementById('coTotal').textContent=(p.price+fee)+' KWD';}
+    function renderAddr(){
+      const c=cSel.value,addr=document.getElementById('coAddr'),payWrap=document.getElementById('coPayWrap'),feeLbl=document.getElementById('coFeeLbl');
+      if(c==='Kuwait'){
+        feeLbl.textContent='Delivery';
+        const govs=TE.GOV.map(g=>`<option value="${g.n}">${g.n} · ${g.ar}</option>`).join('');
+        addr.innerHTML=`<label style="${lab}">Governorate</label><select id="coGov" style="${fld}">${govs}</select>
+          <label style="${lab}">Area</label><select id="coArea" style="${fld}"></select>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <div><label style="${lab}">Block</label><input id="coBlock" style="${fld}"></div>
+            <div><label style="${lab}">Street</label><input id="coStreet" style="${fld}"></div>
+            <div><label style="${lab}">House</label><input id="coHouse" style="${fld}"></div></div>
+          <label style="${lab}">Avenue (if available)</label><input id="coAve" style="${fld}" placeholder="optional">`;
+        payWrap.innerHTML=`<label style="flex:1;border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:12px;cursor:pointer;font-size:13.5px"><input type="radio" name="copay" value="cod" checked> Cash on delivery</label>
+          <label style="flex:1;border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:12px;cursor:pointer;font-size:13.5px"><input type="radio" name="copay" value="link"> Payment link</label>`;
+        const gov=document.getElementById('coGov'),area=document.getElementById('coArea');
+        const fill=()=>{const g=TE.GOV.find(x=>x.n===gov.value);area.innerHTML=g.areas.map(a=>`<option>${a}</option>`).join('');updTotal();};
+        gov.onchange=fill;fill();
+      } else {
+        feeLbl.textContent='Shipping · '+c;
+        const ksa=c==='Saudi Arabia';
+        addr.innerHTML=`<label style="${lab}">Address line 1 (building, street, district)</label><input id="coL1" style="${fld}" placeholder="Building, street, district">
+          <label style="${lab}">Address line 2 / landmark</label><input id="coL2" style="${fld}" placeholder="optional">
+          <label style="${lab}">City</label><input id="coCity" style="${fld}" placeholder="City">
+          ${ksa?`<label style="${lab}">National Address short code (required in Saudi Arabia)</label><input id="coNat" style="${fld}" placeholder="e.g. RRRD2929">`:''}
+          <label style="${lab}">Postal code</label><input id="coPost" style="${fld}" placeholder="optional">
+          <label style="${lab}">Courier</label><select id="coCourier" style="${fld}">${TE.state().couriers.map(x=>`<option>${x}</option>`).join('')}</select>
+          <div style="font-size:12px;color:#9A968C;margin:-2px 0 10px">Shipped internationally by courier (DHL / Aramex). Tracking sent after dispatch. Cash on delivery isn't available cross-border.</div>`;
+        payWrap.innerHTML=`<label style="flex:1;border:1px solid rgba(201,168,106,.4);border-radius:11px;padding:12px;font-size:13.5px"><input type="radio" name="copay" value="link" checked> Prepaid — pay by link / card</label>`;
+      }
+      updTotal();
+    }
+    cSel.onchange=renderAddr;renderAddr();
+    document.getElementById('coPlace').onclick=()=>{
+      const name=document.getElementById('coName').value.trim(),phone=document.getElementById('coPhone').value.trim();
+      if(!name||!phone){alert('Please enter your name and phone.');return;}
+      if(TE.product().left<=0){alert('Sold out.');return;}
+      const c=cSel.value,pay=document.querySelector('input[name=copay]:checked').value,fee=feeNow();
+      let extra;
+      if(c==='Kuwait'){extra={country:'Kuwait',ship:'driver',gov:document.getElementById('coGov').value,area:document.getElementById('coArea').value,block:document.getElementById('coBlock').value,street:document.getElementById('coStreet').value,house:document.getElementById('coHouse').value,avenue:document.getElementById('coAve').value};}
+      else{const nat=document.getElementById('coNat');extra={country:c,ship:'courier',courier:document.getElementById('coCourier').value,line1:document.getElementById('coL1').value,line2:document.getElementById('coL2').value,city:document.getElementById('coCity').value,postal:document.getElementById('coPost').value,nationalAddress:nat?nat.value:'',area:document.getElementById('coCity').value,gov:c};}
+      const o=TE.createOrder(Object.assign({name,phone,items:[{productId:p.id,n:p.name,q:1,p:p.price}],fee,pay},extra));
+      confirmView(o,pay);
+    };
+  }
+  function confirmView(o,pay){
+    body.innerHTML=`<div style="text-align:center;padding:14px 0">
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(201,168,106,.18);color:#E7D3A6;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px">✓</div>
+      <h2 style="font-size:22px">Order placed</h2>
+      <div style="color:#9A968C;font-size:14px;margin-top:8px">Your order <b style="color:#fff">${o.id}</b> is in. ${pay==='cod'?'Pay cash on delivery.':'We\'ll send a payment link after we confirm.'}</div>
+      <div style="color:#9A968C;font-size:13px;margin-top:14px">Total ${o.items[0].p+o.fee} KWD · delivery to ${o.area}, ${o.gov}</div>
+      <button id="coDone" style="margin-top:22px;width:100%;height:48px;border:0;border-radius:40px;background:#C9A86A;color:#1a1407;font-weight:700;cursor:pointer">Done</button></div>`;
+    document.getElementById('coDone').onclick=closeCo;
+  }
+  function openCo(){
+    body.innerHTML=`<div style="text-align:center;padding:14px 0">
+      <div style="font-size:11px;letter-spacing:.3em;color:#C9A86A;text-transform:uppercase;margin-bottom:14px">The Edit · Drop 01</div>
+      <h2 style="font-size:24px;color:#fff">Opening soon.</h2>
+      <p style="color:#E7D3A6;font-size:14.5px;margin:12px 0 20px;line-height:1.6">The first drop goes live on a Thursday at 8:00 PM Kuwait.<br>Leave your WhatsApp number — you'll get the link before anyone else.</p>
+      <input id="pvPhone" type="tel" placeholder="WhatsApp number · +965" style="width:100%;height:48px;background:#0F0E12;border:1px solid rgba(255,255,255,.15);border-radius:40px;color:#fff;padding:0 18px;font-size:14.5px;outline:none;font-family:inherit">
+      <button id="pvGo" style="margin-top:12px;width:100%;height:50px;border:0;border-radius:40px;background:#C9A86A;color:#1a1407;font-weight:700;font-size:15px;cursor:pointer">Put me first in line</button>
+      <div id="pvMsg" style="margin-top:12px;font-size:13px;color:#E7D3A6"></div></div>`;
+    document.getElementById('pvGo').onclick=()=>{
+      const ph=(document.getElementById('pvPhone').value||'').trim();
+      if(ph.replace(/\D/g,'').length<7){document.getElementById('pvMsg').textContent='Please enter a valid number.';return;}
+      if(window.postWait)postWait(ph,'drop-01');
+      if(window.TE&&TE.addWaitlist)TE.addWaitlist('drop-01',ph);
+      body.innerHTML=`<div style="text-align:center;padding:30px 0">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(201,168,106,.18);color:#E7D3A6;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px">✓</div>
+        <h2 style="font-size:22px;color:#fff">You're first in line.</h2>
+        <p style="color:#E7D3A6;font-size:14px;margin-top:10px">We'll WhatsApp you the moment Drop 01 opens.</p>
+        <button onclick="document.getElementById('checkout').style.display='none'" style="margin-top:22px;width:100%;height:48px;border:0;border-radius:40px;background:#C9A86A;color:#1a1407;font-weight:700;cursor:pointer">Done</button></div>`;
+    };
+    modal.style.display='flex';
+  }
+  function closeCo(){modal.style.display='none';}
+  document.getElementById('coClose').onclick=closeCo;
+  modal.addEventListener('click',e=>{if(e.target===modal)closeCo();});
+  document.querySelectorAll('button').forEach(b=>{if(b.textContent.trim()==='Get first access')b.addEventListener('click',openCo);});
+})();
+</script>
+</body>
+</html>
