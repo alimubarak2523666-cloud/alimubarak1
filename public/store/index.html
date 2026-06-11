@@ -200,6 +200,12 @@
     -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
   .goldtext .portal-hero .ar{color:var(--gold-2)}
   .goldtext .portal-hero .sub{color:var(--gold-2)}
+    /* Engraved gold headlines — Ali's locked choice 2026-06-12 */
+  .typeEng .portal-hero h1,.typeEng .portal-hero h1 .lt,
+  .typeEng .vstage h2,.typeEng .how h2,.typeEng .enter h2{
+    background:linear-gradient(180deg,#F7EBC9 0%,#E7D3A6 38%,#C9A86A 72%,#9E7E48 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,248,224,.28)) drop-shadow(0 -1px 0 rgba(0,0,0,.55)) drop-shadow(0 10px 24px rgba(201,168,106,.16))}
   .txtoggle{position:fixed;left:22px;bottom:20px;z-index:40;display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:40px;background:rgba(12,11,14,.78);backdrop-filter:blur(14px);overflow:hidden;font-size:12px;font-weight:600}
   .txtoggle button{border:0;background:transparent;color:var(--muted);padding:10px 16px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;transition:all .25s}
   .txtoggle button.on{background:var(--gold);color:#1a1407}
@@ -225,7 +231,7 @@
 <div class="scrollcue" id="cue">Scroll</div>
 <div class="loadnote" id="loadnote">rendering 3D…</div>
 
-<script>document.body.classList.add('goldtext');</script>
+<script>document.body.classList.add('goldtext','typeEng'); // Engraved gold — locked</script>
 <form name="waitlist" data-netlify="true" netlify hidden><input type="text" name="phone"/><input type="text" name="drop"/></form>
 
 <nav id="nav">
@@ -381,7 +387,7 @@
 
   <footer>
     <div class="brand"><span class="bn">ALI MUBARAK ·</span> <span>THE EDIT</span></div>
-    <div class="fl"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Snapchat</a><a href="#">Contact</a></div>
+    <div class="fl"><a href="https://www.instagram.com/alimubarak1?igsh=MWhpZ214dGJud2Vx" target="_blank" rel="noopener">Instagram</a><a href="#">TikTok</a><a href="#">Snapchat</a><a href="#">Contact</a></div>
     <p style="margin-top:20px">THE EDIT · Drop 01 opens soon · <a href="/en" style="color:var(--gold)">About Ali Mubarak</a></p>
   </footer>
 </div>
@@ -390,7 +396,7 @@
   <div class="wrap"><div class="bl"><span class="nm">The Aurora</span><span class="pr" id="barPrice">89 KWD</span></div><button class="btn btn-primary">Get first access</button></div>
 </div>
 
-<script src="theedit-data.js?v=4"></script>
+<script src="theedit-data.js?v=9"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
