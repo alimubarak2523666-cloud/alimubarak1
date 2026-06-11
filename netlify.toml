@@ -7,3 +7,10 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# THE EDIT preview: store is the landing page (302 = reversible until the full build)
+[[redirects]]
+  from = "/"
+  to = "/store/"
+  status = 302
+  force = true
