@@ -105,9 +105,10 @@
     <div class="ltag">Admin</div>
     <h2>Sign in to the dashboard</h2>
     <p>Manage products, drops, videos, suppliers and orders.</p>
-    <div class="fld"><label>Email</label><input type="email" value="ali@theedit.com" /></div>
-    <div class="fld"><label>Password</label><input type="password" value="••••••••" /></div>
+    <div class="fld"><label>Email</label><input type="email" id="admEmail" value="ali@theedit.com" /></div>
+    <div class="fld"><label>Password</label><input type="password" id="admPass" value="" placeholder="Admin password" /></div>
     <button class="lbtn" id="loginBtn">Enter dashboard</button>
+    <div class="lerr" id="admErr" style="display:none;color:#e08080;font-size:12.5px;margin-top:10px">Wrong admin password.</div>
     <div class="lhint">Admin access only · separate from customer accounts</div>
   </div>
 </div>
@@ -335,7 +336,11 @@
   const itemsTotal=o=>o.items.reduce((s,i)=>s+i.q*i.p,0);
   const grand=o=>Math.max(0,Math.round((itemsTotal(o)+(o.fee||0)-(o.giftUsed||0))*100)/100);
 
-  document.getElementById('loginBtn').onclick=()=>{document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';refresh();};
+  document.getElementById('loginBtn').onclick=()=>{
+    if(document.getElementById('admPass').value!=='Edit@2026'){document.getElementById('admErr').style.display='block';return;}
+    document.getElementById('admErr').style.display='none';
+    document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';refresh();};
+  document.getElementById('admPass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('loginBtn').click();});
   document.getElementById('logout').onclick=(e)=>{e.preventDefault();document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';};
 
   const titles={overview:"Overview",products:"Products",orders:"Orders",customers:"Customers",suppliers:"Suppliers",drivers:"Drivers",drops:"Drops & videos",settings:"Settings"};
