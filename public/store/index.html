@@ -74,8 +74,8 @@
   .pin-stage{height:300vh;position:relative}
   .pin-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
   .prod-shot{position:relative;width:min(560px,80vw);height:min(560px,80vw);border-radius:34px;overflow:hidden;box-shadow:0 50px 140px rgba(0,0,0,.6);will-change:transform}
-  .prod-shot img{width:100%;height:100%;object-fit:cover;display:block}
-  .prod-fallback{position:absolute;inset:0;background:linear-gradient(150deg,#1c1813,#070707);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;letter-spacing:.2em}
+  .prod-shot img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:2}
+  .prod-fallback{position:absolute;inset:0;z-index:1;background:linear-gradient(150deg,#1c1813,#070707);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;letter-spacing:.2em}
   .pin-caption{position:absolute;z-index:3;text-align:center;pointer-events:none}
   .pin-caption h2{font-size:clamp(30px,5vw,60px);font-weight:700;letter-spacing:-.02em}
   .pin-caption p{color:var(--muted);margin-top:8px;font-size:16px}
@@ -526,6 +526,15 @@
     const fe=document.querySelector('#pvideo .eyebrow');if(fe)fe.textContent=p.name+' · the film';
     const bn=document.querySelector('.buybar .nm');if(bn)bn.textContent=p.name;
     const shotImg=document.querySelector('#shot img');if(shotImg&&p.img){shotImg.src=p.img;shotImg.style.display='';}
+    // show the film's YouTube thumbnail behind the play button
+    const ytU=p.yt||TE.state().videos.product||'';
+    const ytId=(ytU.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/)||[])[1];
+    const pvfF=document.getElementById('pvf');
+    if(pvfF&&ytId&&!pvfF.querySelector('iframe')){pvfF.style.background=`linear-gradient(rgba(6,5,7,.45),rgba(6,5,7,.45)),url('https://img.youtube.com/vi/${ytId}/hqdefault.jpg') center/cover no-repeat`;}
+    const inU=TE.state().videos.intro||'';
+    const inId=(inU.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/)||[])[1];
+    const vfF=document.getElementById('vf');
+    if(vfF&&inId&&!vfF.querySelector('iframe')){vfF.style.background=`linear-gradient(rgba(6,5,7,.45),rgba(6,5,7,.45)),url('https://img.youtube.com/vi/${inId}/hqdefault.jpg') center/cover no-repeat`;}
     const grid=document.querySelector('.dgrid');
     if(grid){
       const BASE={cs1:247,cs2:132,cs3:389}; // demo seed counts — real counts come from the waitlist
