@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ALI MUBARAK · The Edit — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0A090C;--panel:#141318;--panel2:#1B1A20;--ink:#FFFFFF;--muted:#9A968C;--line:rgba(255,255,255,.10);--gold:#C9A86A;--gold-2:#E7D3A6;--ok:#5BBF8A;--warn:#E0B450;--info:#7C9BE6;--bad:#E06A6A}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer}a{color:inherit}
+  #login{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:radial-gradient(60% 50% at 50% 30%,rgba(201,168,106,.14),transparent 60%),var(--bg);padding:20px}
+  .lcard{width:100%;max-width:400px;background:rgba(20,19,24,.8);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:24px;padding:36px 32px}
+  .lbrand{text-align:center;font-weight:700;letter-spacing:.2em;font-size:13px}.lbrand span{color:var(--gold)}
+  .ltag{text-align:center;color:var(--gold-2);font-size:12px;letter-spacing:.24em;text-transform:uppercase;margin-top:8px}
+  .lcard h2{text-align:center;font-size:22px;margin-top:18px;font-weight:700}.lcard p{text-align:center;color:var(--muted);font-size:13.5px;margin-top:8px}
+  .fld{margin-top:16px}.fld label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .fld input{width:100%;height:48px;background:#0F0E12;border:1px solid var(--line);border-radius:11px;color:var(--ink);padding:0 14px;font-size:15px;outline:none}.fld input:focus{border-color:var(--gold)}
+  .lbtn{width:100%;height:50px;margin-top:20px;border:0;border-radius:40px;background:var(--gold);color:#1a1407;font-weight:700;font-size:15px}
+  .lhint{text-align:center;color:#6f6c66;font-size:11.5px;margin-top:14px}
+  #app{display:none;min-height:100vh}
+  .layout{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+  .side{background:#0E0D11;border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+  .side .brand{font-weight:700;letter-spacing:.18em;font-size:13px;padding:6px 10px 18px}.side .brand span{color:var(--gold)}
+  .nav{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:11px;color:var(--muted);font-size:14px;font-weight:500;border:1px solid transparent}
+  .nav:hover{background:var(--panel)}.nav.active{background:var(--panel);color:var(--ink);border-color:var(--line)}
+  .nav .ic{width:18px;text-align:center;color:var(--gold)}
+  .nav .badge{margin-inline-start:auto;background:var(--gold);color:#1a1407;font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px}
+  .side .foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+  .side .foot a{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:9px 12px;border-radius:10px;text-decoration:none}
+  .side .foot a:hover{background:var(--panel);color:var(--ink)}
+  .main{padding:26px 30px 60px;max-width:1180px}
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+  .top h1{font-size:24px;font-weight:700}.top .who{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+  .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#5a4a2a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#1a1407;font-size:12px}
+  .screen{display:none}.screen.on{display:block}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:16px;margin-bottom:24px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .kpi .l{color:var(--muted);font-size:12.5px}.kpi .v{font-size:26px;font-weight:700;margin-top:8px}.kpi .d{font-size:12px;margin-top:6px;color:var(--muted)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:22px}
+  .card .hd{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);gap:8px;flex-wrap:wrap}
+  .card .hd h3{font-size:15px;font-weight:600}
+  .btn{border:1px solid var(--gold);background:var(--gold);color:#1a1407;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:30px}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}.btn.ghost:hover{border-color:var(--ink)}
+  .btn.sm{padding:7px 13px;font-size:12.5px}
+  .srange.active{background:var(--gold)!important;color:#1a1407!important;border-color:var(--gold)!important}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;padding:12px 18px;border-bottom:1px solid var(--line)}
+  td{padding:13px 18px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+  tr:last-child td{border-bottom:0}tbody tr{cursor:pointer}tbody tr:hover{background:var(--panel2)}
+  .empty{padding:26px 18px;color:var(--muted);font-size:13.5px;text-align:center}
+  .thumb{width:42px;height:42px;border-radius:9px;object-fit:cover;background:#23202a;display:inline-block;vertical-align:middle}
+  .pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+  .pill.live{background:rgba(91,191,138,.16);color:var(--ok)}.pill.draft{background:rgba(154,150,140,.16);color:var(--muted)}.pill.sold{background:rgba(224,106,106,.16);color:var(--bad)}
+  .pill.cod{background:rgba(124,155,230,.16);color:var(--info)}.pill.link{background:rgba(201,168,106,.18);color:var(--gold-2)}
+  .pill.new{background:rgba(224,180,80,.16);color:var(--warn)}.pill.confirmed{background:rgba(124,155,230,.16);color:var(--info)}
+  .pill.await{background:rgba(224,180,80,.16);color:var(--warn)}.pill.paid{background:rgba(91,191,138,.16);color:var(--ok)}
+  .pill.delivery{background:rgba(201,168,106,.18);color:var(--gold-2)}.pill.delivered{background:rgba(91,191,138,.2);color:var(--ok)}
+  .overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:none;justify-content:flex-end}.overlay.on{display:flex}
+  .drawer{width:min(560px,100%);background:var(--bg);border-left:1px solid var(--line);height:100vh;overflow-y:auto;padding:24px 26px}
+  .drawer .dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.drawer .dh h2{font-size:20px;font-weight:700}
+  .x{background:transparent;border:1px solid var(--line);color:var(--ink);width:34px;height:34px;border-radius:50%;font-size:16px}
+  .frow{margin-bottom:16px}.frow label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:7px}
+  .frow input,.frow textarea,.frow select{width:100%;background:#0F0E12;border:1px solid var(--line);border-radius:11px;color:var(--ink);padding:12px 14px;font-size:14.5px;outline:none;font-family:inherit}
+  .frow input:focus,.frow textarea:focus,.frow select:focus{border-color:var(--gold)}.frow textarea{min-height:88px;resize:vertical}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .drop-img{border:1px dashed var(--line);border-radius:12px;height:120px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center;cursor:pointer;background:#0F0E12}
+  .ytprev{margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/9;display:none}.ytprev iframe{width:100%;height:100%;border:0;display:block}
+  .save{width:100%;height:50px;border:0;border-radius:40px;background:var(--gold);color:#1a1407;font-weight:700;font-size:15px;margin-top:8px}
+  .ob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+  .ob h4{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+  .kv{display:flex;justify-content:space-between;font-size:14px;padding:5px 0}.kv .k{color:var(--muted)}
+  .lineitem{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}.lineitem:last-child{border-bottom:0}
+  .actions{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .note{background:rgba(201,168,106,.08);border:1px solid rgba(201,168,106,.3);border-radius:12px;padding:12px 14px;font-size:13px;color:#d8c7a6;margin-bottom:14px;line-height:1.6}
+  .toggle{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)}.toggle:last-child{border-bottom:0}
+  .toggle .t{font-size:14.5px;font-weight:500}.toggle .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .sw{width:46px;height:26px;border-radius:20px;background:#2a2730;position:relative;border:1px solid var(--line);flex:none}
+  .sw.on{background:var(--gold)}.sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.sw.on::after{left:22px}
+  .gov{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+  .gov .gh{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;background:var(--panel2);flex-wrap:wrap}
+  .gov .gname{font-size:15px;font-weight:600}.gov .gname .ar{color:var(--muted);font-weight:400;font-size:13px;margin-inline-start:8px}
+  .gov .gprice{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .gov .gprice input{width:74px;height:34px;background:#0F0E12;border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:0 10px;font-size:14px;text-align:center}
+  .gov .gprice input:focus{border-color:var(--gold);outline:none}
+  .collapse{cursor:pointer;color:var(--gold);font-size:12px;border:1px solid var(--line);border-radius:20px;padding:6px 12px;background:transparent}
+  .gov .areas{padding:10px 16px 14px;display:none;flex-wrap:wrap;gap:7px}
+  .gov .areas span{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:4px 10px}
+  .dropgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .scard{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+  .scard .im{aspect-ratio:1/1;background:#1a1820;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.1em}
+  .scard .bd{padding:13px}.scard .tag{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .scard h4{font-size:15px;margin-top:6px;font-weight:600}.scard p{color:var(--muted);font-size:12.5px;margin-top:4px}
+  .scard .rm{color:var(--bad);font-size:12px;cursor:pointer;margin-top:10px;display:inline-block}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;overflow-x:auto}.kpis{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.dropgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lcard">
+    <div class="lbrand">ALI MUBARAK <span>· THE EDIT</span></div>
+    <div class="ltag">Admin</div>
+    <h2>Sign in to the dashboard</h2>
+    <p>Manage products, drops, videos, suppliers and orders.</p>
+    <div class="fld"><label>Email</label><input type="email" value="ali@theedit.com" /></div>
+    <div class="fld"><label>Password</label><input type="password" value="••••••••" /></div>
+    <button class="lbtn" id="loginBtn">Enter dashboard</button>
+    <div class="lhint">Admin access only · separate from customer accounts</div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="layout">
+    <aside class="side">
+      <div class="brand">ALI MUBARAK <span>· ADMIN</span></div>
+      <div class="nav active" data-s="overview"><span class="ic">▦</span> Overview</div>
+      <div class="nav" data-s="products"><span class="ic">◇</span> Products</div>
+      <div class="nav" data-s="orders"><span class="ic">▤</span> Orders <span class="badge" id="navOrders">0</span></div>
+      <div class="nav" data-s="customers"><span class="ic">👥</span> Customers <span class="badge" id="navCust">0</span></div>
+      <div class="nav" data-s="suppliers"><span class="ic">⌂</span> Suppliers</div>
+      <div class="nav" data-s="drivers"><span class="ic">⛟</span> Drivers</div>
+      <div class="nav" data-s="drops"><span class="ic">✦</span> Drops &amp; videos</div>
+      <div class="nav" data-s="settings"><span class="ic">⚙</span> Settings</div>
+      <div class="foot"><a href="store-experience.html" target="_blank">↗ View store</a><a href="#" id="logout">⏻ Sign out</a></div>
+    </aside>
+    <main class="main">
+      <div class="top"><h1 id="pageTitle">Overview</h1><div class="who"><span>Ali Mubarak</span><span class="avatar">AM</span></div></div>
+
+      <section class="screen on" id="s-overview">
+        <div class="kpis">
+          <div class="kpi"><div class="l">Revenue (this drop)</div><div class="v" id="kRev">0 KWD</div><div class="d" id="kSold">0 of 200 sold</div></div>
+          <div class="kpi"><div class="l">New orders</div><div class="v" id="kNew">0</div><div class="d">Need confirming</div></div>
+          <div class="kpi"><div class="l">To deliver</div><div class="v" id="kDeliver">0</div><div class="d">Out for delivery</div></div>
+          <div class="kpi"><div class="l">Stock left</div><div class="v" id="kStock">0</div><div class="d" id="kStockName">The Aurora</div></div>
+          <div class="kpi" style="border-color:rgba(201,168,106,.35);cursor:pointer" data-go="customers"><div class="l">Registered today</div><div class="v" style="color:#E7D3A6" id="kRegToday">0</div><div class="d" id="kRegTotal">0 customers in the bank</div></div>
+        </div>
+        <div class="card"><div class="hd"><h3>Sales &amp; my share</h3>
+          <div style="display:flex;gap:8px">
+            <button class="btn sm ghost srange active" data-r="today">Today</button>
+            <button class="btn sm ghost srange" data-r="week">7 days</button>
+            <button class="btn sm ghost srange" data-r="all">All time</button>
+          </div></div>
+          <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;padding:18px">
+            <div style="min-width:160px">
+              <div style="color:var(--muted);font-size:12.5px">Total sales</div><div style="font-size:25px;font-weight:700" id="svRev">0 KWD</div>
+              <div style="color:var(--muted);font-size:12.5px;margin-top:12px">My share</div><div style="font-size:25px;font-weight:700;color:#E7D3A6" id="svAli">0 KWD</div>
+              <div style="color:var(--muted);font-size:12.5px;margin-top:12px">Suppliers</div><div style="font-size:17px;font-weight:600" id="svSup">0 KWD</div>
+            </div>
+            <canvas id="cPie" width="170" height="170"></canvas>
+            <div style="flex:1;min-width:300px">
+              <div style="color:var(--muted);font-size:12px;margin-bottom:8px">Last 7 days · <span style="color:#C9A86A">gold = my share</span> · grey = suppliers</div>
+              <canvas id="cBars" width="560" height="170" style="width:100%;max-width:560px"></canvas>
+            </div>
+          </div></div>
+        <div class="card"><div class="hd"><h3>Recent orders</h3><button class="btn sm ghost" data-go="orders">View all</button></div>
+          <table><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead><tbody id="recentRows"></tbody></table></div>
+      </section>
+
+      <section class="screen" id="s-products">
+        <div class="card"><div class="hd"><h3>Products</h3><button class="btn" id="addProduct">+ Add product</button></div>
+          <table><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Video</th><th>Status</th></tr></thead><tbody id="productRows"></tbody></table></div>
+      </section>
+
+      <section class="screen" id="s-orders">
+        <div class="card"><div class="hd"><h3>Orders</h3><div style="display:flex;gap:8px;align-items:center"><button class="btn sm ghost flt active" data-f="all">All</button><button class="btn sm ghost flt" data-f="new">New</button><button class="btn sm ghost flt" data-f="deliver">To deliver</button></div></div>
+          <table><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead><tbody id="orderRows"></tbody></table></div>
+      </section>
+
+      <section class="screen" id="s-customers">
+        <div class="kpis">
+          <div class="kpi"><div class="l">Registered today</div><div class="v" id="cToday">0</div><div class="d">New clients today</div></div>
+          <div class="kpi"><div class="l">All customers</div><div class="v" id="cAll">0</div><div class="d">Your client bank</div></div>
+          <div class="kpi"><div class="l">With email</div><div class="v" id="cEmail">0</div><div class="d">Reachable for drop alerts</div></div>
+          <div class="kpi"><div class="l">From orders</div><div class="v" id="cOrders">0</div><div class="d">Bought at least once</div></div>
+        </div>
+        <div class="card"><div class="hd"><h3>Client bank</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <input id="custSearch" placeholder="🔍 Search name, phone or email…" style="background:#0F0E12;border:1px solid var(--line);border-radius:30px;color:var(--ink);padding:8px 16px;font-size:13px;outline:none;width:240px;font-family:inherit">
+            <button class="btn sm" id="dlCustomers">⬇ Download Excel (CSV)</button>
+            <button class="btn sm ghost" id="announceDrop">📣 Email everyone about the live drop</button>
+          </div></div>
+          <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Area</th><th>Source</th><th>Registered</th><th>Gift</th></tr></thead><tbody id="custRows"></tbody></table></div>
+        </div>
+        <div class="note">Customers register automatically: every checkout, every waitlist join, and every "email me new drops" signup lands here once (no duplicates — matched by phone/email).</div>
+      </section>
+
+      <section class="screen" id="s-suppliers">
+        <div class="note">Create a login for each brand/supplier you sign. They sign into the Supplier Portal with it and see <b>only their own orders</b> — never your customers' details. Disable access anytime.</div>
+        <div class="card"><div class="hd"><h3>Suppliers</h3><button class="btn" id="addSupplier">+ New supplier</button></div>
+          <table><thead><tr><th>Supplier</th><th>Product</th><th>Username</th><th>Password</th><th>Status</th><th></th></tr></thead><tbody id="supplierRows"></tbody></table></div>
+      </section>
+
+      <section class="screen" id="s-drivers">
+        <div class="note">Drivers deliver your <b>Kuwait</b> orders. Individuals register with civil ID + licence; companies with a CR. You can add them here or approve ones who self-register in the Driver app, and disable anyone anytime. (GCC orders ship by courier, not drivers.)</div>
+        <div class="card"><div class="hd"><h3>Drivers</h3><button class="btn" id="addDriver">+ New driver</button></div>
+          <table><thead><tr><th>Driver</th><th>Type</th><th>Phone</th><th>ID / Licence</th><th>Deliveries</th><th>Status</th><th></th></tr></thead><tbody id="driverRows"></tbody></table></div>
+      </section>
+
+      <section class="screen" id="s-drops">
+        <div class="note">Videos are YouTube links. Paste a URL and it embeds in the store — customers tap play and the video opens on the page. These now feed the live store directly.</div>
+        <div class="card"><div class="hd"><h3>Current drop · videos</h3><span class="pill live">Live</span></div>
+          <div style="padding:18px">
+            <div class="frow"><label>Intro film (store front-door video) — YouTube link</label><input type="text" id="vIntro" class="ytin" data-prev="introPrev" /><div class="ytprev" id="introPrev"></div></div>
+            <div class="frow"><label>Product film (drop video) — YouTube link</label><input type="text" id="vProduct" class="ytin" data-prev="prodPrev" /><div class="ytprev" id="prodPrev"></div></div>
+            <button class="btn" id="saveVideos">Save videos</button>
+          </div>
+        </div>
+        <div class="card"><div class="hd"><h3>Next drops · Coming soon</h3><button class="btn sm" id="addSoon">+ Add coming-soon</button></div>
+          <div class="note" style="margin:14px 18px 0">Teaser cards in the store's “Next drops” grid. Add a picture, title and one line.</div>
+          <div style="padding:14px 18px"><div id="soonGrid" class="dropgrid"></div></div>
+        </div>
+      </section>
+
+      <section class="screen" id="s-settings">
+        <div class="card"><div class="hd"><h3>Payment methods</h3></div>
+          <div style="padding:6px 18px 14px">
+            <div class="toggle"><div><div class="t">Cash on Delivery</div><div class="s">Customer pays the driver in cash when the order arrives.</div></div><div class="sw on" data-toggle></div></div>
+            <div class="toggle"><div><div class="t">Send payment link</div><div class="s">After the office confirms, send a secure pay-by-link (KNET / card).</div></div><div class="sw on" data-toggle></div></div>
+            <div class="toggle"><div><div class="t">Pay now at checkout (online)</div><div class="s">Customer pays immediately on the website. Turn on later.</div></div><div class="sw" data-toggle></div></div>
+          </div>
+        </div>
+        <div class="card"><div class="hd"><h3>Delivery charges by governorate (Kuwait)</h3><span style="color:var(--muted);font-size:12.5px">Used live at checkout</span></div>
+          <div style="padding:14px 18px 18px"><div id="deliveryBox"></div></div>
+        </div>
+        <div class="card"><div class="hd"><h3>International shipping (GCC) — by courier</h3><span style="color:var(--muted);font-size:12.5px">DHL / Aramex · used live at checkout</span></div>
+          <div style="padding:14px 18px 18px"><div id="gccBox"></div></div>
+        </div>
+        <div class="card"><div class="hd"><h3>Notifications</h3></div>
+          <div style="padding:6px 18px 16px">
+            <div class="toggle"><div><div class="t">New-order sound</div><div class="s">Peep in the dashboard every time a new order arrives.</div></div><div class="sw on" id="soundSw"></div></div>
+            <div style="padding-top:14px"><button class="btn sm ghost" id="testSound">▶ Test the sound</button></div>
+          </div>
+        </div>
+        <div class="card"><div class="hd"><h3>Demo data</h3></div>
+          <div style="padding:14px 18px 18px"><div class="note" style="margin:0 0 12px">Resets all three surfaces (store, admin, supplier) back to the original sample data.</div><button class="btn ghost" id="resetData">⟲ Reset demo data</button> <button class="btn ghost" id="emptyData" style="color:#e08080;border-color:rgba(224,128,128,.4)">⌫ Empty everything — start from zero</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ADD PRODUCT -->
+<div class="overlay" id="prodOverlay"><div class="drawer">
+  <div class="dh"><h2 id="pDrawerTitle">Add product</h2><button class="x" data-close>×</button></div>
+  <div id="approveBar"></div>
+  <div class="frow"><label>Product image</label><div class="drop-img" data-target="pImg">Click to upload a photo · or paste an image URL below</div></div>
+  <div class="frow"><input type="text" id="pImg" placeholder="https://image-url.jpg" /></div>
+  <div class="frow"><label>Product name</label><input type="text" id="pName" placeholder="e.g. The Aurora" /></div>
+  <div class="frow"><label>Description</label><textarea id="pDesc" placeholder="Tell the story."></textarea></div>
+  <div class="two"><div class="frow"><label>Price (KWD)</label><input type="number" id="pPrice" placeholder="89" /></div><div class="frow"><label>Status</label><select id="pStatus"><option value="live">Live</option><option value="draft">Draft</option><option value="sold">Sold out</option></select></div></div>
+  <div class="two"><div class="frow"><label>Total stock</label><input type="number" id="pTotal" placeholder="200" /></div><div class="frow"><label>My commission % of each sale</label><input type="number" id="pComm" placeholder="20" /></div></div>
+  <div class="two"><div class="frow"><label>Remaining</label><input type="number" id="pLeft" placeholder="200" /></div><div class="frow"></div></div>
+  <div class="frow"><label>Product type</label><select id="pType">
+    <option value="simple">Simple — one version, nothing to choose</option>
+    <option value="options">With options — sizes, colours, etc.</option>
+  </select></div>
+  <div id="optWrap" style="display:none;border:1px solid rgba(201,168,106,.25);border-radius:14px;padding:14px 14px 4px;margin-bottom:14px">
+    <div style="font-size:11px;letter-spacing:.2em;color:#C9A86A;text-transform:uppercase;margin-bottom:12px">Customer must choose before buying</div>
+    <div class="two"><div class="frow"><label>Option 1 — name</label><input id="o1Name" placeholder="e.g. Size" /></div><div class="frow"><label>Option 1 — choices, comma separated</label><input id="o1Vals" placeholder="e.g. 39, 40, 41, 42, 43" /></div></div>
+    <div class="two"><div class="frow"><label>Option 2 — name (optional)</label><input id="o2Name" placeholder="e.g. Colour" /></div><div class="frow"><label>Option 2 — choices, comma separated</label><input id="o2Vals" placeholder="e.g. Black, Red, Beige" /></div></div>
+    <div class="frow"><button class="btn ghost sm" id="buildColorSlots" type="button">📷 Add a photo for each Option 2 choice (e.g. one photo per colour)</button></div>
+    <div id="cImgWrap"></div>
+  </div>
+  <div class="frow"><label>Variant</label><input type="text" id="pVariant" placeholder="e.g. Champagne · 40mm" /></div>
+  <div class="frow"><label>Product video — YouTube link</label><input type="text" id="pYt" class="ytin" data-prev="pYtPrev" placeholder="https://www.youtube.com/watch?v=..." /><div class="ytprev" id="pYtPrev"></div></div>
+
+  <div style="border-top:1px solid rgba(244,241,234,.12);margin:20px 0 12px;padding-top:16px;font-size:11px;letter-spacing:.22em;color:#C9A86A;text-transform:uppercase">Story section 1 · first picture under the product</div>
+  <div class="frow"><label>Photo 1</label><div class="drop-img" data-target="f1Img">Click to upload · or paste an image URL below</div></div>
+  <div class="frow"><input type="text" id="f1Img" placeholder="https://image-url.jpg" /></div>
+  <div class="frow"><label>Big font — title 1</label><input type="text" id="f1Head" placeholder="e.g. I don't sell. I curate." /></div>
+  <div class="frow"><label>Small font — description 1</label><textarea id="f1Text" placeholder="The smaller text that appears under the big title."></textarea></div>
+
+  <div style="border-top:1px solid rgba(244,241,234,.12);margin:20px 0 12px;padding-top:16px;font-size:11px;letter-spacing:.22em;color:#C9A86A;text-transform:uppercase">Story section 2 · second picture under the product</div>
+  <div class="frow"><label>Photo 2</label><div class="drop-img" data-target="f2Img">Click to upload · or paste an image URL below</div></div>
+  <div class="frow"><input type="text" id="f2Img" placeholder="https://image-url.jpg" /></div>
+  <div class="frow"><label>Big font — title 2</label><input type="text" id="f2Head" placeholder="e.g. Photographed like Apple. Priced for you." /></div>
+  <div class="frow"><label>Small font — description 2</label><textarea id="f2Text" placeholder="The smaller text that appears under the big title."></textarea></div>
+  <button class="save" id="saveProduct">Save product</button>
+  <button class="btn ghost" id="deleteProduct" style="display:none;width:100%;margin-top:10px;color:#e08080;border-color:rgba(224,128,128,.4)">Delete this product</button>
+</div></div>
+
+<!-- COMING SOON -->
+<div class="overlay" id="soonOverlay"><div class="drawer">
+  <div class="dh"><h2 id="sDrawerTitle">Coming-soon drop</h2><button class="x" data-close>×</button></div>
+  <div id="soonApproveBar"></div>
+  <div class="frow"><label>Picture</label><div class="drop-img" data-target="sImg">Click to upload · or paste an image URL below</div></div>
+  <div class="frow"><input type="text" id="sImg" placeholder="https://image-url.jpg" /></div>
+  <div class="frow"><label>Title</label><input type="text" id="sTitle" placeholder="e.g. The Field Bag" /></div>
+  <div class="frow"><label>Teaser line</label><input type="text" id="sTease" placeholder="e.g. Everyday carry, rebuilt." /></div>
+  <div class="frow"><label>Tag</label><input type="text" id="sTag" value="Coming soon" /></div>
+  <button class="save" id="saveSoon">Save coming-soon drop</button>
+</div></div>
+
+<!-- NEW SUPPLIER -->
+<div class="overlay" id="supOverlay"><div class="drawer">
+  <div class="dh"><h2>New supplier</h2><button class="x" data-close>×</button></div>
+  <div class="frow"><label>Supplier / brand name</label><input id="suName" placeholder="e.g. Aurora Watches Co." /></div>
+  <div class="frow"><label>Product assigned</label><select id="suProduct"></select></div>
+  <div class="frow"><label>Pickup address (warehouse / store)</label><input id="suAddr" placeholder="Shuwaikh Industrial, Block 2..." /></div>
+  <div class="frow"><label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--ink);font-size:13.5px"><input type="checkbox" id="suSelf" style="width:17px;height:17px;accent-color:#C9A86A"> 🚚 This supplier delivers with their OWN drivers (per contract)</label></div>
+  <div class="two"><div class="frow"><label>Username</label><input id="suUser" placeholder="aurora_watches" /></div><div class="frow"><label>Password</label><input id="suPass" placeholder="auto-generate" /></div></div>
+  <button class="btn ghost sm" id="genPass" style="margin:-4px 0 14px">⟳ Generate password</button>
+  <div class="note">Share these credentials with the supplier. They sign in at the Supplier Portal.</div>
+  <button class="save" id="saveSupplier">Create supplier login</button>
+</div></div>
+
+<!-- NEW DRIVER -->
+<div class="overlay" id="drvOverlay"><div class="drawer">
+  <div class="dh"><h2>New driver</h2><button class="x" data-close>×</button></div>
+  <div class="frow"><label>Type</label><select id="drType"><option value="individual">Individual</option><option value="company">Company</option></select></div>
+  <div class="frow"><label>Full name / Company name</label><input id="drName" placeholder="Name" /></div>
+  <div class="frow"><label>Phone</label><input id="drPhone" placeholder="+965 ..." /></div>
+  <div class="frow"><label>Password (for the Driver app)</label><input id="drPass" placeholder="e.g. 0000" /></div>
+  <div id="drInd">
+    <div class="two"><div class="frow"><label>Civil ID</label><input id="drCivil" placeholder="2900..." /></div><div class="frow"><label>Driver's licence</label><input id="drLicense" placeholder="DL-..." /></div></div>
+    <div class="frow"><label>Vehicle &amp; plate</label><input id="drVehicle" placeholder="Toyota Hilux · 1-23456" /></div>
+  </div>
+  <div id="drCo" style="display:none"><div class="frow"><label>Commercial registration (CR)</label><input id="drCR" placeholder="CR-..." /></div></div>
+  <div class="note">The driver signs into the Driver app with this phone number.</div>
+  <button class="save" id="saveDriver">Add driver</button>
+</div></div>
+
+<!-- ORDER DETAIL -->
+<div class="overlay" id="orderOverlay"><div class="drawer" id="orderDrawer"></div></div>
+
+<div class="overlay" id="custOverlay"><div class="drawer" id="custDrawer"></div></div>
+
+<script src="theedit-data.js?v=9"></script>
+<script>
+  const PAYLABEL={cod:'<span class="pill cod">Cash on delivery</span>',link:'<span class="pill link">Payment link</span>',paid:'<span class="pill paid">Paid online</span>'};
+  const STLABEL={new:'<span class="pill new">New</span>',confirmed:'<span class="pill confirmed">Confirmed</span>',await:'<span class="pill await">Awaiting payment</span>',paid:'<span class="pill paid">Paid</span>',delivery:'<span class="pill delivery">Out for delivery</span>',delivered:'<span class="pill delivered">Delivered</span>'};
+  const itemsTotal=o=>o.items.reduce((s,i)=>s+i.q*i.p,0);
+  const grand=o=>Math.max(0,Math.round((itemsTotal(o)+(o.fee||0)-(o.giftUsed||0))*100)/100);
+
+  document.getElementById('loginBtn').onclick=()=>{document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';refresh();};
+  document.getElementById('logout').onclick=(e)=>{e.preventDefault();document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';};
+
+  const titles={overview:"Overview",products:"Products",orders:"Orders",customers:"Customers",suppliers:"Suppliers",drivers:"Drivers",drops:"Drops & videos",settings:"Settings"};
+  function go(s){document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.s===s));document.querySelectorAll('.screen').forEach(sc=>sc.classList.remove('on'));document.getElementById('s-'+s).classList.add('on');document.getElementById('pageTitle').textContent=titles[s];}
+  document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.s));
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+  document.querySelectorAll('[data-toggle]').forEach(s=>s.onclick=()=>s.classList.toggle('on'));
+  document.getElementById('soundSw').onclick=function(){this.classList.toggle('on');};
+
+  // youtube embed preview
+  function ytId(u){const m=String(u).match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/);return m?m[1]:null;}
+  function showYt(input){const box=document.getElementById(input.dataset.prev);if(!box)return;const id=ytId(input.value);if(id){box.innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'" allowfullscreen></iframe>';box.style.display='block';}else box.style.display='none';}
+  document.querySelectorAll('.ytin').forEach(i=>i.addEventListener('input',()=>showYt(i)));
+
+  // ---------- products ----------
+  let editingProductId=null;
+  function renderProducts(){
+    document.getElementById('productRows').innerHTML=TE.state().products.map(p=>`<tr data-pid="${p.id}" style="cursor:pointer" title="Click to edit">
+      <td><img class="thumb" src="${p.img||''}" onerror="this.removeAttribute('src')"> &nbsp;${p.name} <span style="color:var(--muted);font-size:11px">· edit ✎</span></td>
+      <td>${p.price} KWD</td><td>${p.left} / ${p.total}</td>
+      <td>${p.yt?'▶ YouTube':'<span style="color:var(--muted)">—</span>'}</td>
+      <td>${p.approval==='pending'?`<span class="pill" data-approve="${p.id}" style="background:rgba(224,160,80,.12);color:#e0a050;border:1px solid rgba(224,160,80,.45);cursor:pointer" title="Click to approve and publish">⏳ Approve?</span> `:''}<span class="pill ${p.status==='live'?'live':p.status==='sold'?'sold':'draft'}" data-toggle="${p.id}" style="cursor:pointer" title="Click to switch Live/Draft">${p.status==='live'?'Live':p.status==='sold'?'Sold out':'Draft'}</span>
+      <div style="font-size:10.5px;color:var(--muted);margin-top:4px">${p.status==='live'?'click → make draft':'click → make LIVE'}</div></td></tr>`).join('');
+    document.querySelectorAll('#productRows tr[data-pid]').forEach(tr=>tr.onclick=()=>openProductEditor(tr.dataset.pid));
+    document.querySelectorAll('#productRows [data-approve]').forEach(el=>el.onclick=(ev)=>{
+      ev.stopPropagation();
+      const p=TE.productById(el.dataset.approve);if(!p)return;
+      if(confirm('Approve "'+p.name+'" and publish it to the store?'))TE.updateProduct(p.id,{status:'live',approval:'approved'});
+    });
+    document.querySelectorAll('#productRows [data-toggle]').forEach(el=>el.onclick=(ev)=>{
+      ev.stopPropagation();
+      const p=TE.productById(el.dataset.toggle);if(!p)return;
+      if(p.status==='live'){TE.updateProduct(p.id,{status:'draft'});}
+      else{
+        if(p.approval==='pending'&&!confirm('"'+p.name+'" is still awaiting your approval. Make it LIVE anyway? (This also approves it.)'))return;
+        TE.updateProduct(p.id,{status:'live',approval:'approved'});
+      }
+    });
+  }
+  window.resetDropBoxes=function(){document.querySelectorAll('.drop-img[data-target]').forEach(b=>{b.style.backgroundImage='';b.style.border='';b.style.minHeight='';b.textContent=b.dataset.target==='pImg'?'Click to upload a photo · or paste an image URL below':'Click to upload · or paste an image URL below';});};
+  function fillProductForm(p){
+    document.getElementById('pName').value=p?p.name:'';document.getElementById('pDesc').value=p?(p.desc||''):'';
+    document.getElementById('pPrice').value=p?p.price:'';document.getElementById('pStatus').value=p?p.status:'live';
+    document.getElementById('pTotal').value=p?p.total:'';document.getElementById('pLeft').value=p?p.left:'';
+    document.getElementById('pComm').value=(p&&p.commission!=null)?p.commission:'';
+    document.getElementById('pVariant').value=p?(p.variant||''):'';document.getElementById('pImg').value=p?(p.img||''):'';
+    document.getElementById('pYt').value=p?(p.yt||''):'';showYt(document.getElementById('pYt'));
+    const F1=(p&&p.feat1)||{},F2=(p&&p.feat2)||{};
+    document.getElementById('f1Img').value=F1.img||'';document.getElementById('f1Head').value=F1.head||'';document.getElementById('f1Text').value=F1.text||'';
+    document.getElementById('f2Img').value=F2.img||'';document.getElementById('f2Head').value=F2.head||'';document.getElementById('f2Text').value=F2.text||'';
+    const opts=(p&&p.options)||[];
+    document.getElementById('pType').value=opts.length?'options':'simple';
+    document.getElementById('optWrap').style.display=opts.length?'block':'none';
+    document.getElementById('o1Name').value=opts[0]?opts[0].name:'';document.getElementById('o1Vals').value=opts[0]?opts[0].values.join(', '):'';
+    document.getElementById('o2Name').value=opts[1]?opts[1].name:'';document.getElementById('o2Vals').value=opts[1]?opts[1].values.join(', '):'';
+    document.getElementById('cImgWrap').innerHTML='';
+    if(opts[1]&&p&&p.optImgs&&Object.keys(p.optImgs).length)renderColorSlots(opts[1].values,p.optImgs);
+    resetDropBoxes();
+    ['pImg','f1Img','f2Img'].forEach(id=>{const v=document.getElementById(id).value;if(!v)return;
+      const box=document.querySelector(`.drop-img[data-target=${id}]`);if(!box)return;
+      box.textContent='';box.style.backgroundImage=`url('${v}')`;box.style.backgroundSize='cover';box.style.backgroundPosition='center';box.style.minHeight='120px';box.style.border='1px solid rgba(201,168,106,.6)';});
+  }
+  document.getElementById('pType').onchange=function(){document.getElementById('optWrap').style.display=this.value==='options'?'block':'none';};
+  window.openProductEditor=function(id){
+    const p=TE.productById(id);if(!p)return;
+    editingProductId=id;fillProductForm(p);
+    document.getElementById('pDrawerTitle').textContent='Edit product — '+p.name;
+    document.getElementById('deleteProduct').style.display='block';
+    const bar=document.getElementById('approveBar');
+    if(p.approval==='pending'){
+      const sup=TE.state().suppliers.find(s=>s.id===p.supplier);
+      bar.innerHTML=`<div style="border:1px solid rgba(224,160,80,.45);background:rgba(224,160,80,.08);border-radius:14px;padding:14px 16px;margin-bottom:16px">
+        <div style="color:#e0a050;font-size:13px;font-weight:600;margin-bottom:4px">⏳ Submitted by ${sup?sup.name:'a supplier'} — awaiting your approval</div>
+        <div style="color:var(--muted);font-size:12.5px;margin-bottom:12px">Review everything below, edit anything you want, then approve. It only appears on the store when YOU set Status to Live.</div>
+        <button class="btn" id="approveBtn" style="background:#e0a050;border-color:#e0a050;color:#1a1407">✓ Approve this product</button></div>`;
+      document.getElementById('approveBtn').onclick=()=>{TE.approveProduct(id);openProductEditor(id);};
+    } else bar.innerHTML='';
+    document.getElementById('prodOverlay').classList.add('on');
+  };
+  document.getElementById('addProduct').onclick=()=>{
+    editingProductId=null;fillProductForm(null);
+    document.getElementById('pDrawerTitle').textContent='Add product';
+    document.getElementById('deleteProduct').style.display='none';
+    document.getElementById('prodOverlay').classList.add('on');
+  };
+  document.getElementById('saveProduct').onclick=()=>{
+    const data={name:document.getElementById('pName').value||'Untitled',price:+document.getElementById('pPrice').value||0,total:+document.getElementById('pTotal').value||0,left:+document.getElementById('pLeft').value||0,status:document.getElementById('pStatus').value,img:document.getElementById('pImg').value,yt:document.getElementById('pYt').value,desc:document.getElementById('pDesc').value,variant:document.getElementById('pVariant').value,
+      commission:(document.getElementById('pComm').value===''?20:+document.getElementById('pComm').value),
+      feat1:{img:document.getElementById('f1Img').value,head:document.getElementById('f1Head').value,text:document.getElementById('f1Text').value},
+      feat2:{img:document.getElementById('f2Img').value,head:document.getElementById('f2Head').value,text:document.getElementById('f2Text').value}};
+    data.options=[];
+    if(document.getElementById('pType').value==='options'){
+      [['o1Name','o1Vals'],['o2Name','o2Vals']].forEach(([n,v])=>{
+        const name=document.getElementById(n).value.trim();
+        const values=document.getElementById(v).value.split(',').map(x=>x.trim()).filter(Boolean);
+        if(name&&values.length)data.options.push({name,values});
+      });
+      data.optImgs={};
+      document.querySelectorAll('#cImgWrap input[data-cval]').forEach(i=>{if(i.value)data.optImgs[i.dataset.cval]=i.value;});
+    }
+    if(document.getElementById('pStatus').value==='live')data.approval='approved'; // setting Live = approval
+    if(editingProductId){TE.updateProduct(editingProductId,data);}
+    else{TE.addProduct(Object.assign({id:'p'+Date.now()},data));}
+    editingProductId=null;
+    document.getElementById('prodOverlay').classList.remove('on');['pName','pPrice','pTotal','pLeft','pImg','pYt','pDesc','pVariant','f1Img','f1Head','f1Text','f2Img','f2Head','f2Text'].forEach(id=>document.getElementById(id).value='');showYt(document.getElementById('pYt'));
+  };
+  document.getElementById('deleteProduct').onclick=()=>{
+    if(!editingProductId)return;
+    const p=TE.productById(editingProductId);
+    if(!confirm('Delete "'+(p?p.name:'this product')+'"? This cannot be undone.'))return;
+    const s=TE.state();s.products=s.products.filter(x=>x.id!==editingProductId);TE.save();
+    editingProductId=null;document.getElementById('prodOverlay').classList.remove('on');
+  };
+
+  // ---------- orders ----------
+  let filter='all';
+  function visible(o){if(filter==='all')return true;if(filter==='new')return o.payStatus==='new';if(filter==='deliver')return o.payStatus==='delivery';return true;}
+  function renderOrders(){
+    const orders=TE.state().orders;
+    const list=orders.filter(visible);
+    document.getElementById('orderRows').innerHTML=list.length?list.map(o=>`<tr data-id="${o.id}">
+      <td><b>${o.id}</b><div style="color:var(--muted);font-size:12px">${o.date}</div></td>
+      <td>${o.name}<div style="color:var(--muted);font-size:12px">${o.phone}</div></td>
+      <td>${o.items.reduce((s,i)=>s+i.q,0)} item</td><td>${grand(o)} KWD</td>
+      <td>${PAYLABEL[o.pay]||''}</td><td>${STLABEL[o.payStatus]||''}</td></tr>`).join(''):`<tr><td colspan="6" class="empty">No orders.</td></tr>`;
+    document.querySelectorAll('#orderRows tr').forEach(tr=>tr.dataset.id&&(tr.onclick=()=>openOrder(tr.dataset.id)));
+    document.getElementById('recentRows').innerHTML=orders.slice(0,5).length?orders.slice(0,5).map(o=>`<tr data-id="${o.id}"><td><b>${o.id}</b></td><td>${o.name}</td><td>${grand(o)} KWD</td><td>${PAYLABEL[o.pay]||''}</td><td>${STLABEL[o.payStatus]||''}</td></tr>`).join(''):`<tr><td colspan="5" class="empty">No orders yet.</td></tr>`;
+    document.querySelectorAll('#recentRows tr').forEach(tr=>tr.dataset.id&&(tr.onclick=()=>{go('orders');openOrder(tr.dataset.id);}));
+    document.getElementById('navOrders').textContent=orders.filter(o=>o.payStatus==='new').length;
+  }
+  document.querySelectorAll('.flt').forEach(b=>b.onclick=()=>{document.querySelectorAll('.flt').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.f;renderOrders();});
+
+  function actionsFor(o){
+    const a=[];
+    if(o.ship==='courier'){
+      if(o.payStatus==='new')a.push(`<button class="save" onclick="adv('${o.id}','confirmed')">✓ Confirm order</button>`);
+      if(o.payStatus==='confirmed')a.push(`<div class="note" style="margin:0">Confirmed. Add a tracking number above to mark it shipped.</div>`);
+      if(o.payStatus==='delivery')a.push(`<button class="save" onclick="adv('${o.id}','delivered')">✓ Mark delivered (courier confirmed)</button>`);
+      if(o.payStatus==='delivered')a.push(`<div class="note" style="margin:0">Shipped &amp; delivered via ${o.courier||'courier'}. Tracking ${o.tracking||'—'}.</div>`);
+      return a.join('');
+    }
+    if(o.payStatus==='new')a.push(`<button class="save" onclick="adv('${o.id}','confirmed')">✓ Confirm order</button>`);
+    if(o.payStatus==='confirmed'&&o.pay==='link')a.push(`<button class="save" onclick="adv('${o.id}','await')">↗ Send payment link to customer</button>`);
+    if(o.payStatus==='confirmed'&&o.pay!=='link')a.push(`<button class="save" onclick="adv('${o.id}','delivery')">Out for delivery →</button>`);
+    if(o.payStatus==='await')a.push(`<button class="save" onclick="adv('${o.id}','delivery')">✓ Mark paid · out for delivery</button>`);
+    if(o.payStatus==='delivery')a.push(`<div class="note" style="margin:0">Out for delivery with the driver. The driver marks it delivered in the Driver app.</div>`);
+    if(o.payStatus==='delivered')a.push(`<div class="note" style="margin:0">Order completed and delivered. ${o.pay==='cod'?'Cash collected on delivery.':'Paid.'}</div>`);
+    return a.join('');
+  }
+  function openOrder(id){
+    const o=TE.state().orders.find(x=>x.id===id);if(!o)return;
+    const isGcc=(o.ship==='courier');
+    const deliver=isGcc?`
+      <div class="ob"><h4>Ship to · ${o.country}</h4>
+        <div class="kv"><span class="k">Customer</span><span>${o.name}</span></div>
+        <div class="kv"><span class="k">Phone</span><span><a href="tel:${o.phone.replace(/\s/g,'')}" style="color:var(--gold-2);text-decoration:none">${o.phone}</a></span></div>
+        <div class="kv"><span class="k">Address</span><span style="text-align:right;max-width:62%">${o.line1||'—'}</span></div>
+        ${o.line2?`<div class="kv"><span class="k">Line 2</span><span style="text-align:right;max-width:62%">${o.line2}</span></div>`:''}
+        <div class="kv"><span class="k">City</span><span>${o.city||o.area||'—'}</span></div>
+        ${o.nationalAddress?`<div class="kv"><span class="k">National address</span><span>${o.nationalAddress}</span></div>`:''}
+        ${o.postal?`<div class="kv"><span class="k">Postal code</span><span>${o.postal}</span></div>`:''}
+        <div class="kv"><span class="k">Country</span><span>${o.country}</span></div>
+        <div class="kv"><span class="k">Placed</span><span>${o.date}</span></div></div>`
+    :`
+      <div class="ob"><h4>Deliver to · Kuwait</h4>
+        <div class="kv"><span class="k">Customer</span><span>${o.name}</span></div>
+        <div class="kv"><span class="k">Phone</span><span><a href="tel:${o.phone.replace(/\s/g,'')}" style="color:var(--gold-2);text-decoration:none">${o.phone}</a></span></div>
+        <div class="kv"><span class="k">Governorate</span><span>${o.gov||'—'}</span></div>
+        <div class="kv"><span class="k">Area</span><span>${o.area}</span></div>
+        <div class="kv"><span class="k">Block</span><span>${o.block||'—'}</span></div>
+        <div class="kv"><span class="k">Street</span><span>${o.street||'—'}</span></div>
+        <div class="kv"><span class="k">House / Building</span><span>${o.house||'—'}</span></div>
+        ${o.avenue?`<div class="kv"><span class="k">Avenue</span><span>${o.avenue}</span></div>`:''}
+        <div class="kv"><span class="k">Placed</span><span>${o.date}</span></div>
+        <div style="margin-top:10px"><a class="btn sm ghost" target="_blank" href="${(o.locLink&&/^https?:\/\//i.test(o.locLink))?o.locLink:('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((o.area||'')+' block '+(o.block||'')+' Kuwait'))}">${(o.locLink&&/^https?:\/\//i.test(o.locLink))?'📍 Customer\'s exact pin':'↗ Open in Maps'}</a></div></div>`;
+    const feeLine=isGcc?`<div class="kv" style="margin-top:8px"><span class="k">Shipping (${o.courier||'courier'})</span><span>${o.fee||0} KWD</span></div>`:`<div class="kv" style="margin-top:8px"><span class="k">Delivery (${o.gov||''})</span><span>${o.fee||0} KWD</span></div>`;
+    const payNote=isGcc?'Prepaid by link / card · shipped internationally by '+(o.courier||'courier')+'.':(o.pay==='cod'?'Driver collects <b>'+grand(o)+' KWD</b> in cash on delivery.':'Send a secure pay-by-link after confirming.');
+    const shipBlock=isGcc?`<div class="ob"><h4>Courier shipment</h4>
+        <div class="kv"><span class="k">Method</span><span>International courier</span></div>
+        <div class="kv"><span class="k">Courier</span><span>${o.courier||'—'}</span></div>
+        <div class="frow" style="margin:10px 0 0"><label>Tracking number</label><input id="trkIn" value="${o.tracking||''}" placeholder="Add ${o.courier||'courier'} tracking"></div>
+        <button class="btn sm" onclick="saveTrk('${o.id}')">Save tracking &amp; mark shipped</button></div>`
+      :`<div class="ob"><h4>Fulfilment</h4>
+        <div class="kv"><span class="k">Supplier prep</span><span>${o.prepStatus}</span></div>
+        <div class="kv"><span class="k">Delivery by</span><span>${o.ship==='supplier'?'🚚 Supplier\'s own driver':'ALI MUBARAK driver'}</span></div>
+        <div class="kv"><span class="k">Driver status</span><span>${o.driverStatus}${o.driverId&&o.driverId!=='supplier'?(' · '+((TE.driverById(o.driverId)||{}).name||o.driverId)):''}</span></div>
+        ${o.ship==='supplier'&&o.pay==='cod'?'<div class="note" style="margin:8px 0 0">COD cash is collected by the supplier — settle it in their next payout.</div>':''}
+        ${(o.ship!=='supplier'&&o.prepStatus==='ready'&&o.driverStatus==='unassigned')?`
+          <div style="margin-top:12px"><label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">Assign one of my drivers</label>
+          <div style="display:flex;gap:8px">
+          <select id="asgSel" style="flex:1;background:#0F0E12;border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-size:13.5px">
+            ${TE.state().drivers.filter(d=>d.active&&(d.owner||'ali')==='ali').map(d=>`<option value="${d.id}">${d.name} · ${d.phone}</option>`).join('')||'<option value="">No active drivers</option>'}
+          </select>
+          <button class="btn sm" onclick="assignDrv('${o.id}')">Assign</button></div>
+          <div style="color:var(--muted);font-size:11.5px;margin-top:6px">Or leave it — any online driver can accept it from the pool.</div></div>`:''}
+        </div>`;
+    document.getElementById('orderDrawer').innerHTML=`
+      <div class="dh"><h2>${o.id} &nbsp; ${STLABEL[o.payStatus]}</h2><button class="x" data-close>×</button></div>
+      ${deliver}
+      <div class="ob"><h4>Items</h4>
+        ${o.items.map(i=>`<div class="lineitem"><span>${i.q} × ${i.n}${i.opts?` <span style="color:#C9A86A">· ${i.opts}</span>`:''}</span><span style="margin-inline-start:auto">${i.q*i.p} KWD</span></div>`).join('')}
+        ${o.giftUsed?`<div class="lineitem"><span style="color:#C9A86A">🎁 Gift card applied</span><span style="margin-inline-start:auto;color:#C9A86A">−${o.giftUsed} KWD</span></div>`:''}
+        ${feeLine}
+        <div class="kv" style="font-weight:600"><span>Total</span><span>${grand(o)} KWD</span></div></div>
+      <div class="ob"><h4>Payment</h4>
+        <div class="kv"><span class="k">Method</span><span>${PAYLABEL[o.pay]||''}</span></div>
+        <div class="note" style="margin:10px 0 0">${payNote}</div></div>
+      ${shipBlock}
+      <div class="actions">${actionsFor(o)}</div>`;
+    document.getElementById('orderDrawer').querySelector('[data-close]').onclick=close;
+    document.getElementById('orderOverlay').classList.add('on');window._open=id;
+  }
+  window.adv=(id,st)=>{TE.setPayStatus(id,st);openOrder(id);};
+  window.saveTrk=(id)=>{const o=TE.state().orders.find(x=>x.id===id);const t=document.getElementById('trkIn').value;TE.setTracking(id,o.courier||'DHL',t);openOrder(id);};
+
+  function close(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('on'));window._open=null;}
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=close);
+  document.querySelectorAll('.overlay').forEach(o=>o.onclick=(e)=>{if(e.target===o)close();});
+
+  // ---------- suppliers ----------
+  function renderSuppliers(){
+    document.getElementById('supplierRows').innerHTML=TE.state().suppliers.map(s=>{const p=TE.productById(s.productId);return `<tr>
+      <td><b>${s.name}</b>${s.selfDelivery?'<div style="font-size:11px;color:#C9A86A;margin-top:3px">🚚 Delivers with own drivers</div>':''}</td><td>${p?p.name:'—'}</td>
+      <td><code style="color:var(--gold-2)">${s.user}</code></td><td><code style="color:var(--muted)">${s.pass}</code></td>
+      <td><span class="pill ${s.active?'live':'draft'}">${s.active?'Active':'Disabled'}</span></td>
+      <td style="text-align:right;white-space:nowrap"><button class="btn sm ghost" onclick="toggleSelfDel('${s.id}')" title="Per contract">${s.selfDelivery?'🚚 Own → ours':'🚚 Own delivery'}</button> <button class="btn sm ghost" onclick="toggleSup('${s.id}')">${s.active?'Disable':'Enable'}</button> <a class="btn sm ghost" href="store-supplier.html" target="_blank">Portal ↗</a></td></tr>`;}).join('');
+  }
+  window.toggleSup=(id)=>TE.toggleSupplier(id);
+  document.getElementById('addSupplier').onclick=()=>{document.getElementById('suProduct').innerHTML='<option value="">— No product yet (supplier submits their own) —</option>'+TE.state().products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');document.getElementById('supOverlay').classList.add('on');};
+  document.getElementById('genPass').onclick=()=>{document.getElementById('suPass').value=Math.random().toString(36).slice(2,6)+'-'+Math.random().toString(36).slice(2,6);};
+  document.getElementById('saveSupplier').onclick=()=>{
+    TE.addSupplier({id:'s'+Date.now(),name:document.getElementById('suName').value.trim()||'Untitled supplier',productId:document.getElementById('suProduct').value||null,user:document.getElementById('suUser').value.trim()||'supplier',pass:document.getElementById('suPass').value.trim()||'changeme',active:true,pickup:document.getElementById('suAddr').value,selfDelivery:document.getElementById('suSelf').checked});
+    document.getElementById('supOverlay').classList.remove('on');['suName','suUser','suPass','suAddr'].forEach(id=>document.getElementById(id).value='');
+  };
+
+  // ---------- videos ----------
+  function loadVideos(){const v=TE.state().videos;const i=document.getElementById('vIntro'),p=document.getElementById('vProduct');if(document.activeElement!==i)i.value=v.intro||'';if(document.activeElement!==p)p.value=v.product||'';showYt(i);showYt(p);}
+  document.getElementById('saveVideos').onclick=()=>{TE.setVideo('intro',document.getElementById('vIntro').value);TE.setVideo('product',document.getElementById('vProduct').value);alert('Videos saved — they now play on the store.');};
+
+  // ---------- photo upload (drop-img boxes, delegated so dynamic boxes work too) ----------
+  // Click → pick a photo → downscale to max 900px JPEG → store as data URL in the linked input.
+  document.addEventListener('click',function(ev){
+    const box=ev.target.closest('.drop-img[data-target]');
+    if(!box)return;
+    (()=>{
+      const fi=document.createElement('input');fi.type='file';fi.accept='image/*';
+      fi.onchange=()=>{
+        const f=fi.files&&fi.files[0];if(!f)return;
+        if(!/^image\//.test(f.type)){alert('Please choose an image file.');return;}
+        const img=new Image();
+        img.onload=()=>{
+          const MAX=900,sc=Math.min(1,MAX/Math.max(img.width,img.height));
+          const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+          c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+          let url;try{url=c.toDataURL('image/jpeg',.82);}catch(e){alert('Could not read this image.');return;}
+          if(url.length>900000){alert('Photo is too large even after compression — try a smaller image.');return;}
+          const inp=document.getElementById(box.dataset.target);if(inp)inp.value=url;
+          box.textContent='';box.style.backgroundImage=`url('${url}')`;
+          box.style.backgroundSize='cover';box.style.backgroundPosition='center';
+          box.style.minHeight='120px';box.style.border='1px solid rgba(201,168,106,.6)';
+          URL.revokeObjectURL(img.src);
+        };
+        img.onerror=()=>alert('Could not read this image.');
+        img.src=URL.createObjectURL(f);
+      };
+      fi.click();
+    })();
+  });
+  // photos per Option-2 choice (e.g. one photo per colour)
+  function renderColorSlots(values,existing){
+    existing=existing||{};
+    document.getElementById('cImgWrap').innerHTML=values.map((v,i)=>`
+      <div class="frow"><label>Photo for: ${v}</label><div class="drop-img" data-target="cImg_${i}">Click to upload the ${v} photo · or paste a URL below</div></div>
+      <div class="frow"><input type="text" id="cImg_${i}" data-cval="${v}" value="${existing[v]||''}" placeholder="https://image-url.jpg" /></div>`).join('');
+    values.forEach((v,i)=>{const val=existing[v];if(!val)return;
+      const box=document.querySelector(`.drop-img[data-target=cImg_${i}]`);if(!box)return;
+      box.textContent='';box.style.backgroundImage=`url('${val}')`;box.style.backgroundSize='cover';box.style.backgroundPosition='center';box.style.minHeight='100px';box.style.border='1px solid rgba(201,168,106,.6)';});
+  }
+  document.getElementById('buildColorSlots').onclick=()=>{
+    const vals=document.getElementById('o2Vals').value.split(',').map(x=>x.trim()).filter(Boolean);
+    if(!vals.length){alert('First type the Option 2 choices (e.g. Black, Red, Beige), then press this button.');return;}
+    const cur={};document.querySelectorAll('#cImgWrap input[data-cval]').forEach(i=>{if(i.value)cur[i.dataset.cval]=i.value;});
+    renderColorSlots(vals,cur);
+  };
+
+  // ---------- coming soon ----------
+  function renderSoon(){
+    document.getElementById('soonGrid').innerHTML=TE.state().comingSoon.map(s=>{
+      const wn=TE.waitlistCount?TE.waitlistCount(s.id):0;
+      const pend=s.approval==='pending';
+      return `<div class="scard" data-sid="${s.id}" style="cursor:pointer" title="Click to edit">
+      <div class="im" ${s.img?`style="background-image:url('${s.img}')"`:''}>${s.img?'':'NO IMAGE'}</div>
+      <div class="bd"><div class="tag">${s.tag||'Coming soon'}${pend?' · <span style="color:#e0a050">⏳ Approve?</span>':''}</div><h4>${s.title} <span style="color:var(--muted);font-size:11px">· edit ✎</span></h4><p>${s.tease}</p>
+      <p style="margin-top:8px;color:#C9A86A;font-size:12.5px">● ${wn} on the waitlist${wn?` · <span class="rm" style="color:#C9A86A" onclick="event.stopPropagation();showWl('${s.id}')">View numbers</span>`:''}</p>
+      <span class="rm" onclick="event.stopPropagation();rmSoon('${s.id}')">Remove</span></div></div>`;}).join('');
+    document.querySelectorAll('#soonGrid .scard[data-sid]').forEach(c=>c.onclick=()=>openSoonEditor(c.dataset.sid));
+  }
+  window.rmSoon=(id)=>TE.removeComingSoon(id);
+  let editingSoonId=null;
+  window.openSoonEditor=function(id){
+    const c=TE.state().comingSoon.find(x=>x.id===id);if(!c)return;
+    editingSoonId=id;resetDropBoxes();
+    document.getElementById('sTitle').value=c.title||'';document.getElementById('sTease').value=c.tease||'';
+    document.getElementById('sTag').value=c.tag||'Coming soon';document.getElementById('sImg').value=c.img||'';
+    if(c.img){const box=document.querySelector('.drop-img[data-target=sImg]');if(box){box.textContent='';box.style.backgroundImage=`url('${c.img}')`;box.style.backgroundSize='cover';box.style.backgroundPosition='center';box.style.minHeight='110px';box.style.border='1px solid rgba(201,168,106,.6)';}}
+    document.getElementById('sDrawerTitle').textContent='Edit coming-soon — '+(c.title||'');
+    const bar=document.getElementById('soonApproveBar');
+    if(c.approval==='pending'){
+      const sup=TE.state().suppliers.find(x=>x.id===c.supplier);
+      bar.innerHTML=`<div style="border:1px solid rgba(224,160,80,.45);background:rgba(224,160,80,.08);border-radius:14px;padding:14px 16px;margin-bottom:14px">
+        <div style="color:#e0a050;font-size:13px;font-weight:600;margin-bottom:4px">⏳ Teaser submitted by ${sup?sup.name:'a supplier'}</div>
+        <div style="color:var(--muted);font-size:12.5px;margin-bottom:10px">It is NOT on the store yet. Edit anything — picture, words — then approve.</div>
+        <button class="btn" id="approveSoonBtn" style="background:#e0a050;border-color:#e0a050;color:#1a1407">✓ Approve — show in Next drops</button></div>`;
+      document.getElementById('approveSoonBtn').onclick=()=>{TE.approveTeaser(id);openSoonEditor(id);};
+    } else bar.innerHTML='';
+    document.getElementById('soonOverlay').classList.add('on');
+  };
+  window.showWl=(id)=>{
+    const list=(TE.waitlistFor?TE.waitlistFor(id):[]);
+    if(!list.length){alert('No numbers yet.');return;}
+    const drop=TE.state().comingSoon.find(c=>c.id===id);
+    const txt=list.map((w,i)=>(i+1)+'. '+w.phone+'  ('+(w.date||'').slice(0,10)+')').join('\n');
+    if(navigator.clipboard)navigator.clipboard.writeText(list.map(w=>w.phone).join('\n')).catch(()=>{});
+    alert('WAITLIST — '+(drop?drop.title:id)+' ('+list.length+')\n\n'+txt+'\n\nAll numbers copied to clipboard — paste into WhatsApp broadcast.');
+  };
+  document.getElementById('addSoon').onclick=()=>{editingSoonId=null;if(window.resetDropBoxes)resetDropBoxes();
+    ['sTitle','sTease','sImg'].forEach(id=>document.getElementById(id).value='');document.getElementById('sTag').value='Coming soon';
+    document.getElementById('sDrawerTitle').textContent='Coming-soon drop';document.getElementById('soonApproveBar').innerHTML='';
+    document.getElementById('soonOverlay').classList.add('on');};
+  document.getElementById('saveSoon').onclick=()=>{
+    const data={title:document.getElementById('sTitle').value||'Untitled',tease:document.getElementById('sTease').value||'',tag:document.getElementById('sTag').value||'Coming soon',img:document.getElementById('sImg').value||''};
+    if(editingSoonId){TE.updateComingSoon(editingSoonId,data);}
+    else{TE.addComingSoon(Object.assign({id:'cs'+Date.now()},data));}
+    editingSoonId=null;
+    document.getElementById('soonOverlay').classList.remove('on');['sTitle','sTease','sImg'].forEach(id=>document.getElementById(id).value='');};
+
+  // ---------- delivery ----------
+  function renderDelivery(){
+    document.getElementById('deliveryBox').innerHTML=TE.GOV.map((g,gi)=>`
+      <div class="gov"><div class="gh">
+        <div class="gname">${g.n}<span class="ar">${g.ar}</span></div>
+        <div class="gprice"><span style="color:var(--muted);font-size:12px">Price</span>
+          <input type="number" step="0.5" min="0" value="${TE.feeFor(g.n)}" onchange="TE.setDelivery('${g.n}',parseFloat(this.value)||0)">
+          <span style="color:var(--muted);font-size:12px">KWD</span>
+          <button class="collapse" onclick="(function(e){var a=e.nextElementSibling?null:0;})();var el=document.getElementById('ga${gi}');el.style.display=el.style.display==='flex'?'none':'flex'">${g.areas.length} areas ▾</button></div></div>
+        <div class="areas" id="ga${gi}">${g.areas.map(a=>`<span>${a}</span>`).join('')}</div></div>`).join('');
+  }
+  document.getElementById('emptyData').onclick=()=>{if(confirm('Empty ALL data — products, orders, suppliers, drivers, coming-soon? You build everything from zero after this.')){TE.resetEmpty();}};
+  document.getElementById('resetData').onclick=()=>{if(confirm('Reset all demo data?')){TE.reset();}};
+
+  // ---------- drivers ----------
+  function renderDrivers(){
+    const orders=TE.state().orders;
+    document.getElementById('driverRows').innerHTML=TE.state().drivers.map(d=>{
+      const done=orders.filter(o=>o.driverId===d.id&&o.driverStatus==='delivered').length;
+      return `<tr>
+        <td><b>${d.name}</b>${(d.owner&&d.owner!=='ali')?` <span style="color:var(--gold);font-size:11px">· ${(TE.state().suppliers.find(x=>x.id===d.owner)||{}).name||'supplier'} fleet</span>`:''}</td><td>${d.type}</td><td>${d.phone||'—'}<div style="color:var(--muted);font-size:11px">pass: ${d.pass||'0000'}</div></td>
+        <td style="font-size:12.5px">${d.type==='individual'?((d.civilId||'—')+' · '+(d.license||'—')):('CR '+(d.cr||'—'))}</td>
+        <td>${done}</td>
+        <td><span class="pill ${d.active?'live':'draft'}">${d.active?'Active':'Disabled'}</span></td>
+        <td style="text-align:right;white-space:nowrap"><button class="btn sm ghost" onclick="toggleDrv('${d.id}')">${d.active?'Disable':'Enable'}</button></td></tr>`;
+    }).join('')||`<tr><td colspan="7" class="empty">No drivers yet.</td></tr>`;
+  }
+  window.toggleDrv=(id)=>{const d=TE.driverById(id);if(d){d.active=!d.active;TE.save();}};
+  document.getElementById('addDriver').onclick=()=>document.getElementById('drvOverlay').classList.add('on');
+  document.getElementById('drType').onchange=function(){const co=this.value==='company';document.getElementById('drCo').style.display=co?'block':'none';document.getElementById('drInd').style.display=co?'none':'block';};
+  document.getElementById('saveDriver').onclick=()=>{
+    const t=document.getElementById('drType').value;
+    const d={name:document.getElementById('drName').value||'Driver',type:t,phone:document.getElementById('drPhone').value,pass:document.getElementById('drPass').value.trim()||'0000',owner:'ali'};
+    if(t==='individual'){d.civilId=document.getElementById('drCivil').value;d.license=document.getElementById('drLicense').value;d.vehicle=document.getElementById('drVehicle').value;}
+    else d.cr=document.getElementById('drCR').value;
+    TE.addDriver(d);document.getElementById('drvOverlay').classList.remove('on');
+    ['drName','drPhone','drCivil','drLicense','drVehicle','drCR'].forEach(id=>document.getElementById(id).value='');
+  };
+
+  // ---------- GCC shipping ----------
+  function renderGcc(){
+    const g=TE.state().gccShipping;
+    document.getElementById('gccBox').innerHTML=Object.keys(g).map(c=>`
+      <div class="gov"><div class="gh"><div class="gname">${c}</div>
+        <div class="gprice"><span style="color:var(--muted);font-size:12px">Courier ship</span>
+          <input type="number" step="0.5" min="0" value="${g[c]}" onchange="TE.setGccShipping('${c}',parseFloat(this.value)||0)">
+          <span style="color:var(--muted);font-size:12px">KWD</span></div></div></div>`).join('');
+  }
+
+  // ---------- customers (client bank) ----------
+  const SRC={order:'🛒 Order',waitlist:'⏳ Waitlist','drop-alerts':'📧 Drop alerts'};
+  function custFilter(list){
+    const q=(document.getElementById('custSearch')?document.getElementById('custSearch').value:'').trim().toLowerCase();
+    if(!q)return list;
+    return list.filter(c=>((c.name||'')+' '+(c.phone||'')+' '+(c.email||'')+' '+(c.area||'')+' '+(c.gov||'')).toLowerCase().includes(q));
+  }
+  function renderCustomers(){
+    const list=TE.customers?TE.customers():[];
+    document.getElementById('cToday').textContent=TE.customersToday?TE.customersToday():0;
+    document.getElementById('cAll').textContent=list.length;
+    document.getElementById('cEmail').textContent=list.filter(c=>c.email).length;
+    document.getElementById('cOrders').textContent=list.filter(c=>c.source==='order').length;
+    document.getElementById('navCust').textContent=list.length;
+    const krt=document.getElementById('kRegToday');if(krt)krt.textContent=TE.customersToday?TE.customersToday():0;
+    const krl=document.getElementById('kRegTotal');if(krl)krl.textContent=list.length+' customer'+(list.length===1?'':'s')+' in the bank';
+    const shown=custFilter(list);
+    document.getElementById('custRows').innerHTML=shown.length?shown.map(c=>`<tr data-ckey="${c.email||c.phone||''}" style="cursor:pointer" title="Click for full profile">
+      <td>${c.name||'<span style="color:var(--muted)">—</span>'}</td>
+      <td>${c.phone||'—'}</td><td>${c.email||'—'}</td>
+      <td>${[c.area,c.gov].filter(Boolean).join(', ')||'—'}</td>
+      <td>${SRC[c.source]||c.source||'—'}</td>
+      <td>${(c.date||'').slice(0,10)}</td>
+      <td>${c.email?`<button class="btn sm ghost" onclick="giftTo('${c.email}')">🎁 ${(c.giftCards&&c.giftCards.length)?c.giftCards.reduce((s,g)=>s+g.amount,0)+' KWD':'Gift'}</button>`:'—'}</td></tr>`).join('')
+      :`<tr><td colspan="7" class="empty">${list.length?'No customer matches your search.':'No customers yet — they appear here from checkouts, waitlists and drop-alert signups.'}</td></tr>`;
+    document.querySelectorAll('#custRows tr[data-ckey]').forEach(tr=>tr.onclick=(ev)=>{
+      if(ev.target.closest('button'))return; // gift button keeps its own action
+      openCustomer(tr.dataset.ckey);
+    });
+  }
+  window.openCustomer=function(key){
+    const c=(TE.customers()||[]).find(x=>x.email===key||x.phone===key);if(!c)return;
+    const dig=(c.phone||'').replace(/\D/g,'');
+    const hist=TE.state().orders.filter(o=>
+      (c.email&&(o.customerEmail||'').toLowerCase()===c.email.toLowerCase())||
+      (dig&&(o.phone||'').replace(/\D/g,'')===dig));
+    const spent=hist.reduce((s,o)=>s+o.items.reduce((t,i)=>t+i.q*i.p,0)+(o.fee||0),0);
+    const cards=c.giftCards||[];
+    document.getElementById('custDrawer').innerHTML=`
+      <div class="dh"><h2>${c.name||'Customer'}</h2><button class="x" data-close>×</button></div>
+      <div class="ob"><h4>Details</h4>
+        <div class="kv"><span class="k">Phone</span><span>${c.phone||'—'}</span></div>
+        <div class="kv"><span class="k">Email</span><span>${c.email||'—'}</span></div>
+        <div class="kv"><span class="k">Address</span><span>${[c.area,c.gov].filter(Boolean).join(', ')||'—'}${c.block?' · Block '+c.block:''}${c.street?' · St '+c.street:''}${c.house?' · House '+c.house:''}</span></div>
+        <div class="kv"><span class="k">Source</span><span>${SRC[c.source]||c.source||'—'}</span></div>
+        <div class="kv"><span class="k">Registered</span><span>${(c.date||'').slice(0,10)}</span></div></div>
+      <div class="ob"><h4>Value</h4>
+        <div class="kv"><span class="k">Orders</span><span><b>${hist.length}</b></span></div>
+        <div class="kv"><span class="k">Total spent</span><span><b style="color:var(--gold-2)">${Math.round(spent*100)/100} KWD</b></span></div>
+        <div class="kv"><span class="k">Gift cards</span><span>${cards.length?cards.map(g=>g.code+' ('+g.amount+' KWD)').join(', '):'none'}</span></div>
+        ${c.email?`<button class="btn sm ghost" style="margin-top:8px" onclick="giftTo('${c.email}');openCustomer('${key}')">🎁 Send a gift card</button>`:''}</div>
+      <div class="ob"><h4>Purchase history (${hist.length})</h4>
+        ${hist.length?hist.map(o=>`
+          <div style="border-bottom:1px solid var(--line);padding:10px 0">
+            <div style="display:flex;justify-content:space-between;font-size:13.5px"><b>${o.id}</b><span>${STLABEL[o.payStatus]||o.payStatus}</span></div>
+            <div style="color:var(--muted);font-size:12.5px;margin-top:4px">${o.items.map(i=>i.q+' × '+i.n+(i.opts?' <span style="color:#C9A86A">· '+i.opts+'</span>':'')).join('<br>')}</div>
+            <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:4px"><span>${o.ts?new Date(o.ts).toLocaleDateString('en-GB'):o.date}</span><b style="color:var(--ink)">${o.items.reduce((s,i)=>s+i.q*i.p,0)+(o.fee||0)} KWD</b></div>
+          </div>`).join(''):'<div style="color:var(--muted);font-size:13px">No purchases yet.</div>'}</div>`;
+    document.getElementById('custDrawer').querySelector('[data-close]').onclick=()=>document.getElementById('custOverlay').classList.remove('on');
+    document.getElementById('custOverlay').classList.add('on');
+  };
+  document.getElementById('custOverlay').onclick=(e)=>{if(e.target.id==='custOverlay')e.target.classList.remove('on');};
+  document.getElementById('custSearch').oninput=()=>renderCustomers();
+  window.toggleSelfDel=(id)=>{
+    const sp=TE.state().suppliers.find(x=>x.id===id);if(!sp)return;
+    sp.selfDelivery=!sp.selfDelivery;TE.save();
+    alert(sp.name+(sp.selfDelivery?' now delivers with THEIR OWN drivers (per contract).':' now uses ALI MUBARAK drivers.'));
+  };
+  window.assignDrv=(orderId)=>{
+    const sel=document.getElementById('asgSel');
+    if(!sel||!sel.value){alert('No active drivers — add one in the Drivers tab.');return;}
+    TE.assignDriver(orderId,sel.value);
+    const d=TE.driverById(sel.value);
+    alert('✓ Assigned to '+(d?d.name:'driver')+' — it appears in their driver app now.');
+  };
+  window.giftTo=(em)=>{
+    const amt=prompt('Gift card amount in KWD for '+em+':','10');
+    if(amt==null||!(+amt>0))return;
+    const card=TE.addGiftCard(em,amt);
+    if(card)alert('🎁 Gift card created\n\nCode: '+card.code+'\nValue: '+card.amount+' KWD\n\nThe customer now sees it in their profile under Gift cards.');
+  };
+  document.getElementById('dlCustomers').onclick=()=>{
+    const list=TE.customers();
+    if(!list.length){alert('No customers to export yet.');return;}
+    const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+    const head=['Name','Phone','Email','Governorate','Area','Block','Street','House','Source','Registered'];
+    const rows=list.map(c=>[c.name,c.phone,c.email,c.gov,c.area,c.block,c.street,c.house,c.source,(c.date||'').slice(0,19).replace('T',' ')].map(esc).join(','));
+    const csv='\ufeff'+head.join(',')+'\n'+rows.join('\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+    const aEl=document.createElement('a');aEl.href=URL.createObjectURL(blob);
+    aEl.download='THE-EDIT-customers-'+new Date().toISOString().slice(0,10)+'.csv';aEl.click();
+    setTimeout(()=>URL.revokeObjectURL(aEl.href),4000);
+  };
+  document.getElementById('announceDrop').onclick=()=>{
+    const p=TE.product();
+    if(!p){alert('No live drop to announce yet.');return;}
+    const emails=TE.customers().filter(c=>c.email).map(c=>c.email);
+    if(!emails.length){alert('No customer emails collected yet. Emails arrive from the "email me every drop" box on the store.');return;}
+    const subject=encodeURIComponent('NEW DROP \u00b7 '+p.name+' \u2014 THE EDIT by ALI MUBARAK');
+    const body=encodeURIComponent('It\u2019s live.\n\n'+p.name+' \u2014 '+(p.desc||'')+'\nPrice: '+p.price+' KWD \u00b7 Limited to '+p.total+'.\n\nGet yours before it\u2019s gone:\nhttps://alimubarak1.com/store/\n\n\u2014 ALI MUBARAK \u00b7 THE EDIT');
+    navigator.clipboard&&navigator.clipboard.writeText(emails.join(', ')).catch(()=>{});
+    alert(emails.length+' customer emails copied to your clipboard.\nYour mail app will now open with the announcement \u2014 paste the addresses into BCC if they are missing.');
+    location.href='mailto:?bcc='+encodeURIComponent(emails.slice(0,80).join(','))+'&subject='+subject+'&body='+body;
+  };
+
+  // ---------- sales & my share (commission analytics) ----------
+  let salesRange='today';
+  document.querySelectorAll('.srange').forEach(btn=>btn.onclick=()=>{salesRange=btn.dataset.r;
+    document.querySelectorAll('.srange').forEach(x=>x.classList.toggle('active',x===btn));renderSales();});
+  function renderSales(){
+    if(!TE.revenue)return;
+    let from=0;
+    if(salesRange==='today'){const d=new Date();d.setHours(0,0,0,0);from=d.getTime();}
+    else if(salesRange==='week'){from=Date.now()-7*864e5;}
+    const t=TE.revenue(from);
+    document.getElementById('svRev').textContent=t.rev+' KWD';
+    document.getElementById('svAli').textContent=t.ali+' KWD';
+    document.getElementById('svSup').textContent=t.sup+' KWD';
+    // donut: my share vs suppliers
+    const c=document.getElementById('cPie');if(!c)return;const g=c.getContext('2d');g.clearRect(0,0,170,170);
+    const cx=85,cy=85,R=72,IR=46,frac=t.rev>0?t.ali/t.rev:0,A0=-Math.PI/2;
+    function ring(a0,a1,col){if(a1-a0<=0)return;g.beginPath();g.arc(cx,cy,R,a0,a1);g.arc(cx,cy,IR,a1,a0,true);g.closePath();g.fillStyle=col;g.fill();}
+    if(t.rev>0){ring(A0,A0+frac*2*Math.PI,'#C9A86A');ring(A0+frac*2*Math.PI,A0+2*Math.PI,'#3a3a42');}
+    else ring(0,2*Math.PI,'#232229');
+    g.fillStyle='#E7D3A6';g.font='700 19px Inter,Arial';g.textAlign='center';g.fillText(t.rev>0?Math.round(frac*100)+'%':'\u2014',cx,cy+3);
+    g.fillStyle='#9A968C';g.font='10px Inter,Arial';g.fillText('my share',cx,cy+19);
+    // bars: last 7 days stacked
+    const days=TE.revenueByDay(7),bc=document.getElementById('cBars');if(!bc)return;const b2=bc.getContext('2d');
+    b2.clearRect(0,0,bc.width,bc.height);
+    const W=bc.width,H=bc.height,bot=H-22,maxV=Math.max(1,...days.map(d=>d.rev));
+    const slot=(W-30)/7,bw=Math.min(46,slot-16);
+    days.forEach((d,i)=>{
+      const x=15+i*slot+(slot-bw)/2;
+      const h=Math.round((d.rev/maxV)*(bot-20)),ah=Math.round((d.ali/maxV)*(bot-20));
+      b2.fillStyle='#3a3a42';b2.fillRect(x,bot-h,bw,Math.max(0,h-ah));
+      b2.fillStyle='#C9A86A';b2.fillRect(x,bot-ah,bw,ah);
+      b2.fillStyle='#9A968C';b2.font='10px Inter,Arial';b2.textAlign='center';b2.fillText(d.label,x+bw/2,H-8);
+      if(d.rev>0){b2.fillStyle='#E7D3A6';b2.fillText(Math.round(d.rev*10)/10,x+bw/2,bot-h-5);}
+    });
+  }
+
+  // ---------- sound ----------
+  let actx=null;
+  function beep(){const sw=document.getElementById('soundSw');if(sw&&!sw.classList.contains('on'))return;
+    try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+      function tone(at,f){const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f;o.connect(g);g.connect(actx.destination);const t=actx.currentTime+at;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.32,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.2);o.start(t);o.stop(t+0.22);}
+      tone(0,880);tone(0.22,1175);}catch(e){}}
+  document.getElementById('testSound').onclick=beep;
+
+  // ---------- live refresh ----------
+  let seen=null;
+  function kpis(){
+    const orders=TE.state().orders,p=TE.product();
+    if(!p){document.getElementById('kRev').textContent='0 KWD';document.getElementById('kSold').textContent='no product yet';
+      document.getElementById('kNew').textContent=orders.filter(o=>o.payStatus==='new').length;
+      document.getElementById('kDeliver').textContent=orders.filter(o=>o.payStatus==='delivery').length;
+      document.getElementById('kStock').textContent='—';document.getElementById('kStockName').textContent='Add your first product';return;}
+    const sold=p.total-p.left;
+    document.getElementById('kRev').textContent=(sold*p.price)+' KWD';
+    document.getElementById('kSold').textContent=sold+' of '+p.total+' sold';
+    document.getElementById('kNew').textContent=orders.filter(o=>o.payStatus==='new').length;
+    document.getElementById('kDeliver').textContent=orders.filter(o=>o.payStatus==='delivery').length;
+    document.getElementById('kStock').textContent=p.left;
+    document.getElementById('kStockName').textContent=p.name;
+  }
+  let seenPending=null;
+  function refresh(){
+    if(document.getElementById('app').style.display==='none')return;
+    const ids=TE.state().orders.map(o=>o.id);
+    if(seen===null)seen=new Set(ids);
+    else{const fresh=ids.filter(id=>!seen.has(id));if(fresh.length)beep();ids.forEach(id=>seen.add(id));}
+    // peep when an order becomes READY for delivery (supplier finished packing)
+    const readyIds=TE.state().orders.filter(o=>o.prepStatus==='ready').map(o=>o.id);
+    if(window._seenReady==null)window._seenReady=new Set(readyIds);
+    else{const freshR=readyIds.filter(id=>!window._seenReady.has(id));if(freshR.length)beep();readyIds.forEach(id=>window._seenReady.add(id));}
+    // peep when a supplier submits a product for approval
+    const pend=TE.state().products.filter(p=>p.approval==='pending').map(p=>p.id);
+    if(seenPending===null)seenPending=new Set(pend);
+    else{const freshP=pend.filter(id=>!seenPending.has(id));if(freshP.length)beep();pend.forEach(id=>seenPending.add(id));}
+    renderProducts();renderOrders();renderSuppliers();renderDrivers();renderSoon();renderDelivery();renderGcc();loadVideos();kpis();renderCustomers();renderSales();
+    if(window._open)openOrder(window._open);
+  }
+  TE.on(refresh);
+</script>
+</body>
+</html>

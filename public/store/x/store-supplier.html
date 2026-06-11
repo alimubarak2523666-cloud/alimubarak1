@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Supplier Portal · ALI MUBARAK — The Edit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0A090C;--panel:#141318;--panel2:#1B1A20;--ink:#FFFFFF;--muted:#9A968C;--line:rgba(255,255,255,.10);--gold:#C9A86A;--gold-2:#E7D3A6;--ok:#5BBF8A;--warn:#E0B450;--info:#7C9BE6;--bad:#E06A6A}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer}a{color:inherit}
+  #login{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:radial-gradient(60% 50% at 50% 30%,rgba(201,168,106,.14),transparent 60%),var(--bg);padding:20px}
+  .lcard{width:100%;max-width:400px;background:rgba(20,19,24,.82);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:24px;padding:36px 32px}
+  .lbrand{text-align:center;font-weight:700;letter-spacing:.2em;font-size:13px}.lbrand span{color:var(--gold)}
+  .ltag{text-align:center;color:var(--gold-2);font-size:12px;letter-spacing:.24em;text-transform:uppercase;margin-top:8px}
+  .lcard h2{text-align:center;font-size:21px;margin-top:18px;font-weight:700}
+  .lcard p{text-align:center;color:var(--muted);font-size:13.5px;margin-top:8px}
+  .fld{margin-top:16px}.fld label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .fld input{width:100%;height:48px;background:#0F0E12;border:1px solid var(--line);border-radius:11px;color:var(--ink);padding:0 14px;font-size:15px;outline:none}
+  .fld input:focus{border-color:var(--gold)}
+  .lbtn{width:100%;height:50px;margin-top:20px;border:0;border-radius:40px;background:var(--gold);color:#1a1407;font-weight:700;font-size:15px}
+  .lhint{text-align:center;color:#6f6c66;font-size:11.5px;margin-top:14px;line-height:1.6}
+  .lerr{color:var(--bad);font-size:12.5px;text-align:center;margin-top:10px;display:none}
+  #app{display:none}
+  .layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+  .side{background:#0E0D11;border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+  .side .brand{font-weight:700;letter-spacing:.16em;font-size:12.5px;padding:6px 10px 4px}.side .brand span{color:var(--gold)}
+  .side .sup{padding:0 10px 16px;color:var(--muted);font-size:12px}
+  .nav{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:11px;color:var(--muted);font-size:14px;font-weight:500;border:1px solid transparent}
+  .nav:hover{background:var(--panel)}.nav.active{background:var(--panel);color:var(--ink);border-color:var(--line)}
+  .nav .ic{width:18px;text-align:center;color:var(--gold)}
+  .nav .badge{margin-inline-start:auto;background:var(--gold);color:#1a1407;font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px}
+  .side .foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+  .side .foot a{display:flex;gap:10px;color:var(--muted);font-size:13px;padding:9px 12px;border-radius:10px;text-decoration:none}
+  .side .foot a:hover{background:var(--panel);color:var(--ink)}
+  .main{padding:26px 30px 60px;max-width:1080px}
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+  .top h1{font-size:23px;font-weight:700}.top .who{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+  .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#5a4a2a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#1a1407;font-size:12px}
+  .screen{display:none}.screen.on{display:block}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .kpi .l{color:var(--muted);font-size:12.5px}.kpi .v{font-size:26px;font-weight:700;margin-top:8px}.kpi .d{font-size:12px;margin-top:6px;color:var(--muted)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:22px}
+  .card .hd{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
+  .card .hd h3{font-size:15px;font-weight:600}
+  .btn{border:1px solid var(--gold);background:var(--gold);color:#1a1407;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:30px}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}.btn.ghost:hover{border-color:var(--ink)}
+  .btn.sm{padding:7px 13px;font-size:12.5px}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;padding:12px 18px;border-bottom:1px solid var(--line)}
+  td{padding:13px 18px;border-bottom:1px solid var(--line);font-size:14px}
+  tr:last-child td{border-bottom:0}tbody tr{cursor:pointer}tbody tr:hover{background:var(--panel2)}
+  .empty{padding:26px 18px;color:var(--muted);font-size:13.5px;text-align:center}
+  .pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+  .pill.new{background:rgba(224,180,80,.16);color:var(--warn)}.pill.prep{background:rgba(124,155,230,.16);color:var(--info)}
+  .pill.ready{background:rgba(201,168,106,.18);color:var(--gold-2)}.pill.picked{background:rgba(91,191,138,.2);color:var(--ok)}
+  .overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:none;justify-content:flex-end}.overlay.on{display:flex}
+  .drawer{width:min(540px,100%);background:var(--bg);border-left:1px solid var(--line);height:100vh;overflow-y:auto;padding:24px 26px}
+  .dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.dh h2{font-size:20px;font-weight:700}
+  .x{background:transparent;border:1px solid var(--line);color:var(--ink);width:34px;height:34px;border-radius:50%;font-size:16px}
+  .ob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+  .ob h4{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+  .kv{display:flex;justify-content:space-between;font-size:14px;padding:5px 0}.kv .k{color:var(--muted)}
+  .lineitem{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}.lineitem:last-child{border-bottom:0}
+  .check{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;color:var(--ink)}.check input{width:18px;height:18px;accent-color:var(--gold)}
+  .actions{display:flex;flex-direction:column;gap:10px}
+  .save{width:100%;height:50px;border:0;border-radius:40px;background:var(--gold);color:#1a1407;font-weight:700;font-size:15px}
+  .save.alt{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .note{background:rgba(201,168,106,.08);border:1px solid rgba(201,168,106,.3);border-radius:12px;padding:12px 14px;font-size:13px;color:#d8c7a6;line-height:1.6;margin-bottom:14px}
+  .priv{background:rgba(124,155,230,.08);border:1px solid rgba(124,155,230,.3);color:#bcd0f5}
+  .frow{margin-bottom:14px}.frow label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:7px}
+  .frow input{width:120px;background:#0F0E12;border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-size:14.5px;outline:none}.frow input:focus{border-color:var(--gold)}
+  .toggle{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)}.toggle:last-child{border-bottom:0}
+  .toggle .t{font-size:14.5px;font-weight:500}.toggle .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .sw{width:46px;height:26px;border-radius:20px;background:#2a2730;position:relative;border:1px solid var(--line);flex:none}
+  .sw.on{background:var(--gold)}.sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.sw.on::after{left:22px}
+  #printArea{position:fixed;left:-9999px;top:0}
+  @media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{left:0;top:0;width:100%;visibility:visible;color:#000;background:#fff;padding:30px;font-family:Inter,sans-serif}}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;overflow-x:auto}.kpis{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lcard">
+    <div class="lbrand">SUPPLIER PORTAL</div>
+    <div class="ltag">ALI MUBARAK · The Edit</div>
+    <h2>Supplier sign in</h2>
+    <p>See your incoming orders and prepare them for pickup.</p>
+    <div class="fld"><label>Username</label><input type="text" id="user" value="aurora_watches" /></div>
+    <div class="fld"><label>Password</label><input type="text" id="pass" value="aurora-2026" /></div>
+    <button class="lbtn" id="loginBtn">Sign in</button>
+    <div class="lerr" id="lerr">Wrong username or password, or access disabled.</div>
+    <div class="lhint">Username &amp; password issued by ALI MUBARAK. (Demo: aurora_watches / aurora-2026)</div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="layout">
+    <aside class="side">
+      <div class="brand">SUPPLIER <span>PORTAL</span></div>
+      <div class="sup" id="supName">Aurora Watches Co.<br><span style="color:var(--gold)">for ALI MUBARAK · The Edit</span></div>
+      <div class="nav active" data-s="overview"><span class="ic">▦</span> Overview</div>
+      <div class="nav" data-s="prepare"><span class="ic">▤</span> Orders to prepare <span class="badge" id="navPrep">0</span></div>
+      <div class="nav" data-s="pickups"><span class="ic">✦</span> Ready &amp; pickups</div>
+      <div class="nav" data-s="inventory"><span class="ic">◇</span> Inventory</div>
+      <div class="nav" data-s="product"><span class="ic">✚</span> My product &amp; sales</div>
+      <div class="nav" data-s="settings"><span class="ic">⚙</span> Settings</div>
+      <div class="foot"><a href="#" id="contact">✉ Contact ALI MUBARAK team</a><a href="#" id="logout">⏻ Sign out</a></div>
+    </aside>
+    <main class="main">
+      <div class="top"><h1 id="pageTitle">Overview</h1><div class="who"><span id="whoName">Aurora Watches Co.</span><span class="avatar">AW</span></div></div>
+
+      <section class="screen on" id="s-overview">
+        <div class="kpis">
+          <div class="kpi"><div class="l">New to prepare</div><div class="v" id="kNew">0</div><div class="d">Need packing</div></div>
+          <div class="kpi"><div class="l">Preparing</div><div class="v" id="kPrep">0</div><div class="d">In progress</div></div>
+          <div class="kpi"><div class="l">Ready for pickup</div><div class="v" id="kReady">0</div><div class="d">Awaiting driver</div></div>
+          <div class="kpi"><div class="l">Units in stock</div><div class="v" id="kStock">0</div><div class="d" id="kStockName">The Aurora</div></div>
+        </div>
+        <div class="note priv">Privacy: you only see what to prepare and the pickup — never the customer's name, phone, or address. ALI MUBARAK's driver handles delivery.</div>
+        <div class="card"><div class="hd"><h3>Latest orders</h3><button class="btn sm ghost" data-go="prepare">View all</button></div>
+          <table><thead><tr><th>Order</th><th>Item</th><th>Qty</th><th>Placed</th><th>Status</th></tr></thead><tbody id="recentRows"></tbody></table></div>
+      </section>
+
+      <section class="screen" id="s-prepare">
+        <div class="card"><div class="hd"><h3>Orders to prepare</h3></div>
+          <table><thead><tr><th>Order</th><th>Item</th><th>Qty</th><th>Placed</th><th>Status</th></tr></thead><tbody id="prepRows"></tbody></table></div>
+      </section>
+
+      <section class="screen" id="s-pickups">
+        <div class="note">When you mark an order <b>Ready for pickup</b>, ALI MUBARAK's driver is notified to collect it from your store/warehouse.</div>
+        <div class="card"><div class="hd"><h3>Ready &amp; picked up</h3><span style="color:var(--muted);font-size:12.5px">Pickup window: daily 4:00–7:00 PM</span></div>
+          <table><thead><tr><th>Order</th><th>Item</th><th>Qty</th><th>Status</th></tr></thead><tbody id="pickRows"></tbody></table></div>
+
+        <div class="card" id="myDrvCard" style="display:none"><div class="hd"><h3>🚚 My delivery drivers</h3></div>
+          <div style="padding:16px">
+            <div class="note">Your contract includes delivery, so create logins for your own drivers. They sign in to the <b>Driver app</b> with phone + password and see only YOUR orders that are ready.</div>
+            <table><thead><tr><th>Name</th><th>Phone</th><th>Password</th><th>Status</th><th></th></tr></thead><tbody id="myDrvRows"></tbody></table>
+            <div class="two" style="margin-top:12px"><div class="frow"><label>Driver name</label><input id="ndName" placeholder="Name" style="width:100%"></div><div class="frow"><label>Phone</label><input id="ndPhone" placeholder="+965 ..." style="width:100%"></div></div>
+            <div class="frow"><label>Password</label><input id="ndPass" placeholder="e.g. 1234" style="width:100%"></div>
+            <button class="save" id="ndAdd">+ Create driver login</button>
+          </div></div>
+      </section>
+
+      <section class="screen" id="s-inventory">
+        <div class="note">This is the <b>same stock number</b> the store shows as "X of 200 left" and the admin sees. Update it here and it changes everywhere live.</div>
+        <div class="card"><div class="hd"><h3>Your product</h3></div>
+          <div style="padding:18px">
+            <div style="font-size:17px;font-weight:600;margin-bottom:4px" id="invTitle">The Aurora — Drop 01</div>
+            <div style="color:var(--muted);font-size:13px;margin-bottom:16px">Units remaining for ALI MUBARAK orders (shared with store &amp; admin).</div>
+            <div class="frow"><label>Units available</label><input type="number" id="invUnits" value="0" /></div>
+            <button class="btn" id="updateInv" style="margin-top:8px">Update inventory</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="s-product">
+        <div id="myProdBox"></div>
+      </section>
+
+      <section class="screen" id="s-settings">
+        <div class="card"><div class="hd"><h3>Pickup location</h3></div>
+          <div style="padding:6px 18px 16px">
+            <div class="frow" style="max-width:520px"><label>Store / warehouse address (where the driver collects)</label><input type="text" id="pickupAddr" style="width:100%" /></div>
+            <div class="frow"><label>Contact person</label><input type="text" style="width:260px" value="Operations desk" /></div>
+            <div class="frow"><label>Phone</label><input type="text" style="width:200px" value="+965 2200 0000" /></div>
+          </div>
+        </div>
+        <div class="card"><div class="hd"><h3>Notifications</h3></div>
+          <div style="padding:6px 18px 16px">
+            <div class="toggle"><div><div class="t">New-order sound</div><div class="s">Play a peep every time a new order arrives to prepare.</div></div><div class="sw on" id="soundSw"></div></div>
+            <div style="padding-top:14px"><button class="btn sm ghost" id="testSound">▶ Test the sound</button></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="orderOverlay"><div class="drawer" id="orderDrawer"></div></div>
+<div id="printArea"></div>
+
+<script src="theedit-data.js?v=9"></script>
+<script>
+  const ST={new:'<span class="pill new">New</span>',prep:'<span class="pill prep">Preparing</span>',ready:'<span class="pill ready">Ready for pickup</span>',picked:'<span class="pill picked">Picked up</span>'};
+  let myId='aurora_co';
+
+  // login validates against the supplier record created in admin
+  document.getElementById('loginBtn').onclick=()=>{
+    const u=document.getElementById('user').value.trim(), p=document.getElementById('pass').value.trim();
+    const sup=TE.state().suppliers.find(s=>(s.user||'').trim().toLowerCase()===u.toLowerCase() && (s.pass||'').trim()===p && s.active);
+    if(!sup){document.getElementById('lerr').style.display='block';return;}
+    myId=sup.id;
+    document.getElementById('supName').innerHTML=sup.name+'<br><span style="color:var(--gold)">for ALI MUBARAK · The Edit</span>';
+    document.getElementById('whoName').textContent=sup.name;
+    document.getElementById('pickupAddr').value=sup.pickup||'';
+    document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';
+    refresh();
+  };
+  document.getElementById('logout').onclick=(e)=>{e.preventDefault();document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';};
+  document.getElementById('contact').onclick=(e)=>{e.preventDefault();alert('Opens a message to the ALI MUBARAK operations team.');};
+
+  const titles={overview:"Overview",prepare:"Orders to prepare",pickups:"Ready & pickups",inventory:"Inventory",product:"My product & sales",settings:"Settings"};
+  function go(s){document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.s===s));document.querySelectorAll('.screen').forEach(sc=>sc.classList.remove('on'));document.getElementById('s-'+s).classList.add('on');document.getElementById('pageTitle').textContent=titles[s];}
+  document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.s));
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+  document.getElementById('soundSw').onclick=function(){this.classList.toggle('on');};
+
+  function myProductId(){const s=TE.state().suppliers.find(x=>x.id===myId);return s?(s.productId||null):null;}
+  function myOrders(){const pid=myProductId();return TE.state().orders.filter(o=>o.items.some(i=>i.productId===pid));}
+  function variant(){const p=TE.productById(myProductId());return p?p.variant||'':'';}
+  function itemName(){const p=TE.productById(myProductId());return p?p.name:'';}
+
+  function rowsHTML(list){return list.map(o=>`<tr data-ref="${o.id}"><td><b>${o.id}</b></td><td>${itemName()}<div style="color:var(--muted);font-size:12px">${variant()}</div></td><td>${o.items.reduce((s,i)=>s+i.q,0)}</td><td>${o.date}</td><td>${ST[o.prepStatus]}</td></tr>`).join('');}
+  function bindRows(sel){document.querySelectorAll(sel+' tr').forEach(tr=>tr.onclick=()=>openOrder(tr.dataset.ref));}
+
+  function render(){
+    const mine=myOrders();
+    const prep=mine.filter(o=>o.prepStatus==='new'||o.prepStatus==='prep');
+    const pick=mine.filter(o=>o.prepStatus==='ready'||o.prepStatus==='picked');
+    document.getElementById('prepRows').innerHTML=prep.length?rowsHTML(prep):`<tr><td colspan="5" class="empty">No orders to prepare right now.</td></tr>`;bindRows('#prepRows');
+    document.getElementById('recentRows').innerHTML=mine.slice(0,5).length?rowsHTML(mine.slice(0,5)):`<tr><td colspan="5" class="empty">No orders yet.</td></tr>`;bindRows('#recentRows');
+    renderMyDrivers();
+    document.getElementById('pickRows').innerHTML=pick.length?pick.map(o=>`<tr data-ref="${o.id}"><td><b>${o.id}</b></td><td>${itemName()}</td><td>${o.items.reduce((s,i)=>s+i.q,0)}</td><td>${ST[o.prepStatus]}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">Nothing ready yet.</td></tr>`;bindRows('#pickRows');
+    document.getElementById('navPrep').textContent=prep.length;
+    document.getElementById('kNew').textContent=mine.filter(o=>o.prepStatus==='new').length;
+    document.getElementById('kPrep').textContent=mine.filter(o=>o.prepStatus==='prep').length;
+    document.getElementById('kReady').textContent=mine.filter(o=>o.prepStatus==='ready').length;
+    const p=TE.productById(myProductId());
+    document.getElementById('kStock').textContent=p?p.left:0;
+    document.getElementById('kStockName').textContent=p?p.name:'';
+    document.getElementById('invTitle').textContent=p?(p.name+' — Drop 01'):'';
+    if(document.activeElement!==document.getElementById('invUnits'))document.getElementById('invUnits').value=p?p.left:0;
+    renderMyProduct(p);
+  }
+
+  // ---------- My product & sales (submit → Ali approves → track sales) ----------
+  let subImg='',teaserImg='',s1Img='',s2Img='',colorUps={};
+  function teaserHTML(){
+    const t=TE.state().comingSoon.find(c=>c.supplier===myId);
+    if(t){
+      const badge=t.approval==='pending'
+        ?'<span style="border:1px solid rgba(224,160,80,.5);color:#e0a050;border-radius:30px;padding:5px 14px;font-size:12px">⏳ Awaiting approval</span>'
+        :'<span style="border:1px solid rgba(110,190,130,.5);color:#7fc98a;border-radius:30px;padding:5px 14px;font-size:12px">● Showing in Next drops</span>';
+      return `<div class="card" style="margin-top:14px"><div class="hd"><h3>Your "coming soon" teaser</h3>${badge}</div>
+        <div style="display:flex;gap:16px;padding:16px;align-items:center;flex-wrap:wrap">
+          ${t.img?`<img src="${t.img}" style="width:84px;height:84px;object-fit:cover;border-radius:12px;border:1px solid var(--line)">`:''}
+          <div><div style="font-weight:700">${t.title}</div><div style="color:var(--muted);font-size:13px;margin-top:3px">${t.tease||''}</div></div>
+        </div></div>`;
+    }
+    return `<div class="card" style="margin-top:14px"><div class="hd"><h3>Tease your next drop (optional)</h3></div>
+      <div style="padding:6px 18px 18px">
+        <div class="note">Appears in the store's "Next drops" with a customer waitlist — after ALI MUBARAK approves it.</div>
+        <div class="frow"><label>Teaser picture</label><input type="file" id="tFile" accept="image/*"><div id="tPrev" style="margin-top:8px"></div></div>
+        <div class="frow" style="max-width:420px"><label>Title</label><input id="tTitle" style="width:100%" placeholder="e.g. The Dune Slide"></div>
+        <div class="frow" style="max-width:560px"><label>Teaser line</label><input id="tTease" style="width:100%" placeholder="e.g. Hand-stitched. Coming this month."></div>
+        <button class="save" id="tSubmit" style="max-width:420px">Send teaser for approval</button>
+      </div></div>`;
+  }
+  function wireTeaser(){
+    const fi=document.getElementById('tFile');if(!fi)return;
+    fi.onchange=function(){const f=this.files&&this.files[0];if(!f)return;const img=new Image();
+      img.onload=()=>{const MAX=900,sc=Math.min(1,MAX/Math.max(img.width,img.height));
+        const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+        c.getContext('2d').drawImage(img,0,0,c.width,c.height);teaserImg=c.toDataURL('image/jpeg',.82);
+        document.getElementById('tPrev').innerHTML=`<img src="${teaserImg}" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid rgba(201,168,106,.5)">`;
+        URL.revokeObjectURL(img.src);};
+      img.src=URL.createObjectURL(f);};
+    document.getElementById('tSubmit').onclick=()=>{
+      const title=document.getElementById('tTitle').value.trim();
+      if(!title){alert('Please enter a title for the teaser.');return;}
+      TE.submitTeaser(myId,{title:title,tease:document.getElementById('tTease').value,img:teaserImg});
+      teaserImg='';};
+  }
+  function renderMyProduct(p){
+    const box=document.getElementById('myProdBox');if(!box)return;
+    if(document.getElementById('spName')&&document.activeElement&&box.contains(document.activeElement))return; // don't wipe while typing
+    if(p){
+      const sales=TE.salesFor(p.id);
+      const comm=(p.commission!=null?p.commission:20);
+      const myShare=Math.round(sales.rev*(100-comm))/100;
+      const badge=p.approval==='pending'
+        ?'<span style="border:1px solid rgba(224,160,80,.5);color:#e0a050;border-radius:30px;padding:5px 14px;font-size:12px">⏳ Awaiting ALI MUBARAK approval</span>'
+        :(p.status==='live'?'<span style="border:1px solid rgba(110,190,130,.5);color:#7fc98a;border-radius:30px;padding:5px 14px;font-size:12px">● LIVE on the store</span>'
+        :'<span style="border:1px solid var(--line);color:var(--muted);border-radius:30px;padding:5px 14px;font-size:12px">Approved · waiting for drop day</span>');
+      box.innerHTML=`
+        <div class="card"><div class="hd"><h3>Your product</h3>${badge}</div>
+          <div style="display:flex;gap:18px;padding:18px;flex-wrap:wrap;align-items:center">
+            ${p.img?`<img src="${p.img}" style="width:110px;height:110px;object-fit:cover;border-radius:14px;border:1px solid var(--line)">`:''}
+            <div>
+              <div style="font-size:18px;font-weight:700">${p.name}</div>
+              <div style="color:var(--muted);font-size:13px;margin-top:4px">${p.price} KWD · ${(p.options||[]).map(g=>g.name+': '+g.values.join('/')).join(' · ')||'Simple product'}</div>
+              <div style="color:var(--muted);font-size:12.5px;margin-top:4px">${p.desc||''}</div>
+            </div>
+          </div></div>
+        <div class="kpis" style="margin-top:14px">
+          <div class="kpi"><div class="l">Units sold</div><div class="v">${sales.units}</div><div class="d">All time</div></div>
+          <div class="kpi"><div class="l">Sales value</div><div class="v">${sales.rev} KWD</div><div class="d">${comm}% commission to ALI MUBARAK</div></div>
+          <div class="kpi"><div class="l">Your share</div><div class="v" style="color:var(--gold-2)">${myShare} KWD</div><div class="d">After ${comm}% commission</div></div>
+          <div class="kpi"><div class="l">Stock remaining</div><div class="v">${p.left}</div><div class="d">of ${p.total} — update in Inventory</div></div>
+        </div>
+        <div class="note" style="margin-top:14px">Need to change the photos, text or price? Send the change to the ALI MUBARAK team — only they can edit a product after approval.</div>`+teaserHTML();
+      wireTeaser();
+    } else {
+      box.innerHTML=`
+        <div class="note">Your contract is active but no product is submitted yet. Fill this in — ALI MUBARAK reviews and approves before anything goes on the store.</div>
+        <div class="card"><div class="hd"><h3>Submit your product for approval</h3></div>
+          <div style="padding:6px 18px 18px">
+            <div class="frow"><label>Main product photo — upload a file OR paste a web link (e.g. from your website)</label>
+              <input type="file" id="spFile" accept="image/*"><div id="spPrev" style="margin-top:8px"></div>
+              <input type="text" id="spImgUrl" style="width:100%;margin-top:8px" placeholder="https://your-website.com/product.jpg (link wins if both given)"></div>
+            <div class="frow" style="max-width:420px"><label>Product name</label><input id="spName" style="width:100%" placeholder="e.g. The Desert Runner"></div>
+            <div class="frow" style="max-width:560px"><label>Description</label><input id="spDesc" style="width:100%" placeholder="One strong line about the product"></div>
+            <div class="frow" style="max-width:200px"><label>Suggested price (KWD)</label><input id="spPrice" style="width:100%" type="number" placeholder="28"></div>
+            <div class="frow" style="max-width:200px"><label>Stock you can supply</label><input id="spStock" style="width:100%" type="number" placeholder="150"></div>
+            <div class="frow" style="max-width:260px"><label>ALI MUBARAK commission % (per your contract)</label><input id="spComm" style="width:100%" type="number" placeholder="20"></div>
+            <div class="frow" style="max-width:420px"><label>▶ YouTube video — product explanation / review (optional)</label><input id="spFilm" style="width:100%" placeholder="https://www.youtube.com/watch?v=..."></div>
+            <div class="frow" style="max-width:420px"><label>Sizes — comma separated (leave empty if none)</label><input id="spSizes" style="width:100%" placeholder="40, 41, 42, 43"></div>
+            <div class="frow" style="max-width:420px"><label>Colours — comma separated (leave empty if none)</label><input id="spColours" style="width:100%" placeholder="Black, Red"></div>
+            <div class="frow"><button class="btn ghost sm" id="spBuildColors" type="button">📷 Add a photo for each colour — so customers see the colour they choose</button></div>
+            <div id="spColorWrap"></div>
+            <div style="border-top:1px solid var(--line);margin:18px 0 12px;padding-top:14px;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase">Story picture 1 · shown under the product (optional)</div>
+            <div class="frow"><label>Picture 1 — upload OR paste a link</label>
+              <input type="file" id="sp1File" accept="image/*"><div id="sp1Prev" style="margin-top:8px"></div>
+              <input type="text" id="sp1Url" style="width:100%;margin-top:8px" placeholder="https://your-website.com/photo1.jpg"></div>
+            <div class="frow" style="max-width:520px"><label>Big title 1</label><input id="sp1Head" style="width:100%" placeholder="e.g. Built to last."></div>
+            <div class="frow" style="max-width:560px"><label>Small text 1</label><input id="sp1Text" style="width:100%" placeholder="One or two lines about this picture"></div>
+            <div style="border-top:1px solid var(--line);margin:18px 0 12px;padding-top:14px;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase">Story picture 2 · second picture (optional)</div>
+            <div class="frow"><label>Picture 2 — upload OR paste a link</label>
+              <input type="file" id="sp2File" accept="image/*"><div id="sp2Prev" style="margin-top:8px"></div>
+              <input type="text" id="sp2Url" style="width:100%;margin-top:8px" placeholder="https://your-website.com/photo2.jpg"></div>
+            <div class="frow" style="max-width:520px"><label>Big title 2</label><input id="sp2Head" style="width:100%" placeholder="e.g. The details matter."></div>
+            <div class="frow" style="max-width:560px"><label>Small text 2</label><input id="sp2Text" style="width:100%" placeholder="One or two lines about this picture"></div>
+            <button class="save" id="spSubmit" style="max-width:420px">Send to ALI MUBARAK for approval</button>
+            <div id="spMsg" style="color:var(--gold-2);font-size:13px;margin-top:10px"></div>
+          </div></div>`+teaserHTML();
+      wireTeaser();
+      function pickImg(fileId,prevId,setter){const fi=document.getElementById(fileId);if(!fi)return;
+        fi.onchange=function(){const f=this.files&&this.files[0];if(!f)return;const img=new Image();
+          img.onload=()=>{const MAX=900,sc=Math.min(1,MAX/Math.max(img.width,img.height));
+            const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+            c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+            const url=c.toDataURL('image/jpeg',.82);setter(url);
+            document.getElementById(prevId).innerHTML=`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid rgba(201,168,106,.5)">`;
+            URL.revokeObjectURL(img.src);};
+          img.src=URL.createObjectURL(f);};}
+      pickImg('spFile','spPrev',v=>subImg=v);
+      pickImg('sp1File','sp1Prev',v=>s1Img=v);
+      pickImg('sp2File','sp2Prev',v=>s2Img=v);
+      // UX: slots also build automatically when the supplier finishes typing colours
+      document.getElementById('spColours').addEventListener('change',()=>{const b=document.getElementById('spBuildColors');if(document.getElementById('spColours').value.trim())b.click();});
+      document.getElementById('spBuildColors').onclick=()=>{
+        const vals=document.getElementById('spColours').value.split(',').map(x=>x.trim()).filter(Boolean);
+        if(!vals.length){alert('First type the colours above (e.g. Black, Red), then press this button.');return;}
+        document.getElementById('spColorWrap').innerHTML=vals.map((v,i)=>`
+          <div class="frow" style="border:1px solid rgba(201,168,106,.2);border-radius:12px;padding:12px"><label>Photo for colour: <b style="color:var(--gold-2)">${v}</b> — upload OR paste a link</label>
+          <input type="file" id="scF_${i}" accept="image/*"><div id="scP_${i}" style="margin-top:8px"></div>
+          <input type="text" id="scU_${i}" data-cval="${v}" style="width:100%;margin-top:8px" placeholder="https://your-website.com/photo-${v.toLowerCase().replace(/[^a-z0-9]/g,'')}.jpg"></div>`).join('');
+        vals.forEach((v,i)=>pickImg('scF_'+i,'scP_'+i,val=>{colorUps[v]=val;}));
+      };
+      document.getElementById('spSubmit').onclick=()=>{
+        const name=document.getElementById('spName').value.trim();
+        if(!name){document.getElementById('spMsg').textContent='Please enter the product name.';return;}
+        const options=[];
+        const sizes=document.getElementById('spSizes').value.split(',').map(x=>x.trim()).filter(Boolean);
+        const colours=document.getElementById('spColours').value.split(',').map(x=>x.trim()).filter(Boolean);
+        if(sizes.length)options.push({name:'Size',values:sizes});
+        if(colours.length)options.push({name:'Colour',values:colours});
+        const total=+document.getElementById('spStock').value||0;
+        const mainImg=(document.getElementById('spImgUrl').value.trim())||subImg;
+        const f1i=(document.getElementById('sp1Url').value.trim())||s1Img;
+        const f2i=(document.getElementById('sp2Url').value.trim())||s2Img;
+        const optImgs={};
+        document.querySelectorAll('#spColorWrap input[data-cval]').forEach(inp=>{const v=inp.dataset.cval;const u=inp.value.trim()||colorUps[v];if(u)optImgs[v]=u;});
+        TE.submitProduct(myId,{name,desc:document.getElementById('spDesc').value,price:+document.getElementById('spPrice').value||0,
+          commission:+document.getElementById('spComm').value||20,
+          total:total,left:total,img:mainImg,yt:(document.getElementById('spFilm')?document.getElementById('spFilm').value.trim():''),film:(document.getElementById('spFilm')?document.getElementById('spFilm').value.trim():''),variant:'',options:options,optImgs:optImgs,
+          feat1:{img:f1i,head:document.getElementById('sp1Head').value,text:document.getElementById('sp1Text').value},
+          feat2:{img:f2i,head:document.getElementById('sp2Head').value,text:document.getElementById('sp2Text').value}});
+        subImg='';s1Img='';s2Img='';colorUps={};
+      };
+    }
+  }
+
+  function mySup(){return TE.state().suppliers.find(x=>x.id===myId)||{};}
+  window.supAssign=function(oid){
+    const sel=document.getElementById('supAsg_'+oid); if(!sel||!sel.value)return;
+    TE.supplierAssignDriver(oid,sel.value);
+    const d=TE.state().drivers.find(x=>x.id===sel.value);
+    alert('Assigned to '+(d?d.name:'driver')+' — the order is now in their Driver app under "My deliveries".');
+    openOrder(oid);
+  };
+  function dlvBadge(o){
+    const who=o.deliveryBy==='supplier'?'🚚 My drivers':'ALI MUBARAK team';
+    return `<div class="note" style="margin:0 0 6px;display:flex;justify-content:space-between;align-items:center">
+      <span>Delivery: <b style="color:var(--gold-2)">${who}</b></span>
+      <span style="color:var(--gold-2);cursor:pointer;font-size:12px" onclick="TE.setDeliveryBy('${o.id}',null);openOrder('${o.id}')">change</span></div>`;
+  }
+  function actions(o){
+    const a=[];
+    const self=!!mySup().selfDelivery;
+    // STEP 1 — on a NEW order, a self-delivery supplier first decides who delivers
+    if(self && o.prepStatus==='new' && !o.deliveryBy){
+      a.push(`<div class="note" style="margin:0 0 6px"><b style="color:var(--gold-2)">First — who will deliver this order?</b><br>Choose once; everything after follows your choice.</div>`);
+      a.push(`<button class="save" onclick="TE.setDeliveryBy('${o.id}','supplier');openOrder('${o.id}')">🚚 My drivers will deliver it</button>`);
+      a.push(`<button class="save alt" onclick="TE.setDeliveryBy('${o.id}','ali');openOrder('${o.id}')">↪ Send it to the ALI MUBARAK dashboard — his drivers deliver</button>`);
+      return a.join('');
+    }
+    const supDelivers = self && o.deliveryBy==='supplier';
+    if(o.prepStatus==='new'){
+      if(self)a.push(dlvBadge(o));
+      a.push(`<button class="save" onclick="adv('${o.id}','prep')">Start preparing</button>`);
+    }
+    if(o.prepStatus==='prep'){
+      if(self)a.push(dlvBadge(o));
+      a.push(`<button class="save" onclick="adv('${o.id}','ready')">✓ Mark ready ${supDelivers?'for delivery':'for pickup'}</button>`);
+    }
+    if(o.prepStatus==='ready'){
+      if(supDelivers){
+        const myDrv=TE.driversFor(mySup().id).filter(d=>d.active);
+        if(myDrv.length){
+          a.push(`<div class="note" style="margin:0 0 4px">Ready — now choose which of your drivers takes it:</div>`);
+          a.push(`<div style="display:flex;gap:8px;align-items:center;margin:4px 0">
+            <select id="supAsg_${o.id}" style="flex:1;background:#0F0E12;border:1px solid rgba(244,241,234,.14);border-radius:10px;color:#F4F1EA;padding:10px 12px;font-size:13.5px">
+              ${myDrv.map(d=>`<option value="${d.id}">🚚 ${d.name} · ${d.phone}</option>`).join('')}
+            </select>
+            <button class="save" style="width:auto;padding:10px 16px" onclick="supAssign('${o.id}')">Assign</button></div>`);
+          a.push(`<div style="color:var(--muted);font-size:11.5px;margin-top:4px;cursor:pointer" onclick="TE.setDeliveryBy('${o.id}',null);openOrder('${o.id}')">Changed your mind? Switch delivery method</div>`);
+        } else {
+          a.push(`<div class="note" style="margin:0 0 4px;color:#e0a050">No driver logins yet — create them in <b>Ready &amp; pickups → My delivery drivers</b>.</div>`);
+          a.push(`<button class="save" onclick="TE.supplierStartDelivery('${o.id}');openOrder('${o.id}')">🚚 Our driver took it (no app)</button>`);
+          a.push(`<button class="save alt" onclick="TE.setDeliveryBy('${o.id}','ali');openOrder('${o.id}')">↪ Send to ALI MUBARAK instead</button>`);
+        }
+      } else if(self){
+        a.push(dlvBadge(o));
+        a.push(`<div class="note" style="margin:0 0 4px">With the ALI MUBARAK team — their driver will collect it from you. Nothing else needed.</div>`);
+        a.push(`<button class="save alt" onclick="adv('${o.id}','picked')">Confirm handed to their driver</button>`);
+      } else {
+        a.push(`<div class="note" style="margin:0 0 4px">Driver notified — awaiting pickup in today's window (4–7 PM).</div>`);
+        a.push(`<button class="save alt" onclick="adv('${o.id}','picked')">Confirm handed to driver</button>`);
+      }
+    }
+    if(o.prepStatus==='picked'&&o.ship==='supplier'&&o.payStatus!=='delivered')a.push(`<button class="save" onclick="TE.supplierDelivered('${o.id}');openOrder('${o.id}')">✓ Delivered to the customer${o.pay==='cod'?' · cash collected':''}</button>`);
+    if(o.prepStatus==='picked'&&o.ship==='supplier'&&o.payStatus==='delivered')a.push(`<div class="note" style="margin:0">✓ Delivered by your driver. ${o.pay==='cod'?'COD cash settles in your next payout.':''}</div>`);
+    if(o.prepStatus==='picked'&&o.ship!=='supplier')a.push(`<div class="note" style="margin:0">Picked up by ALI MUBARAK driver. Done.</div>`);
+    a.push(`<button class="save alt" onclick="printSlip('${o.id}')">🖨 Print slip</button>`);
+    if(o.prepStatus!=='picked')a.push(`<button class="save alt" style="border-color:rgba(224,106,106,.4);color:#E06A6A" onclick="reportIssue('${o.id}')">⚠ Report a problem / out of stock</button>`);
+    return a.join('');
+  }
+  function openOrder(ref){
+    const o=TE.state().orders.find(x=>x.id===ref);if(!o)return;
+    document.getElementById('orderDrawer').innerHTML=`
+      <div class="dh"><h2>${o.id} &nbsp; ${ST[o.prepStatus]}</h2><button class="x" data-close>×</button></div>
+      <div class="ob"><h4>Prepare this</h4>
+        <div class="lineitem"><span>${o.items.reduce((s,i)=>s+i.q,0)} × ${itemName()}</span></div>
+        <div class="kv"><span class="k">Variant</span><span>${variant()}</span></div>
+        ${o.items[0]&&o.items[0].opts?`<div class="kv"><span class="k">Chosen options</span><span style="color:var(--gold-2);font-weight:600">${o.items[0].opts}</span></div>`:''}
+        <div class="kv"><span class="k">Order placed</span><span>${o.date}</span></div></div>
+      <div class="ob"><h4>Packing checklist</h4>
+        <label class="check"><input type="checkbox"> Item inspected &amp; working</label>
+        <label class="check"><input type="checkbox"> Boxed &amp; protected</label>
+        <label class="check"><input type="checkbox"> Insert / authenticity card added</label>
+        <label class="check"><input type="checkbox"> Order label ${o.id} attached</label></div>
+      ${(function(){const self=!!mySup().selfDelivery;const mine=(o.ship==='supplier');const tot=o.items.reduce((s,i)=>s+i.q*i.p,0)+(o.fee||0)-(o.giftUsed||0);
+        if(self&&(mine||o.prepStatus==='ready'||o.prepStatus==='picked'))return `
+      <div class="ob" style="border-color:rgba(201,168,106,.45)"><h4>🚚 Deliver to (your contract includes delivery)</h4>
+        <div class="kv"><span class="k">Customer</span><span>${o.name}</span></div>
+        <div class="kv"><span class="k">Phone</span><span><a href="tel:${(o.phone||'').replace(/\s/g,'')}" style="color:var(--gold-2);text-decoration:none">${o.phone}</a></span></div>
+        <div class="kv"><span class="k">Governorate</span><span>${o.gov||'—'}</span></div>
+        <div class="kv"><span class="k">Area</span><span>${o.area||'—'}</span></div>
+        <div class="kv"><span class="k">Block / Street / House</span><span>${o.block||'—'} / ${o.street||'—'} / ${o.house||'—'}</span></div>
+        ${o.avenue?`<div class="kv"><span class="k">Avenue</span><span>${o.avenue}</span></div>`:''}
+        <div class="kv"><span class="k">Payment</span><span>${o.pay==='cod'?('💵 Collect <b>'+(Math.round(tot*100)/100)+' KWD</b> cash'):'Prepaid — nothing to collect'}</span></div>
+        <div style="margin-top:10px"><a class="btn sm ghost" target="_blank" href="${(o.locLink&&/^https?:\/\//i.test(o.locLink))?o.locLink:('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((o.area||'')+' block '+(o.block||'')+' Kuwait'))}">${(o.locLink&&/^https?:\/\//i.test(o.locLink))?'📍 Customer\'s exact pin':'↗ Open in Maps'}</a></div></div>`;
+        return `
+      <div class="ob"><h4>Pickup</h4>
+        <div class="kv"><span class="k">Collected by</span><span>${o.ship==='courier'?(o.courier||'Courier · DHL/Aramex'):'ALI MUBARAK driver'}</span></div>
+        <div class="kv"><span class="k">From</span><span>Your warehouse</span></div>
+        <div class="kv"><span class="k">Window</span><span>${o.ship==='courier'?'Courier scheduled':'Today 4:00–7:00 PM'}</span></div></div>
+      <div class="note priv">You don't see the customer's name or address — the package only needs the order label <b>${o.id}</b>. ALI MUBARAK delivers it.</div>`;})()}
+      <div class="actions">${actions(o)}</div>`;
+    document.getElementById('orderDrawer').querySelector('[data-close]').onclick=close;
+    document.getElementById('orderOverlay').classList.add('on');
+    window._open=ref;
+  }
+  window.adv=(ref,st)=>{TE.setPrepStatus(ref,st);openOrder(ref);};
+  window.reportIssue=(ref)=>{alert('Sends an alert to ALI MUBARAK that order '+ref+' has a problem (e.g. out of stock).');};
+  window.printSlip=(ref)=>{const o=TE.state().orders.find(x=>x.id===ref);
+    const self=!!mySup().selfDelivery&&(o.ship==='supplier'||o.prepStatus==='ready'||o.prepStatus==='picked');
+    const tot=o.items.reduce((s,i)=>s+i.q*i.p,0)+(o.fee||0)-(o.giftUsed||0);
+    const deliverBlock=self?`
+      <hr style="margin:14px 0">
+      <div style="font-size:13px;color:#333;line-height:1.8">
+        <b style="font-size:15px">DELIVER TO</b><br>
+        ${o.name} · ${o.phone}<br>
+        ${o.gov||''} · ${o.area||''}<br>
+        Block ${o.block||'—'} · Street ${o.street||'—'} · House ${o.house||'—'}${o.avenue?' · Avenue '+o.avenue:''}<br>
+        <b>${o.pay==='cod'?('COLLECT '+(Math.round(tot*100)/100)+' KWD CASH ON DELIVERY'):'PREPAID — nothing to collect'}</b>
+      </div>`:'';
+    const footer=self?'Delivery by '+(mySup().name||'supplier')+' (per contract with ALI MUBARAK)':'Attach this label · no customer details printed';
+    document.getElementById('printArea').innerHTML=`<h2 style="margin-bottom:6px">${self?'Delivery slip':'Packing slip'}</h2><div style="font-size:13px;color:#555;margin-bottom:18px">Supplier Portal · ALI MUBARAK — The Edit</div><div style="font-size:20px;font-weight:700">${o.id}</div><hr style="margin:14px 0"><div style="font-size:16px">${o.items.reduce((s,i)=>s+i.q,0)} × ${itemName()}</div><div style="color:#555">${variant()}</div>${o.items[0]&&o.items[0].opts?`<div style="font-weight:700;font-size:15px;margin-top:4px">${o.items[0].opts}</div>`:''}${deliverBlock}<div style="margin-top:14px;color:#555">Placed: ${o.date}</div><div style="margin-top:26px;border:1px dashed #999;padding:14px;text-align:center;font-weight:700;font-size:18px">${o.id}</div><div style="text-align:center;color:#777;font-size:12px;margin-top:6px">${footer}</div>`;window.print();};
+
+  function close(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('on'));window._open=null;}
+  document.querySelectorAll('.overlay').forEach(o=>o.onclick=(e)=>{if(e.target===o)close();});
+
+  document.getElementById('updateInv').onclick=()=>{TE.setStockLeft(parseInt(document.getElementById('invUnits').value)||0);};
+
+  // sound + simulate
+  let actx=null;
+  function beep(){const sw=document.getElementById('soundSw');if(sw&&!sw.classList.contains('on'))return;
+    try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+      function tone(at,f){const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f;o.connect(g);g.connect(actx.destination);const t=actx.currentTime+at;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.32,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.2);o.start(t);o.stop(t+0.22);}
+      tone(0,880);tone(0.22,1175);}catch(e){}}
+  document.getElementById('testSound').onclick=beep;
+
+  // live refresh + new-order sound
+  let seen=null;
+  function refresh(){
+    if(document.getElementById('app').style.display==='none')return;
+    const ids=myOrders().map(o=>o.id);
+    if(seen===null){seen=new Set(ids);}
+    else{const fresh=ids.filter(id=>!seen.has(id));if(fresh.length)beep();ids.forEach(id=>seen.add(id));}
+    render();
+    if(window._open)openOrder(window._open);
+  }
+  function renderMyDrivers(){
+    const card=document.getElementById('myDrvCard'); if(!card)return;
+    const sp=mySup(); if(!sp||!sp.selfDelivery){card.style.display='none';return;}
+    card.style.display='block';
+    const rows=TE.driversFor(sp.id).map(d=>`<tr><td><b>${d.name}</b></td><td>${d.phone||'—'}</td><td>${d.pass||'—'}</td><td>${d.active?'Active':'Disabled'}</td><td><button class="save" style="padding:4px 10px;font-size:12px" onclick="TE.setDriverActive('${d.id}',${d.active?'false':'true'})">${d.active?'Disable':'Enable'}</button></td></tr>`).join('');
+    document.getElementById('myDrvRows').innerHTML=rows||'<tr><td colspan="5" class="empty">No drivers yet — create the first login below.</td></tr>';
+  }
+  document.getElementById('ndAdd').onclick=()=>{
+    const n=document.getElementById('ndName').value.trim(),p=document.getElementById('ndPhone').value.trim(),w=document.getElementById('ndPass').value.trim();
+    if(!n||!p||!w){alert('Fill name, phone and password.');return;}
+    TE.supplierAddDriver(mySup().id,{name:n,type:'company driver',phone:p,pass:w});
+    ['ndName','ndPhone','ndPass'].forEach(i=>document.getElementById(i).value='');
+    alert('Driver login created — '+n+' can now sign in to the Driver app with that phone & password.');
+  };
+  TE.on(refresh);
+</script>
+</body>
+</html>

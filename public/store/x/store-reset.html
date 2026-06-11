@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reset password · THE EDIT by ALI MUBARAK</title>
+<style>
+  :root{--bg:#060507;--ink:#fff;--muted:#B8B5AD;--line:rgba(244,241,234,.12);--gold:#C9A86A;--gold-2:#E7D3A6}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:radial-gradient(60% 50% at 50% 25%,rgba(201,168,106,.12),transparent 60%),var(--bg);color:var(--ink);font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{width:100%;max-width:440px;background:rgba(12,11,14,.85);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:24px;padding:34px 30px}
+  .brand{text-align:center;font-weight:700;letter-spacing:.2em;font-size:13px}.brand span{color:var(--gold)}
+  h1{text-align:center;font-size:22px;margin-top:16px}
+  .sub{text-align:center;color:var(--muted);font-size:13.5px;margin-top:8px;line-height:1.6}
+  label{font-size:12px;color:var(--muted);margin:16px 0 6px;display:block}
+  input{width:100%;height:48px;background:#0F0E12;border:1px solid var(--line);border-radius:11px;color:#fff;padding:0 14px;font-size:15px;outline:none;font-family:inherit}
+  input:focus{border-color:var(--gold)}
+  .btn{width:100%;height:50px;margin-top:18px;border:0;border-radius:40px;background:var(--gold);color:#1a1407;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+  .msg{display:none;font-size:13px;margin-top:12px;text-align:center;border-radius:12px;padding:11px;line-height:1.5}
+  .mail{margin-top:18px;border:1px solid rgba(201,168,106,.4);border-radius:16px;overflow:hidden}
+  .mail .mh{background:rgba(201,168,106,.1);padding:11px 16px;font-size:12px;color:var(--muted);border-bottom:1px solid rgba(201,168,106,.25)}
+  .mail .mb{padding:18px 16px;font-size:13.5px;line-height:1.7;color:#ddd}
+  .mail .mbtn{display:block;text-align:center;background:var(--gold);color:#1a1407;font-weight:700;border-radius:30px;padding:12px;margin:14px 0 4px;text-decoration:none;font-size:14px}
+  .note{color:var(--muted);font-size:11.5px;margin-top:14px;text-align:center;line-height:1.6}
+  .back{display:block;text-align:center;color:var(--gold-2);font-size:13px;margin-top:18px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">ALI MUBARAK <span>· THE EDIT</span></div>
+  <h1 id="h">Forgot your password?</h1>
+  <div class="sub" id="s">Enter your account email and we'll send you a reset link.</div>
+  <div id="body"></div>
+  <div class="msg" id="m"></div>
+  <a class="back" href="store-login.html">← Back to sign in</a>
+</div>
+
+<script src="theedit-data.js?v=9"></script>
+<script>
+(function(){
+  const B=document.getElementById('body'),H=document.getElementById('h'),S=document.getElementById('s'),M=document.getElementById('m');
+  function msg(t,good){M.style.display='block';M.textContent=t;
+    M.style.background=good?'rgba(110,190,130,.1)':'rgba(224,106,106,.1)';
+    M.style.border=good?'1px solid rgba(110,190,130,.4)':'1px solid rgba(224,106,106,.4)';
+    M.style.color=good?'#7fc98a':'#e08080';}
+  const qs=new URLSearchParams(location.search);
+
+  function step1(){
+    H.textContent='Forgot your password?';
+    S.textContent="Enter your account email and we'll send you a reset link.";
+    B.innerHTML=`<label>Email</label><input type="email" id="rEmail" placeholder="you@email.com">
+      <button class="btn" id="rGo">Send reset email</button>`;
+    document.getElementById('rGo').onclick=()=>{
+      const em=(document.getElementById('rEmail').value||'').trim().toLowerCase();
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){msg('Please enter a valid email.');return;}
+      const code=TE.startReset(em);
+      if(!code){msg('No account found with this email. Check the spelling, or create a new account.');return;}
+      step2(em,code);
+    };
+  }
+
+  function step2(em,code){
+    M.style.display='none';
+    H.textContent='📧 Email sent';
+    S.textContent='We sent a reset link to '+em+'. The code expires in 30 minutes.';
+    const link='store-reset.html?step=3&email='+encodeURIComponent(em)+'&code='+code;
+    B.innerHTML=`
+      <div class="mail">
+        <div class="mh"><b style="color:#fff">From:</b> THE EDIT &lt;no-reply@alimubarak1.com&gt;<br>
+        <b style="color:#fff">To:</b> ${em}<br>
+        <b style="color:#fff">Subject:</b> Reset your password · THE EDIT</div>
+        <div class="mb">Salam,<br><br>
+        Someone asked to reset the password for your THE EDIT account. If that was you, press the button below — the link works for 30 minutes.<br>
+        <a class="mbtn" href="${link}">Reset my password</a>
+        If it wasn't you, ignore this email — nothing changes.<br><br>— ALI MUBARAK · THE EDIT</div>
+      </div>
+      <div class="note">▲ Demo preview: this is the exact email your customer will receive. On the live launch it lands in their real inbox (email service connects with the backend) — the reset mechanism itself is fully working, as you can try now.</div>`;
+  }
+
+  function step3(){
+    const em=(qs.get('email')||'').toLowerCase(),code=qs.get('code')||'';
+    H.textContent='Choose a new password';
+    S.textContent='For '+em;
+    B.innerHTML=`<label>Reset code (from the email)</label><input id="rCode" value="${code}">
+      <label>New password</label><input type="password" id="rP1" placeholder="At least 4 characters">
+      <label>Repeat new password</label><input type="password" id="rP2">
+      <button class="btn" id="rSet">Set new password</button>`;
+    document.getElementById('rSet').onclick=()=>{
+      const p1=document.getElementById('rP1').value.trim(),p2=document.getElementById('rP2').value.trim();
+      if(p1!==p2){msg('The two passwords do not match.');return;}
+      const r=TE.finishReset(em,document.getElementById('rCode').value,p1);
+      if(!r.ok){msg(r.err);return;}
+      msg('✓ Password changed! Taking you to sign in…',true);
+      setTimeout(()=>location.href='store-login.html',1400);
+    };
+  }
+
+  if(qs.get('step')==='3')step3();else step1();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ALI MUBARAK · The Edit — Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060507;--ink:#FFFFFF;--muted:#B8B5AD;--line:rgba(255,255,255,.14);--field:#111014;--gold:#C9A86A;--gold-2:#E7D3A6}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,"IBM Plex Sans Arabic",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;padding:40px 18px;position:relative;overflow:hidden}
+  .glow{position:fixed;inset:0;z-index:0;background:radial-gradient(60% 50% at 50% 28%,rgba(201,168,106,.16),transparent 60%),radial-gradient(50% 40% at 50% 110%,rgba(201,168,106,.10),transparent 70%)}
+  .card{position:relative;z-index:2;width:100%;max-width:430px;background:rgba(14,13,17,.7);backdrop-filter:blur(20px);border:1px solid var(--line);border-radius:26px;padding:38px 34px 32px}
+  .brand{text-align:center;font-weight:700;letter-spacing:.2em;font-size:13px}.brand span{color:var(--gold)}
+  h1{text-align:center;font-size:26px;font-weight:700;margin-top:20px;letter-spacing:-.01em}
+  .ar{text-align:center;font-family:"Reem Kufi",sans-serif;direction:rtl;color:var(--gold-2);font-size:18px;margin-top:6px}
+  .sub{text-align:center;color:var(--muted);font-size:14px;margin-top:10px;line-height:1.6}
+
+  .tabs{display:flex;background:var(--field);border:1px solid var(--line);border-radius:40px;padding:4px;margin:24px 0 22px}
+  .tab{flex:1;text-align:center;padding:10px;border-radius:40px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:.2s}
+  .tab.active{background:var(--gold);color:#1a1407}
+
+  label{display:block;font-size:12px;color:var(--muted);margin:0 0 7px;letter-spacing:.02em}
+  .field{display:flex;align-items:center;background:var(--field);border:1px solid var(--line);border-radius:12px;height:50px;padding:0 14px;margin-bottom:16px;transition:border-color .2s}
+  .field:focus-within{border-color:var(--gold)}
+  .field .cc{color:var(--ink);font-size:15px;font-weight:600;padding-inline-end:10px;margin-inline-end:10px;border-inline-end:1px solid var(--line)}
+  .field input{flex:1;background:transparent;border:0;outline:0;color:var(--ink);font-size:15px;font-family:inherit}
+  .field input::placeholder{color:#6f6c66}
+  .namerow{display:none}
+  .btn{width:100%;height:52px;border-radius:40px;border:0;background:var(--gold);color:#1a1407;font-size:15px;font-weight:700;cursor:pointer;transition:transform .15s,background .2s;margin-top:4px}
+  .btn:hover{transform:translateY(-1px);background:var(--gold-2)}
+  .forgot{text-align:right;margin:-6px 0 16px}.forgot a{color:var(--muted);font-size:12.5px;text-decoration:none}.forgot a:hover{color:var(--ink)}
+
+  .or{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:12px;margin:20px 0}
+  .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+  .social{display:flex;flex-direction:column;gap:10px}
+  .sbtn{height:50px;border-radius:40px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s,background .2s}
+  .sbtn:hover{border-color:var(--ink);background:rgba(255,255,255,.03)}
+  .sbtn .ic{width:18px;height:18px;display:inline-block}
+
+  .guest{text-align:center;margin-top:20px}
+  .guest a{color:var(--gold-2);font-size:13.5px;text-decoration:none;border-bottom:1px solid rgba(231,211,166,.35);padding-bottom:2px}
+  .legal{text-align:center;color:#6f6c66;font-size:11.5px;margin-top:20px;line-height:1.6}
+  .legal a{color:var(--muted);text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="card">
+  <div class="brand">ALI MUBARAK <span>· THE EDIT</span></div>
+  <h1 id="title">Welcome back</h1>
+  <div class="ar">متجر مختار بعنايه</div>
+  <div class="sub" id="sub">Sign in to check out, track your orders, and get first access to every drop.</div>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-in">Sign in</div>
+    <div class="tab" id="tab-up">Create account</div>
+  </div>
+
+  <div class="namerow" id="namerow">
+    <label>Full name</label>
+    <div class="field"><input type="text" id="liName" placeholder="Your name" /></div>
+  </div>
+
+  <label>Email</label>
+  <div class="field"><input type="email" id="liEmail" placeholder="you@email.com" /></div>
+
+  <label>Password</label>
+  <div class="field"><input type="password" id="liPass" placeholder="••••••••" /></div>
+  <div id="liMsg" style="display:none;margin-top:10px;font-size:13px;border-radius:12px;padding:11px 14px;line-height:1.5"></div>
+
+  <div class="forgot" id="forgot"><a href="#">Forgot password?</a></div>
+
+  <button class="btn" id="primary">Sign in</button>
+
+  <div class="or">or</div>
+
+  <div class="social">
+    <button class="sbtn"><span class="ic">&#63743;</span> Continue with Apple</button>
+    <button class="sbtn"><span class="ic">G</span> Continue with Google</button>
+  </div>
+
+  <div class="guest"><a href="#">Continue as guest →</a></div>
+
+  <div class="legal">By continuing you agree to The Edit's <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>.</div>
+</div>
+
+<script src="theedit-data.js?v=9"></script>
+<script>
+  const tin=document.getElementById('tab-in'),tup=document.getElementById('tab-up');
+  const title=document.getElementById('title'),sub=document.getElementById('sub'),primary=document.getElementById('primary'),nrow=document.getElementById('namerow');
+  let isSignup=false;
+  function mode(signup){
+    isSignup=signup;
+    tin.classList.toggle('active',!signup);tup.classList.toggle('active',signup);
+    nrow.style.display=signup?'block':'none';
+    document.getElementById('forgot').style.display=signup?'none':'block';
+    title.textContent=signup?'Create your account':'Welcome back';
+    sub.textContent=signup?'Join The Edit — checkout faster and get first access to every drop.':'Sign in to check out, track your orders, and get first access to every drop.';
+    primary.textContent=signup?'Create account':'Sign in';
+    msg(false);
+  }
+  tin.onclick=()=>mode(false);tup.onclick=()=>mode(true);
+
+  const M=document.getElementById('liMsg');
+  function msg(text,good){
+    if(!text){M.style.display='none';return;}
+    M.style.display='block';M.textContent=text;
+    M.style.background=good?'rgba(110,190,130,.1)':'rgba(224,106,106,.1)';
+    M.style.border=good?'1px solid rgba(110,190,130,.4)':'1px solid rgba(224,106,106,.4)';
+    M.style.color=good?'#7fc98a':'#e08080';
+  }
+  function session(u){
+    // session is rendered in the store nav — keep it free of markup characters
+    if(u&&u.name)u.name=String(u.name).replace(/</g,'\u2039').replace(/>/g,'\u203A').replace(/"/g,'\u201D');
+    localStorage.setItem('theedit_user',JSON.stringify(u));}
+  function goStore(){setTimeout(()=>{location.href='store-experience-morph.html#price';},900);}
+
+  primary.onclick=()=>{
+    const email=(document.getElementById('liEmail').value||'').trim().toLowerCase();
+    const pass=(document.getElementById('liPass').value||'').trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){msg('Please enter a valid email address.');return;}
+    if(pass.length<4){msg('Password needs at least 4 characters.');return;}
+    const bank=(window.TE&&TE.customers)?TE.customers():[];
+    const ex=bank.find(c=>(c.email||'').toLowerCase()===email);
+    if(isSignup){
+      const name=(document.getElementById('liName').value||'').trim();
+      if(!name){msg('Please enter your name.');return;}
+      if(ex&&ex.pass){msg('This email already has an account — switch to Sign in.');return;}
+      TE.registerCustomer({name:name,email:email,pass:pass,source:'account'});
+      session({name:name,email:email});
+      msg('Welcome to The Edit, '+name.split(' ')[0]+'! Taking you to the store…',true);
+      goStore();
+    } else {
+      if(!ex||!ex.pass){msg('No account found for this email — switch to Create account.');return;}
+      if(ex.pass!==pass){msg('Wrong password. Try again.');return;}
+      session({name:ex.name||'',email:email});
+      msg('Welcome back'+(ex.name?', '+ex.name.split(' ')[0]:'')+'! Taking you to the store…',true);
+      goStore();
+    }
+  };
+  // Apple / Google: honest prototype behaviour
+  document.querySelectorAll('.sbtn').forEach(b=>b.onclick=()=>{
+    mode(true);
+    msg('Apple & Google sign-in switch on at launch — they need Apple/Google developer keys and the real backend. For now, create your account with email (10 seconds).');
+  });
+  document.querySelector('.guest a').onclick=(e)=>{e.preventDefault();location.href='store-experience-morph.html';};
+  document.querySelector('.forgot a').onclick=(e)=>{e.preventDefault();location.href='store-reset.html';};
+</script>
+</body>
+</html>

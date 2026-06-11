@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Account · THE EDIT by ALI MUBARAK</title>
+<style>
+  :root{--bg:#060507;--bg2:#0C0B0E;--ink:#FFFFFF;--muted:#B8B5AD;--line:rgba(244,241,234,.12);--gold:#C9A86A;--gold-2:#E7D3A6}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(6,5,7,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  .brand{font-weight:700;letter-spacing:.2em;font-size:13px}.brand span{color:var(--gold)}
+  .back{color:var(--muted);text-decoration:none;font-size:13px;border:1px solid var(--line);padding:8px 16px;border-radius:40px}
+  .back:hover{color:#fff}
+  .wrap{max-width:760px;margin:0 auto;padding:34px 20px 80px}
+  h1{font-size:clamp(26px,5vw,38px);font-weight:700;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin-top:6px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0}
+  .tab{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:40px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:none}
+  .tab.on{background:var(--gold);border-color:var(--gold);color:#1a1407}
+  .card{border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px;background:rgba(255,255,255,.02)}
+  label{font-size:12px;color:var(--muted);margin:2px 0 6px;display:block}
+  input,select{width:100%;height:46px;background:#0F0E12;border:1px solid var(--line);border-radius:11px;color:#fff;padding:0 13px;font-size:14.5px;outline:none;font-family:inherit;margin-bottom:12px}
+  input:focus,select:focus{border-color:rgba(201,168,106,.5)}
+  .btn{width:100%;height:48px;border:0;border-radius:40px;background:var(--gold);color:#1a1407;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:#fff}
+  .btn.danger{background:transparent;border:1px solid rgba(224,128,128,.4);color:#e08080}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .msg{display:none;font-size:13px;margin:8px 0;text-align:center}
+  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+  .pillTag{display:inline-block;border:1px solid rgba(201,168,106,.5);color:var(--gold-2);border-radius:30px;padding:3px 12px;font-size:11px;margin-left:8px}
+  .rowBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .rowBtns button{flex:1;min-width:110px;height:38px;font-size:12.5px}
+  @media(max-width:600px){.grid3{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="back" href="store-experience-morph.html">← Back to the store</a>
+  <div class="brand">MY ACCOUNT <span>· THE EDIT</span></div>
+  <a class="back" href="#" id="outBtn">Sign out</a>
+</div>
+<div class="wrap">
+  <h1 id="hi">My account</h1>
+  <div class="sub" id="who"></div>
+  <div class="tabs">
+    <a class="tab" href="#orders" data-t="orders">🛍 Past purchases</a>
+    <a class="tab" href="#addresses" data-t="addresses">📍 My addresses</a>
+    <a class="tab" href="#settings" data-t="settings">⚙️ Settings</a>
+    <a class="tab" href="#gifts" data-t="gifts">🎁 Gift cards</a>
+  </div>
+  <div id="body"></div>
+</div>
+
+<script src="theedit-data.js?v=9"></script>
+<script>
+(function(){
+  function sessU(){try{return JSON.parse(localStorage.getItem('theedit_user')||'null');}catch(e){return null;}}
+  const u=sessU();
+  if(!u||!u.email){location.href='store-login.html';return;}
+  const STL={new:'Order received',await:'Awaiting payment',paid:'Paid',confirmed:'Confirmed',delivery:'On the way',delivered:'✓ Delivered'};
+  function C(){return TE.customerByEmail(u.email)||{name:u.name,email:u.email};}
+  document.getElementById('outBtn').onclick=(e)=>{e.preventDefault();localStorage.removeItem('theedit_user');location.href='store-experience-morph.html';};
+
+  function show(id,t,good){const m=document.getElementById(id);if(!m)return;m.style.display='block';m.textContent=t;m.style.color=good?'#7fc98a':'#e08080';}
+
+  function render(){
+    const tab=(location.hash||'#orders').slice(1);
+    const c=C();
+    document.getElementById('hi').textContent=(c.name?c.name.split(' ')[0]:'My account');
+    document.getElementById('who').textContent=u.email;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.t===tab));
+    const B=document.getElementById('body');
+
+    /* ============ PAST PURCHASES ============ */
+    if(tab==='orders'){
+      const hist=TE.ordersForCustomer(u.email);
+      B.innerHTML='<div class="eyebrow">Past purchases · '+hist.length+'</div>'+
+        (hist.length?hist.map(o=>`
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;font-size:14px"><b>${o.id}</b><span style="color:var(--gold-2)">${STL[o.payStatus]||o.payStatus}</span></div>
+          <div style="color:var(--muted);font-size:13px;margin-top:8px">${o.items.map(i=>i.q+' × '+i.n+(i.opts?' · '+i.opts:'')).join('<br>')}</div>
+          <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:12.5px;margin-top:10px">
+            <span>${o.ts?new Date(o.ts).toLocaleDateString('en-GB')+' · '+new Date(o.ts).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):o.date}</span>
+            <b style="color:#fff">${o.items.reduce((s,i)=>s+i.q*i.p,0)+(o.fee||0)} KWD</b></div>
+          <div style="color:var(--muted);font-size:12px;margin-top:6px">Delivery: ${[o.area,o.gov].filter(Boolean).join(', ')}</div>
+        </div>`).join('')
+        :'<div class="card" style="color:var(--muted)">No purchases yet — when you order, everything appears here.</div>');
+    }
+
+    /* ============ MY ADDRESSES ============ */
+    if(tab==='addresses'){
+      const list=TE.addresses(u.email);
+      B.innerHTML='<div class="eyebrow">My addresses · '+list.length+'</div>'+
+        list.map((a,i)=>`
+        <div class="card">
+          <div style="font-size:15px;font-weight:700">${a.label||'Address'} ${a.def?'<span class="pillTag">Default — used at checkout</span>':''}</div>
+          <div style="color:var(--muted);font-size:13px;margin-top:6px">${[a.area,a.gov].filter(Boolean).join(', ')} · Block ${a.block||'—'} · St ${a.street||'—'} · House ${a.house||'—'}${a.avenue?' · Ave '+a.avenue:''}</div>
+          <div style="color:var(--muted);font-size:12.5px;margin-top:3px">${a.phone||''}</div>
+          <div class="rowBtns">
+            ${a.def?'':'<button class="btn ghost" data-def="'+i+'">Make default</button>'}
+            <button class="btn ghost" data-edit="${i}">Edit</button>
+            ${list.length>1?'<button class="btn danger" data-del="'+i+'">Delete</button>':''}
+          </div>
+        </div>`).join('')+
+        '<button class="btn ghost" id="addAddr">+ Add a new address</button><div id="addrForm"></div>';
+      document.querySelectorAll('[data-def]').forEach(b=>b.onclick=()=>{TE.setDefaultAddress(u.email,+b.dataset.def);render();});
+      document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('Delete this address?')){TE.deleteAddress(u.email,+b.dataset.del);render();}});
+      document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>addrForm(+b.dataset.edit));
+      document.getElementById('addAddr').onclick=()=>addrForm(-1);
+    }
+
+    /* ============ SETTINGS ============ */
+    if(tab==='settings'){
+      B.innerHTML=`
+        <div class="card"><div class="eyebrow">Change password</div>
+          <label>Current password</label><input type="password" id="sCur">
+          <label>New password</label><input type="password" id="sNew">
+          <button class="btn" id="sPassBtn">Update password</button>
+          <div class="msg" id="sMsg1"></div>
+          <div style="color:var(--muted);font-size:12.5px;margin-top:10px">Forgot your current password? <a href="store-reset.html" style="color:var(--gold-2)">Reset it by email →</a></div></div>
+        <div class="card"><div class="eyebrow">Change email address</div>
+          <label>New email</label><input type="email" id="sEmail" value="${u.email}">
+          <label>Confirm with your password</label><input type="password" id="sPass2">
+          <button class="btn ghost" id="sMailBtn">Update email</button>
+          <div class="msg" id="sMsg2"></div></div>`;
+      document.getElementById('sPassBtn').onclick=()=>{
+        const c2=C(),cur=document.getElementById('sCur').value.trim(),nw=document.getElementById('sNew').value.trim();
+        if((c2.pass||'')!==cur){show('sMsg1','Current password is wrong.');return;}
+        if(nw.length<4){show('sMsg1','New password needs at least 4 characters.');return;}
+        TE.updateCustomerByEmail(u.email,{pass:nw});show('sMsg1','✓ Password updated',true);};
+      document.getElementById('sMailBtn').onclick=()=>{
+        const c2=C(),ne=(document.getElementById('sEmail').value||'').trim().toLowerCase(),pw=document.getElementById('sPass2').value.trim();
+        if((c2.pass||'')!==pw){show('sMsg2','Password is wrong.');return;}
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ne)){show('sMsg2','Enter a valid email.');return;}
+        if(ne!==u.email.toLowerCase()&&TE.customerByEmail(ne)){show('sMsg2','That email already belongs to another account.');return;}
+        TE.updateCustomerByEmail(u.email,{email:ne});
+        u.email=ne;localStorage.setItem('theedit_user',JSON.stringify({name:c2.name||u.name,email:ne}));
+        show('sMsg2','✓ Email updated to '+ne,true);render();};
+    }
+
+    /* ============ GIFT CARDS ============ */
+    if(tab==='gifts'){
+      const cards=(c.giftCards||[]);
+      const total=cards.reduce((s,g)=>s+(+g.amount||0),0);
+      B.innerHTML='<div class="eyebrow">Gift cards</div>'+
+        `<div class="card" style="border-color:rgba(201,168,106,.4)"><div style="color:var(--muted);font-size:13px">Your balance</div><div style="font-size:32px;font-weight:700;color:var(--gold-2);margin-top:4px">${total} KWD</div></div>`+
+        (cards.length?cards.map(g=>`
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="color:var(--gold-2);font-weight:700;letter-spacing:.08em">${g.code}</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">A gift from ALI MUBARAK · ${(g.date||'').slice(0,10)}</div></div>
+          <div style="font-size:20px;font-weight:700">${g.amount} KWD</div>
+        </div>`).join('')+'<div style="color:var(--muted);font-size:12.5px">Mention your gift code when our team confirms your order — it is deducted from your total. Automatic redemption arrives with online payments.</div>'
+        :'<div class="card" style="color:var(--muted)">No gift cards yet — when ALI MUBARAK sends you one, it appears here with its code.</div>');
+    }
+  }
+
+  function addrForm(idx){
+    const c=C(),list=TE.addresses(u.email),a=idx>=0?list[idx]:{};
+    const govs=TE.GOV.map(g=>`<option value="${g.n}" ${a.gov===g.n?'selected':''}>${g.n} · ${g.ar}</option>`).join('');
+    document.getElementById('addrForm').innerHTML=`
+      <div class="card" style="border-color:rgba(201,168,106,.45);margin-top:14px">
+        <div class="eyebrow">${idx>=0?'Edit address':'New address'}</div>
+        <label>Label (Home, Office, Mum's house…)</label><input id="aLabel" value="${a.label||''}" placeholder="Home">
+        <label>Phone for this address</label><input id="aPhone" value="${a.phone||c.phone||''}" placeholder="+965 ...">
+        <label>Governorate</label><select id="aGov">${govs}</select>
+        <label>Area</label><select id="aArea"></select>
+        <div class="grid3">
+          <div><label>Block</label><input id="aBlock" value="${a.block||''}"></div>
+          <div><label>Street</label><input id="aStreet" value="${a.street||''}"></div>
+          <div><label>House</label><input id="aHouse" value="${a.house||''}"></div>
+        </div>
+        <label>Avenue (optional)</label><input id="aAve" value="${a.avenue||''}">
+        <button class="btn" id="aSave">Save address</button>
+      </div>`;
+    const gov=document.getElementById('aGov'),area=document.getElementById('aArea');
+    const fillA=()=>{const g=TE.GOV.find(x=>x.n===gov.value)||TE.GOV[0];area.innerHTML=g.areas.map(x=>`<option ${a.area===x?'selected':''}>${x}</option>`).join('');};
+    gov.onchange=fillA;fillA();
+    document.getElementById('aSave').onclick=()=>{
+      const data={label:document.getElementById('aLabel').value.trim()||'Home',phone:document.getElementById('aPhone').value.trim(),
+        gov:gov.value,area:area.value,block:document.getElementById('aBlock').value.trim(),
+        street:document.getElementById('aStreet').value.trim(),house:document.getElementById('aHouse').value.trim(),
+        avenue:document.getElementById('aAve').value.trim()};
+      if(idx>=0)TE.updateAddress(u.email,idx,data);else TE.addAddress(u.email,data);
+      render();
+      if(window.TE&&TE.on)TE.on(()=>render());
+    };
+    document.getElementById('addrForm').scrollIntoView();
+  }
+
+  window.addEventListener('hashchange',render);
+  render();
+})();
+</script>
+</body>
+</html>
