@@ -14,3 +14,16 @@
   to = "/store/"
   status = 302
   force = true
+
+# Serve the static store before Next.js locale middleware can intercept
+[[redirects]]
+  from = "/store"
+  to = "/store/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/store/"
+  to = "/store/index.html"
+  status = 200
+  force = true
