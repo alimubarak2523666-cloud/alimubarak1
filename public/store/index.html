@@ -87,7 +87,7 @@
   .ftxt h3{font-size:clamp(28px,4vw,46px);font-weight:700;letter-spacing:-.02em;line-height:1.05}
   .ftxt p{color:var(--muted);margin-top:18px;font-size:17px;max-width:440px}
   .fcard{aspect-ratio:4/3;border-radius:26px;overflow:hidden;border:1px solid var(--line);position:relative;background:var(--bg2)}
-  .fcard img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.2s ease}
+  .fcard img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.2s ease;position:relative;z-index:2}
   .fcard:hover img{transform:scale(1)}
   .fcard .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.2em}
 
@@ -535,6 +535,15 @@
     const inId=(inU.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/)||[])[1];
     const vfF=document.getElementById('vf');
     if(vfF&&inId&&!vfF.querySelector('iframe')){vfF.style.background=`linear-gradient(rgba(6,5,7,.45),rgba(6,5,7,.45)),url('https://img.youtube.com/vi/${inId}/hqdefault.jpg') center/cover no-repeat`;}
+    // story sections 1 & 2 follow the featured product (photo + big title + small text from admin)
+    const feats=document.querySelectorAll('.feat');
+    [p.feat1,p.feat2].forEach((F,i)=>{
+      if(!F||!feats[i])return;
+      const h=feats[i].querySelector('.ftxt h3'),t=feats[i].querySelector('.ftxt p'),im=feats[i].querySelector('.fcard img');
+      if(F.head&&h)h.textContent=F.head;
+      if(F.text&&t)t.textContent=F.text;
+      if(F.img&&im){im.src=F.img;im.style.display='';}
+    });
     const grid=document.querySelector('.dgrid');
     if(grid){
       const BASE={cs1:247,cs2:132,cs3:389}; // demo seed counts — real counts come from the waitlist
