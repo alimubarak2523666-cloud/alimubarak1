@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ALI MUBARAK · The Edit — Sign in</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -79,7 +80,8 @@
 
   <div class="social">
     <button class="sbtn"><span class="ic">&#63743;</span> Continue with Apple</button>
-    <button class="sbtn"><span class="ic">G</span> Continue with Google</button>
+    <div id="gBtnWrap" style="display:flex;justify-content:center;min-height:44px"></div>
+    <button class="sbtn" id="gFallback" style="display:none"><span class="ic">G</span> Continue with Google</button>
   </div>
 
   <div class="guest"><a href="#">Continue as guest →</a></div>
@@ -141,10 +143,36 @@
       goStore();
     }
   };
-  // Apple / Google: honest prototype behaviour
-  document.querySelectorAll('.sbtn').forEach(b=>b.onclick=()=>{
+  // ===== REAL Google sign-in (Google Identity Services) =====
+  const G_CLIENT_ID='738305985810-752c83trtrcs2e6hfbth3t7hu1nefa0s.apps.googleusercontent.com';
+  function onGoogleCred(resp){
+    try{
+      const p=JSON.parse(decodeURIComponent(escape(atob(resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
+      const email=(p.email||'').toLowerCase(); const name=p.name||p.given_name||'Customer';
+      if(!email){msg('Google did not share an email — try email sign-in.');return;}
+      let c=TE.customerByEmail(email);
+      if(!c){TE.registerCustomer({name:name,email:email,pass:'',source:'google'});}
+      session({name:(c&&c.name)||name,email:email});
+      msg('Welcome'+(name?', '+String(name).split(' ')[0]:'')+'! Taking you to the store…',true);
+      goStore();
+    }catch(e){msg('Google sign-in hiccup — try again or use email.');}
+  }
+  function initGoogle(){
+    if(!(window.google&&google.accounts&&google.accounts.id)){
+      document.getElementById('gFallback').style.display='flex';
+      document.getElementById('gBtnWrap').style.display='none';
+      document.getElementById('gFallback').onclick=()=>msg('Google sign-in is loading — check your internet and refresh.');
+      return;
+    }
+    google.accounts.id.initialize({client_id:G_CLIENT_ID,callback:onGoogleCred});
+    google.accounts.id.renderButton(document.getElementById('gBtnWrap'),
+      {theme:'filled_black',size:'large',shape:'pill',text:'continue_with',width:300,logo_alignment:'left'});
+  }
+  window.addEventListener('load',()=>setTimeout(initGoogle,400));
+  // Apple: honest prototype behaviour until the Apple Developer account exists
+  document.querySelectorAll('.sbtn:not(#gFallback)').forEach(b=>b.onclick=()=>{
     mode(true);
-    msg('Apple & Google sign-in switch on at launch — they need Apple/Google developer keys and the real backend. For now, create your account with email (10 seconds).');
+    msg('Apple sign-in switches on once the Apple Developer account is set up. Use Google or email for now.');
   });
   document.querySelector('.guest a').onclick=(e)=>{e.preventDefault();location.href='store-experience-morph.html';};
   document.querySelector('.forgot a').onclick=(e)=>{e.preventDefault();location.href='store-reset.html';};
