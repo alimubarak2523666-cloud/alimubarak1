@@ -469,7 +469,11 @@
   }
   addEventListener('scroll',onScroll,{passive:true});
 
-  document.getElementById('enterBtn').addEventListener('click',()=>store.scrollIntoView({behavior:'smooth'}));
+  // custom glide (Chrome's native smooth scroll silently no-ops on this page)
+  window.glideTo=function(y){const s=scrollY,d=y-s,t0=performance.now(),D=Math.min(1600,500+Math.abs(d)*0.10);
+    function step(t){const p=Math.min(1,(t-t0)/D),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;window.scrollTo(0,s+d*e);if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);};
+  document.getElementById('enterBtn').addEventListener('click',()=>glideTo(store.offsetTop));
   document.getElementById('vf').addEventListener('click',function(){this.querySelector('.cap').textContent='▶ Your intro film plays here on the live site';});
 
   const clock=glOK?new THREE.Clock():null;let visible=true;
@@ -691,7 +695,11 @@
   function closeCo(){modal.style.display='none';}
   document.getElementById('coClose').onclick=closeCo;
   modal.addEventListener('click',e=>{if(e.target===modal)closeCo();});
-  document.querySelectorAll('button').forEach(b=>{if(b.textContent.trim()==='Get first access')b.addEventListener('click',openCo);});
+  document.querySelectorAll('button').forEach(b=>{
+    const t=b.textContent.trim();
+    if(t==='Get first access')b.addEventListener('click',openCo);
+    if(t==='Watch the story')b.addEventListener('click',()=>{const v=document.getElementById('pvideo');if(v)window.glideTo(v.offsetTop-40);});
+  });
 })();
 </script>
 </body>
