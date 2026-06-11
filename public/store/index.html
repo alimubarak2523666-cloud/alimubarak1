@@ -119,6 +119,12 @@
   .bar{height:6px;border-radius:6px;background:rgba(244,241,234,.12);overflow:hidden}
   .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:0;transition:width 1.5s cubic-bezier(.16,1,.3,1)}
   .stock .sub{margin-top:11px;color:var(--muted);font-size:12.5px}
+  .alerts{margin:0 0 50px;border:1px solid rgba(201,168,106,.3);border-radius:24px;padding:26px 28px;background:rgba(201,168,106,.05);display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .alerts h3{font-size:clamp(18px,2.2vw,24px);font-weight:700;letter-spacing:-.01em;margin-top:6px}
+  .alerts .af{display:flex;gap:8px;flex:1;max-width:400px;min-width:260px}
+  .alerts .af input{flex:1;height:46px;background:#0F0E12;border:1px solid var(--line);border-radius:40px;color:#fff;padding:0 18px;font-size:14px;outline:none;font-family:inherit}
+  .alerts .af input:focus{border-color:rgba(201,168,106,.5)}
+  .alerts .af button{width:46px;height:46px;border-radius:50%;border:0;background:var(--gold);color:#1a1407;font-size:17px;font-weight:700;cursor:pointer;flex:none}
   .optgrp{max-width:430px;margin:26px auto 0;text-align:left}
   .optgrp .olbl{font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
   .opts{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
@@ -226,7 +232,7 @@
   <div class="brand"><span class="bn">ALI MUBARAK ·</span> <span>THE EDIT</span></div>
   <div class="navlinks"><a href="#how">How it works</a><a href="#store">The store</a><a href="#price">Drop 01</a><a href="#archive">Archive</a><a class="alitab" href="/en">ALI MUBARAK</a></div>
   <div style="display:flex;gap:10px;align-items:center">
-    <div class="cart">Bag · 0</div>
+    <div class="cart"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C9A86A" stroke-width="2" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M6 7V6a6 6 0 0 1 12 0v1"/><path d="M4 7h16l-1.5 13h-13L4 7z"/></svg>Bag · 0</div>
   </div>
 </nav>
 
@@ -340,6 +346,10 @@
           <div class="cd-cell"><b id="cdM">00</b><span>Min</span></div>
           <div class="cd-cell"><b id="cdS">00</b><span>Sec</span></div>
         </div>
+      </div>
+      <div class="alerts reveal" id="dropAlerts">
+        <div><span class="eyebrow">Never miss a drop</span><h3>Get every new drop in your inbox.</h3></div>
+        <div class="af"><input type="email" id="alertEmail" placeholder="you@email.com"><button id="alertGo" title="Join">→</button></div>
       </div>
       <div class="dgrid">
         <div class="dcard reveal"><div class="dthumb">DROP 02</div><div class="dbody"><div class="tag">Coming soon</div><h4>The Field Bag</h4><p>Everyday carry, rebuilt.</p></div></div>
@@ -513,12 +523,27 @@
   // ---- shared data: real YouTube videos + live stock/price/coming-soon (synced with admin & supplier) ----
   function ytEmbed(frameId,which){const f=document.getElementById(frameId);if(!f)return;
     f.addEventListener('click',()=>{let url=(window.TE?TE.state().videos[which]:'')||'';
-      if(which==='product'&&window.TE&&TE.product().yt)url=TE.product().yt; // each drop can carry its own film
+      if(which==='product'&&window.TE&&TE.product()&&TE.product().yt)url=TE.product().yt; // each drop can carry its own film
       const id=(url.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/)||[])[1];
       if(id)f.innerHTML='<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0" src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay" allowfullscreen></iframe>';});}
   ytEmbed('vf','intro');ytEmbed('pvf','product');
   function renderShared(){
     if(!window.TE)return;const p=TE.product();
+    if(!p){ // store is empty — show a graceful "preparing" state
+      const set=(sel,t)=>{const el=document.querySelector(sel);if(el)el.textContent=t;};
+      set('.cap-1 h2','The first drop');set('.cap-1 p','Being prepared');
+      set('.cap-2 h2','Something is coming.');
+      set('#price .eyebrow','Drop 01');set('#pvideo .eyebrow','The film');
+      const pa=document.getElementById('priceAmt');if(pa)pa.textContent='—';
+      const lc=document.getElementById('leftCount');if(lc)lc.textContent='';
+      const tot=document.getElementById('stockTotal');if(tot)tot.textContent='';
+      const sub=document.getElementById('stockSub');if(sub)sub.textContent='The first drop is being prepared. Join the list below.';
+      const bar=document.getElementById('stockBar');if(bar)bar.style.width='0%';
+      const ob=document.getElementById('optSel');if(ob)ob.innerHTML='';
+      const grid=document.querySelector('.dgrid');if(grid&&!TE.state().comingSoon.length)grid.innerHTML='<div class="dcard reveal in"><div class="dthumb">SOON</div><div class="dbody"><div class="tag">Coming soon</div><h4>New drops on the way</h4><p>Follow @alimubarak to catch the first one.</p></div></div>';
+      const bn=document.querySelector('.buybar .nm');if(bn)bn.textContent='THE EDIT';
+      return;
+    }
     const lc=document.getElementById('leftCount');if(lc)lc.textContent=p.left;
     const tot=document.getElementById('stockTotal');if(tot)tot.textContent=' / '+p.total+' left';
     const pa=document.getElementById('priceAmt');if(pa)pa.textContent=p.price;
@@ -567,8 +592,8 @@
     const grid=document.querySelector('.dgrid');
     if(grid){
       const BASE={cs1:247,cs2:132,cs3:389}; // demo seed counts — real counts come from the waitlist
-      grid.innerHTML=TE.state().comingSoon.map((s,i)=>{
-        const n=(BASE[s.id]||90)+(TE.waitlistCount?TE.waitlistCount(s.id):0);
+      grid.innerHTML=(TE.visibleComingSoon?TE.visibleComingSoon():TE.state().comingSoon).map((s,i)=>{
+        const n=(BASE[s.id]||0)+(TE.waitlistCount?TE.waitlistCount(s.id):0);
         const joined=joinedDrops[s.id];
         const notify=joined
           ?`<div class="ndone">✓ You're on the list — we'll WhatsApp you</div>`
@@ -577,6 +602,7 @@
             :`<button class="nbtn" data-notify="${s.id}">Notify me first</button>`);
         return `<div class="dcard reveal in"><div class="dthumb" ${s.img?`style="background:url('${s.img}') center/cover"`:''}>${s.img?'':'DROP 0'+(i+2)}</div><div class="dbody"><div class="tag">${s.tag||'Coming soon'}</div><h4>${s.title}</h4><p>${s.tease}</p><div class="notify"><div class="count"><span class="dot"></span>${n} people waiting</div>${notify}</div></div></div>`;
       }).join('');
+      if(!(TE.visibleComingSoon?TE.visibleComingSoon():TE.state().comingSoon).length)grid.innerHTML='<div class="dcard reveal in"><div class="dthumb">SOON</div><div class="dbody"><div class="tag">Coming soon</div><h4>New drops on the way</h4><p>Follow @alimubarak to catch the first one.</p></div></div>';
     }
   }
   // ---- waitlist interactions (event delegation — grid re-renders on data change) ----
@@ -609,6 +635,18 @@
   }
   if(window.TE){TE.on(renderShared);renderShared();}
 
+  (function(){
+    const go=document.getElementById('alertGo');
+    if(!go)return;
+    go.onclick=()=>{
+      const inp=document.getElementById('alertEmail');
+      const em=(inp.value||'').trim();
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){inp.style.borderColor='#c96a6a';inp.placeholder='Enter a valid email';return;}
+      if(window.TE&&TE.registerCustomer)TE.registerCustomer({email:em,source:'drop-alerts'});
+      if(window.postWait)postWait(em,'email-alerts');
+      document.getElementById('dropAlerts').innerHTML='<div style="width:100%;text-align:center;color:var(--gold-2);font-size:15px;padding:6px 0">\u2713 You\u2019re in. Every new drop lands in your inbox first.</div>';
+    };
+  })();
   // ---- drop ritual countdown: every Thursday 20:00 Kuwait (UTC+3) ----
   function nextDropTime(){
     const now=new Date();

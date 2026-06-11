@@ -86,7 +86,7 @@
   function SEEDFEE(gov){ const m={ "Capital":1.5,"Hawalli":1.5,"Farwaniya":2,"Mubarak Al-Kabeer":2,"Ahmadi":2.5,"Jahra":3 }; return m[gov]||2; }
 
   function clone(o){ return JSON.parse(JSON.stringify(o)); }
-  function load(){ try{ const r=localStorage.getItem(KEY); const s=r?JSON.parse(r):clone(SEED); if(!s.waitlist) s.waitlist=[]; return s;}catch(e){ const s=clone(SEED); s.waitlist=[]; return s;} }
+  function load(){ try{ const r=localStorage.getItem(KEY); const s=r?JSON.parse(r):clone(SEED); if(!s.waitlist) s.waitlist=[]; if(!s.customers) s.customers=[]; return s;}catch(e){ const s=clone(SEED); s.waitlist=[]; s.customers=[]; return s;} }
 
   let state = load();
   const subs = [];
@@ -107,11 +107,14 @@
     on: (f)=>{ subs.push(f); return ()=>{}; },
     save,
     reset: ()=>{ state=clone(SEED); save(); },
+    resetEmpty: ()=>{ state={ currency:"KWD", drop:{}, videos:{intro:"",product:""}, products:[], comingSoon:[], suppliers:[],
+      delivery:clone(SEED.delivery), gccShipping:clone(SEED.gccShipping), couriers:clone(SEED.couriers), driverFee:1.0,
+      drivers:[], orders:[], waitlist:[], customers:[], seq:1001 }; save(); },
 
     // featured drop = newest product marked Live (admin controls the store via the Status field)
     product: ()=> state.products.find(p=>p.status==="live") || state.products[0],
     productById: (id)=> state.products.find(p=>p.id===id),
-    setStockLeft: (n)=>{ const p=TE.product(); p.left=Math.max(0, Math.min(p.total, n)); save(); },
+    setStockLeft: (n)=>{ const p=TE.product(); if(!p)return; p.left=Math.max(0, Math.min(p.total, n)); save(); },
     addProduct: (p)=>{ state.products.unshift(p); save(); },
     updateProduct: (id,patch)=>{ const p=state.products.find(x=>x.id===id); if(p) Object.assign(p,patch); save(); },
 
@@ -119,15 +122,34 @@
 
     addComingSoon: (c)=>{ state.comingSoon.push(c); save(); },
     removeComingSoon: (id)=>{ state.comingSoon=state.comingSoon.filter(x=>x.id!==id); save(); },
+    updateComingSoon: (id,patch)=>{ const c=state.comingSoon.find(x=>x.id===id); if(c)Object.assign(c,patch); save(); },
+    submitTeaser: (supplierId,c)=>{ c.id=c.id||('cs'+Date.now()); c.tag=c.tag||'Coming soon'; c.approval='pending'; c.supplier=supplierId;
+      state.comingSoon.push(c); save(); return c; },
+    approveTeaser: (id)=>{ const c=state.comingSoon.find(x=>x.id===id); if(c)c.approval='approved'; save(); },
+    visibleComingSoon: ()=> state.comingSoon.filter(c=>c.approval!=='pending'),
 
     // ----- waitlist (notify-me per upcoming drop) -----
     addWaitlist: (dropId, phone)=>{ if(!state.waitlist) state.waitlist=[];
       if(state.waitlist.some(w=>w.dropId===dropId && w.phone===phone)) return false;
-      state.waitlist.push({ dropId, phone, date: new Date().toISOString() }); save(); return true; },
+      state.waitlist.push({ dropId, phone, date: new Date().toISOString() }); save();
+      try{ TE.registerCustomer({phone:phone,source:'waitlist'}); }catch(e){}
+      return true; },
     waitlistCount: (dropId)=> (state.waitlist||[]).filter(w=>w.dropId===dropId).length,
     waitlistFor: (dropId)=> (state.waitlist||[]).filter(w=>w.dropId===dropId),
 
     addSupplier: (s)=>{ state.suppliers.unshift(s); save(); },
+
+    // ----- customer bank (registrations from orders, waitlists, drop alerts) -----
+    registerCustomer: (c)=>{ if(!state.customers) state.customers=[];
+      const key=(c.phone||'').replace(/\D/g,'')||((c.email||'').toLowerCase());
+      if(!key) return null;
+      let ex=state.customers.find(x=>((x.phone||'').replace(/\D/g,'')===key)||(key.includes('@')&&(x.email||'').toLowerCase()===key));
+      if(ex){ Object.keys(c).forEach(k=>{ if(c[k]&&!ex[k]) ex[k]=c[k]; }); ex.lastSeen=new Date().toISOString(); }
+      else { ex=Object.assign({date:new Date().toISOString(),lastSeen:new Date().toISOString()},c); state.customers.unshift(ex); }
+      save(); return ex; },
+    customers: ()=> state.customers||[],
+    customersToday: ()=>{ const today=new Date().toISOString().slice(0,10);
+      return (state.customers||[]).filter(c=>(c.date||'').slice(0,10)===today).length; },
 
     // ----- supplier product submission & approval (360 loop) -----
     submitProduct: (supplierId,p)=>{ p.id=p.id||('p'+Date.now()); p.status='draft'; p.approval='pending'; p.supplier=supplierId;
@@ -147,6 +169,7 @@
       const id = "AE-" + (state.seq++);
       const order = Object.assign({ id, date:"Just now", country:"Kuwait", ship:"driver", courier:null, tracking:"", payStatus:"new", prepStatus:"new", driverStatus:"unassigned", driverId:null, cashDeclared:false }, o);
       state.orders.unshift(order);
+      try{ TE.registerCustomer({name:o.name,phone:o.phone,gov:o.gov,area:o.area,block:o.block,street:o.street,house:o.house,source:'order'}); }catch(e){}
       const p = TE.product();
       const qty = (order.items||[]).reduce((s,i)=>s+(i.q||1),0) || 1;
       p.left = Math.max(0, p.left - qty);
