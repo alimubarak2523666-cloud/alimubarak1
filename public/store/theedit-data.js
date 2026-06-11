@@ -5,7 +5,7 @@
    in sync live across tabs. Replace with a real backend later.
    ==================================================================== */
 (function () {
-  const KEY = 'theedit_v3';
+  const KEY = 'theedit_v4'; // bumped so every visitor gets the new seed
 
   const GOV = [
     { n: "Capital", ar: "العاصمة", p: 1.5, areas: ["Kuwait City","Sharq","Mirqab","Qibla","Dasman","Dasma","Daiya","Abdullah Al-Salem","Mansouriya","Faiha","Nuzha","Kaifan","Khaldiya","Adailiya","Shamiya","Rawda","Yarmouk","Qadsiya","Surra","Qurtuba","Granada","Jaber Al-Ahmad","Sulaibikhat","Doha","Shuwaikh","Nahda","Failaka"] },
@@ -24,11 +24,31 @@
       product: ""
     },
     products: [
-      { id: "aurora", name: "The Aurora", price: 89, total: 200, left: 47, status: "live",
+      { id: "runner", name: "The Desert Runner", price: 28, total: 150, left: 150, status: "live",
+        variant: "Limited run · 150 pairs", supplier: "aurora_co",
+        img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1100&q=80",
+        yt: "",
+        desc: "Drop 01. A shoe built for Kuwait streets — light, tough, beautiful.",
+        options: [
+          { name: "Size", values: ["40","41","42","43","44","45"] },
+          { name: "Colour", values: ["Red","Black","White"] }
+        ],
+        optImgs: {
+          "Red":   "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1100&q=80",
+          "Black": "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1100&q=80",
+          "White": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=1100&q=80"
+        },
+        feat1: { img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1100&q=80",
+                 head: "Runs cool in 50°.",
+                 text: "Breathable mesh built for Gulf summers — tested on Kuwait asphalt in July, not in a catalogue." },
+        feat2: { img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=1100&q=80",
+                 head: "Every stitch, checked.",
+                 text: "I refused three factories before this one. This is the pair I kept for myself." } },
+      { id: "aurora", name: "The Aurora", price: 89, total: 200, left: 47, status: "draft",
         variant: "Champagne · 40mm", supplier: "aurora_co",
         img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=80",
-        yt: "https://www.youtube.com/watch?v=ScMzIvxBSi4",
-        desc: "Drop 01. A watch engineered to be worn." }
+        yt: "",
+        desc: "Drop 02. A watch engineered to be worn." }
     ],
     comingSoon: [
       { id: "cs1", title: "The Field Bag", tease: "Everyday carry, rebuilt.", tag: "Coming soon", img: "" },
@@ -108,6 +128,16 @@
     waitlistFor: (dropId)=> (state.waitlist||[]).filter(w=>w.dropId===dropId),
 
     addSupplier: (s)=>{ state.suppliers.unshift(s); save(); },
+
+    // ----- supplier product submission & approval (360 loop) -----
+    submitProduct: (supplierId,p)=>{ p.id=p.id||('p'+Date.now()); p.status='draft'; p.approval='pending'; p.supplier=supplierId;
+      state.products.unshift(p);
+      const s=state.suppliers.find(x=>x.id===supplierId); if(s)s.productId=p.id;
+      save(); return p; },
+    approveProduct: (id)=>{ const p=state.products.find(x=>x.id===id); if(p)p.approval='approved'; save(); },
+    salesFor: (productId)=>{ let units=0,rev=0;
+      state.orders.forEach(o=>(o.items||[]).forEach(i=>{ if(i.productId===productId){units+=i.q;rev+=i.q*i.p;} }));
+      return {units:units,rev:rev}; },
     toggleSupplier: (id)=>{ const s=state.suppliers.find(x=>x.id===id); if(s) s.active=!s.active; save(); },
 
     setDelivery: (gov,price)=>{ state.delivery[gov]=price; save(); },
