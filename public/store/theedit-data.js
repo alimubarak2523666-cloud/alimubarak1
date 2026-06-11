@@ -88,7 +88,8 @@
     save,
     reset: ()=>{ state=clone(SEED); save(); },
 
-    product: ()=> state.products.find(p=>p.id==="aurora") || state.products[0],
+    // featured drop = newest product marked Live (admin controls the store via the Status field)
+    product: ()=> state.products.find(p=>p.status==="live") || state.products[0],
     productById: (id)=> state.products.find(p=>p.id===id),
     setStockLeft: (n)=>{ const p=TE.product(); p.left=Math.max(0, Math.min(p.total, n)); save(); },
     addProduct: (p)=>{ state.products.unshift(p); save(); },

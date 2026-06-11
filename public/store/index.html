@@ -505,7 +505,9 @@
 
   // ---- shared data: real YouTube videos + live stock/price/coming-soon (synced with admin & supplier) ----
   function ytEmbed(frameId,which){const f=document.getElementById(frameId);if(!f)return;
-    f.addEventListener('click',()=>{const url=(window.TE?TE.state().videos[which]:'')||'';const id=(url.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/)||[])[1];
+    f.addEventListener('click',()=>{let url=(window.TE?TE.state().videos[which]:'')||'';
+      if(which==='product'&&window.TE&&TE.product().yt)url=TE.product().yt; // each drop can carry its own film
+      const id=(url.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/)||[])[1];
       if(id)f.innerHTML='<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0" src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay" allowfullscreen></iframe>';});}
   ytEmbed('vf','intro');ytEmbed('pvf','product');
   function renderShared(){
@@ -516,6 +518,14 @@
     const pb=document.getElementById('barPrice');if(pb)pb.textContent=p.price+' KWD';
     const bar=document.getElementById('stockBar');if(bar)bar.style.width=((p.total-p.left)/p.total*100).toFixed(1)+'%';
     const sub=document.getElementById('stockSub');if(sub)sub.textContent=(p.total-p.left)+' claimed · selling fast · free delivery in Kuwait';
+    // the whole page follows the featured product (admin: newest product marked Live)
+    const nm1=document.querySelector('.cap-1 h2');if(nm1)nm1.textContent=p.name;
+    const c1p=document.querySelector('.cap-1 p');if(c1p)c1p.textContent='Drop 01 · Limited to '+p.total;
+    const c2=document.querySelector('.cap-2 h2');if(c2&&p.desc)c2.textContent=p.desc.replace(/^Drop \d+\.\s*/,'');
+    const pe=document.querySelector('#price .eyebrow');if(pe)pe.textContent='Drop 01 · '+p.name;
+    const fe=document.querySelector('#pvideo .eyebrow');if(fe)fe.textContent=p.name+' · the film';
+    const bn=document.querySelector('.buybar .nm');if(bn)bn.textContent=p.name;
+    const shotImg=document.querySelector('#shot img');if(shotImg&&p.img){shotImg.src=p.img;shotImg.style.display='';}
     const grid=document.querySelector('.dgrid');
     if(grid){
       const BASE={cs1:247,cs2:132,cs3:389}; // demo seed counts — real counts come from the waitlist
