@@ -184,7 +184,7 @@
 <div class="overlay" id="orderOverlay"><div class="drawer" id="orderDrawer"></div></div>
 <div id="printArea"></div>
 
-<script src="theedit-data.js?v=9"></script>
+<script src="theedit-data.js?v=10"></script>
 <script>
   const ST={new:'<span class="pill new">New</span>',prep:'<span class="pill prep">Preparing</span>',ready:'<span class="pill ready">Ready for pickup</span>',picked:'<span class="pill picked">Picked up</span>'};
   let myId='aurora_co';
@@ -394,55 +394,16 @@
     alert('Assigned to '+(d?d.name:'driver')+' — the order is now in their Driver app under "My deliveries".');
     openOrder(oid);
   };
-  function dlvBadge(o){
-    const who=o.deliveryBy==='supplier'?'🚚 My drivers':'ALI MUBARAK team';
-    return `<div class="note" style="margin:0 0 6px;display:flex;justify-content:space-between;align-items:center">
-      <span>Delivery: <b style="color:var(--gold-2)">${who}</b></span>
-      <span style="color:var(--gold-2);cursor:pointer;font-size:12px" onclick="TE.setDeliveryBy('${o.id}',null);openOrder('${o.id}')">change</span></div>`;
-  }
   function actions(o){
     const a=[];
-    const self=!!mySup().selfDelivery;
-    // STEP 1 — on a NEW order, a self-delivery supplier first decides who delivers
-    if(self && o.prepStatus==='new' && !o.deliveryBy){
-      a.push(`<div class="note" style="margin:0 0 6px"><b style="color:var(--gold-2)">First — who will deliver this order?</b><br>Choose once; everything after follows your choice.</div>`);
-      a.push(`<button class="save" onclick="TE.setDeliveryBy('${o.id}','supplier');openOrder('${o.id}')">🚚 My drivers will deliver it</button>`);
-      a.push(`<button class="save alt" onclick="TE.setDeliveryBy('${o.id}','ali');openOrder('${o.id}')">↪ Send it to the ALI MUBARAK dashboard — his drivers deliver</button>`);
-      return a.join('');
-    }
-    const supDelivers = self && o.deliveryBy==='supplier';
     if(o.prepStatus==='new'){
-      if(self)a.push(dlvBadge(o));
       a.push(`<button class="save" onclick="adv('${o.id}','prep')">Start preparing</button>`);
     }
     if(o.prepStatus==='prep'){
-      if(self)a.push(dlvBadge(o));
-      a.push(`<button class="save" onclick="adv('${o.id}','ready')">✓ Mark ready ${supDelivers?'for delivery':'for pickup'}</button>`);
+      a.push(`<button class="save" onclick="adv('${o.id}','ready')">✓ Mark ready for pickup</button>`);
     }
     if(o.prepStatus==='ready'){
-      if(supDelivers){
-        const myDrv=TE.driversFor(mySup().id).filter(d=>d.active);
-        if(myDrv.length){
-          a.push(`<div class="note" style="margin:0 0 4px">Ready — now choose which of your drivers takes it:</div>`);
-          a.push(`<div style="display:flex;gap:8px;align-items:center;margin:4px 0">
-            <select id="supAsg_${o.id}" style="flex:1;background:#0F0E12;border:1px solid rgba(244,241,234,.14);border-radius:10px;color:#F4F1EA;padding:10px 12px;font-size:13.5px">
-              ${myDrv.map(d=>`<option value="${d.id}">🚚 ${d.name} · ${d.phone}</option>`).join('')}
-            </select>
-            <button class="save" style="width:auto;padding:10px 16px" onclick="supAssign('${o.id}')">Assign</button></div>`);
-          a.push(`<div style="color:var(--muted);font-size:11.5px;margin-top:4px;cursor:pointer" onclick="TE.setDeliveryBy('${o.id}',null);openOrder('${o.id}')">Changed your mind? Switch delivery method</div>`);
-        } else {
-          a.push(`<div class="note" style="margin:0 0 4px;color:#e0a050">No driver logins yet — create them in <b>Ready &amp; pickups → My delivery drivers</b>.</div>`);
-          a.push(`<button class="save" onclick="TE.supplierStartDelivery('${o.id}');openOrder('${o.id}')">🚚 Our driver took it (no app)</button>`);
-          a.push(`<button class="save alt" onclick="TE.setDeliveryBy('${o.id}','ali');openOrder('${o.id}')">↪ Send to ALI MUBARAK instead</button>`);
-        }
-      } else if(self){
-        a.push(dlvBadge(o));
-        a.push(`<div class="note" style="margin:0 0 4px">With the ALI MUBARAK team — their driver will collect it from you. Nothing else needed.</div>`);
-        a.push(`<button class="save alt" onclick="adv('${o.id}','picked')">Confirm handed to their driver</button>`);
-      } else {
-        a.push(`<div class="note" style="margin:0 0 4px">Driver notified — awaiting pickup in today's window (4–7 PM).</div>`);
-        a.push(`<button class="save alt" onclick="adv('${o.id}','picked')">Confirm handed to driver</button>`);
-      }
+      a.push(`<div class="note" style="margin:0 0 4px">✓ Ready. The <b>ALI MUBARAK team</b> is arranging the delivery — a driver will collect this order from you. Print the packing slip and keep it with the parcel.</div>`);
     }
     if(o.prepStatus==='picked'&&o.ship==='supplier'&&o.payStatus!=='delivered')a.push(`<button class="save" onclick="TE.supplierDelivered('${o.id}');openOrder('${o.id}')">✓ Delivered to the customer${o.pay==='cod'?' · cash collected':''}</button>`);
     if(o.prepStatus==='picked'&&o.ship==='supplier'&&o.payStatus==='delivered')a.push(`<div class="note" style="margin:0">✓ Delivered by your driver. ${o.pay==='cod'?'COD cash settles in your next payout.':''}</div>`);
@@ -465,7 +426,7 @@
         <label class="check"><input type="checkbox"> Boxed &amp; protected</label>
         <label class="check"><input type="checkbox"> Insert / authenticity card added</label>
         <label class="check"><input type="checkbox"> Order label ${o.id} attached</label></div>
-      ${(function(){const self=!!mySup().selfDelivery;const mine=(o.ship==='supplier');const tot=o.items.reduce((s,i)=>s+i.q*i.p,0)+(o.fee||0)-(o.giftUsed||0);
+      ${(function(){const self=false;const mine=false;const tot=o.items.reduce((s,i)=>s+i.q*i.p,0)+(o.fee||0)-(o.giftUsed||0);
         if(self&&(mine||o.prepStatus==='ready'||o.prepStatus==='picked'))return `
       <div class="ob" style="border-color:rgba(201,168,106,.45)"><h4>🚚 Deliver to (your contract includes delivery)</h4>
         <div class="kv"><span class="k">Customer</span><span>${o.name}</span></div>
@@ -490,7 +451,7 @@
   window.adv=(ref,st)=>{TE.setPrepStatus(ref,st);openOrder(ref);};
   window.reportIssue=(ref)=>{alert('Sends an alert to ALI MUBARAK that order '+ref+' has a problem (e.g. out of stock).');};
   window.printSlip=(ref)=>{const o=TE.state().orders.find(x=>x.id===ref);
-    const self=!!mySup().selfDelivery&&(o.ship==='supplier'||o.prepStatus==='ready'||o.prepStatus==='picked');
+    const self=false; // delivery details stay in the Driver app — slips are privacy-only
     const tot=o.items.reduce((s,i)=>s+i.q*i.p,0)+(o.fee||0)-(o.giftUsed||0);
     const deliverBlock=self?`
       <hr style="margin:14px 0">

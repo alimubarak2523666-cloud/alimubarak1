@@ -149,7 +149,7 @@
   </div>
 </div>
 
-<script src="theedit-data.js?v=9"></script>
+<script src="theedit-data.js?v=10"></script>
 <script>
   let me=null, regType='individual';
   const govPill=p=>`<span class="pill ${p}">${p==='cod'?'Cash on delivery':'Prepaid (link)'}</span>`;
@@ -237,13 +237,13 @@
     if(!me||document.getElementById('app').style.display==='none')return;
     const online=document.getElementById('onlineSw').classList.contains('on');
     const supDrv=me.owner&&me.owner!=='ali';
-    const avail=online?(supDrv?TE.availableForSupplierDriver(me.owner):TE.availableForDriver()):[];
+    const avail=online?(supDrv?[]:TE.availableForDriver()):[];  // supplier drivers receive assignments from ALI MUBARAK
     const mine=TE.driverOrders(me.id);
     // available
     const ids=avail.map(o=>o.id);
     if(seenAvail===null)seenAvail=new Set(ids);
     else{if(ids.some(id=>!seenAvail.has(id)))beep();ids.forEach(id=>seenAvail.add(id));}
-    document.getElementById('availList').innerHTML=avail.length?avail.map(availCard).join(''):`<div class="empty">${online?'No orders ready right now. They appear the moment a supplier marks one ready.':'You are offline. Go online to receive orders.'}</div>`;
+    document.getElementById('availList').innerHTML=avail.length?avail.map(availCard).join(''):`<div class="empty">${!online?'You are offline. Go online to receive orders.':(me.owner&&me.owner!=='ali')?'Deliveries assigned to you by ALI MUBARAK appear under My deliveries.':'No orders ready right now. They appear the moment a supplier marks one ready.'}</div>`;
     document.getElementById('availB').textContent=avail.length;
     // mine
     const active=mine.filter(o=>o.driverStatus!=='delivered');
