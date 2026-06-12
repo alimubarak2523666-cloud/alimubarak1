@@ -118,7 +118,7 @@
     // session is rendered in the store nav — keep it free of markup characters
     if(u&&u.name)u.name=String(u.name).replace(/</g,'\u2039').replace(/>/g,'\u203A').replace(/"/g,'\u201D');
     localStorage.setItem('theedit_user',JSON.stringify(u));}
-  function goStore(){setTimeout(()=>{location.href='store-experience-morph.html#price';},900);}
+  function goStore(){setTimeout(()=>{location.href='store-experience-morph.html';},900);}
 
   primary.onclick=()=>{
     const email=(document.getElementById('liEmail').value||'').trim().toLowerCase();
