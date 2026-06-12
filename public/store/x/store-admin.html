@@ -329,7 +329,7 @@
 
 <div class="overlay" id="custOverlay"><div class="drawer" id="custDrawer"></div></div>
 
-<script src="theedit-data.js?v=10"></script>
+<script src="theedit-data.js?v=11"></script>
 <script>
   const PAYLABEL={cod:'<span class="pill cod">Cash on delivery</span>',link:'<span class="pill link">Payment link</span>',paid:'<span class="pill paid">Paid online</span>'};
   const STLABEL={new:'<span class="pill new">New</span>',confirmed:'<span class="pill confirmed">Confirmed</span>',await:'<span class="pill await">Awaiting payment</span>',paid:'<span class="pill paid">Paid</span>',delivery:'<span class="pill delivery">Out for delivery</span>',delivered:'<span class="pill delivered">Delivered</span>'};
@@ -528,20 +528,32 @@
         <div class="kv"><span class="k">Delivery by</span><span>${o.ship==='supplier'?'🚚 Supplier\'s own driver':'ALI MUBARAK driver'}</span></div>
         <div class="kv"><span class="k">Driver status</span><span>${o.driverStatus}${o.driverId&&o.driverId!=='supplier'?(' · '+((TE.driverById(o.driverId)||{}).name||o.driverId)):''}</span></div>
         ${o.ship==='supplier'&&o.pay==='cod'?'<div class="note" style="margin:8px 0 0">COD cash is collected by the supplier — settle it in their next payout.</div>':''}
-        ${(o.ship!=='supplier'&&o.prepStatus==='ready'&&o.driverStatus==='unassigned')?`
-          <div style="margin-top:12px"><label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">Assign one of my drivers</label>
+        ${(function(){
+          if(o.ship==='supplier'&&o.driverStatus!=='unassigned')return '';
+          const sup=TE.state().suppliers.find(x=>x.id===(TE.productById((o.items[0]||{}).productId)||{}).supplier||x.productId===(o.items[0]||{}).productId);
+          const ali=TE.state().drivers.filter(d=>d.active&&(d.owner||'ali')==='ali');
+          const fleet=(sup&&sup.selfDelivery)?TE.state().drivers.filter(d=>d.active&&d.owner===sup.id):[];
+          const stat=d=>{const busy=TE.driverBusy(d.id);return d.online?(busy?'🟡 online · busy':'🟢 online · free'):'⚪ offline';};
+          const ready=(o.prepStatus==='ready'&&o.driverStatus==='unassigned');
+          if(!ready&&o.driverStatus==='unassigned'){
+            // PLANNING VIEW — visible while the supplier prepares; assignment unlocks at Ready
+            const li=d2=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(244,241,234,.06);font-size:12.5px"><span>${d2.name} <span style="color:var(--muted)">· ${d2.phone}</span></span><span>${stat(d2)}</span></div>`;
+            return `<div style="margin-top:12px;border:1px dashed rgba(201,168,106,.35);border-radius:12px;padding:12px">
+              <div style="font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px">🚚 DELIVERY PLANNING</div>
+              <div style="color:var(--muted);font-size:11.5px;margin-bottom:8px">Assignment unlocks when the supplier marks this order <b>ready for pickup</b>. Meanwhile — your pool right now:</div>
+              ${ali.map(li).join('')||'<div style="color:var(--muted);font-size:12px">No drivers yet — add them in the Drivers tab.</div>'}
+              ${fleet.length?`<div style="font-size:11px;color:var(--gold);margin-top:8px">${sup.name} fleet (contract)</div>`+fleet.map(li).join(''):''}
+            </div>`;
+          }
+          if(!ready)return '';
+          let h=ali.map(d2=>`<option value="${d2.id}">${d2.online?(TE.driverBusy(d2.id)?'🟡':'🟢'):'⚪'} ⛟ ALI MUBARAK — ${d2.name} · ${d2.phone} (${stat(d2)})</option>`).join('');
+          if(fleet.length)h+=fleet.map(d2=>`<option value="${d2.id}">${d2.online?(TE.driverBusy(d2.id)?'🟡':'🟢'):'⚪'} 🚚 ${sup.name} — ${d2.name} · ${d2.phone} (${stat(d2)})</option>`).join('');
+          return `<div style="margin-top:12px"><label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">✓ Ready for pickup — send it to a driver (🟢 = online &amp; free)</label>
           <div style="display:flex;gap:8px">
-          <select id="asgSel" style="flex:1;background:#0F0E12;border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-size:13.5px">
-            ${(function(){
-              const ali=TE.state().drivers.filter(d=>d.active&&(d.owner||'ali')==='ali');
-              const sup=TE.state().suppliers.find(x=>x.id===(TE.productById((o.items[0]||{}).productId)||{}).supplier||x.productId===(o.items[0]||{}).productId);
-              const fleet=(sup&&sup.selfDelivery)?TE.state().drivers.filter(d=>d.active&&d.owner===sup.id):[];
-              let h=ali.map(d=>`<option value="${d.id}">⛟ ALI MUBARAK — ${d.name} · ${d.phone}</option>`).join('');
-              if(fleet.length)h+=fleet.map(d=>`<option value="${d.id}">🚚 ${sup.name} — ${d.name} · ${d.phone}</option>`).join('');
-              return h||'<option value="">No active drivers</option>';})()}
-          </select>
-          <button class="btn sm" onclick="assignDrv('${o.id}')">Assign</button></div>
-          <div style="color:var(--muted);font-size:11.5px;margin-top:6px">Or leave it — any online driver can accept it from the pool.</div></div>`:''}
+          <select id="asgSel" style="flex:1;background:#0F0E12;border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-size:13.5px">${h||'<option value="">No active drivers</option>'}</select>
+          <button class="btn sm" onclick="assignDrv('${o.id}')">📲 Send to driver</button></div>
+          <div style="color:var(--muted);font-size:11.5px;margin-top:6px">The job lands in his Driver app with a sound. Or leave it — any online ALI driver can accept it from the pool.</div></div>`;
+        })()}
         </div>`;
     document.getElementById('orderDrawer').innerHTML=`
       <div class="dh"><h2>${o.id} &nbsp; ${STLABEL[o.payStatus]}</h2><button class="x" data-close>×</button></div>

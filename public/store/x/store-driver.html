@@ -149,7 +149,7 @@
   </div>
 </div>
 
-<script src="theedit-data.js?v=10"></script>
+<script src="theedit-data.js?v=11"></script>
 <script>
   let me=null, regType='individual';
   const govPill=p=>`<span class="pill ${p}">${p==='cod'?'Cash on delivery':'Prepaid (link)'}</span>`;
@@ -182,12 +182,12 @@
   };
   function ownerLabel(d){ if(!d.owner||d.owner==='ali') return d.type+' · ALI MUBARAK fleet';
     const sp=TE.state().suppliers.find(x=>x.id===d.owner); return (d.type||'driver')+' · '+(sp?sp.name:'supplier')+' fleet'; }
-  function enter(d){me=d;localStorage.setItem('theedit_driver',d.id);
+  function enter(d){me=d;localStorage.setItem('theedit_driver',d.id);TE.setDriverOnline(d.id,true);
     document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';
     document.getElementById('dName').textContent=d.name;document.getElementById('dType').textContent=ownerLabel(d);document.getElementById('dAv').textContent=(d.name[0]||'D').toUpperCase();
     refresh();}
-  document.getElementById('logout').onclick=()=>{me=null;localStorage.removeItem('theedit_driver');document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';};
-  document.getElementById('onlineSw').onclick=function(){this.classList.toggle('on');refresh();};
+  document.getElementById('logout').onclick=()=>{if(me)TE.setDriverOnline(me.id,false);me=null;localStorage.removeItem('theedit_driver');document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';};
+  document.getElementById('onlineSw').onclick=function(){this.classList.toggle('on');if(me)TE.setDriverOnline(me.id,this.classList.contains('on'));refresh();};
 
   // nav
   document.querySelectorAll('.tn').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tn').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById('s-'+t.dataset.s).classList.add('on');});
@@ -232,13 +232,16 @@
       function tone(at,f){const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f;o.connect(g);g.connect(actx.destination);const t=actx.currentTime+at;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.3,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.2);o.start(t);o.stop(t+0.22);}
       tone(0,760);tone(0.2,1010);}catch(e){}}
 
-  let seenAvail=null;
+  let seenAvail=null,seenMine=null;
   function refresh(){
     if(!me||document.getElementById('app').style.display==='none')return;
     const online=document.getElementById('onlineSw').classList.contains('on');
     const supDrv=me.owner&&me.owner!=='ali';
     const avail=online?(supDrv?[]:TE.availableForDriver()):[];  // supplier drivers receive assignments from ALI MUBARAK
     const mine=TE.driverOrders(me.id);
+    const mineIds=mine.filter(o=>o.driverStatus==='assigned').map(o=>o.id);
+    if(seenMine===null)seenMine=new Set(mineIds);
+    else{ if(mineIds.some(id=>!seenMine.has(id)))beep(); mineIds.forEach(id=>seenMine.add(id)); }
     // available
     const ids=avail.map(o=>o.id);
     if(seenAvail===null)seenAvail=new Set(ids);

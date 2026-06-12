@@ -235,6 +235,8 @@
     driversFor: (owner)=> state.drivers.filter(d=> (d.owner||'ali')===owner),
     supplierAddDriver: (supplierId, d)=>{ d.owner=supplierId; d.id="drv"+Date.now(); d.active=true; if(!d.pass)d.pass='0000'; state.drivers.unshift(d); save(); return d; },
     setDriverActive: (id,on)=>{ const d=state.drivers.find(x=>x.id===id); if(d){ d.active=!!on; save(); } },
+    setDriverOnline: (id,on)=>{ const d=state.drivers.find(x=>x.id===id); if(d){ d.online=!!on; d.onlineTs=Date.now(); save(); } },
+    driverBusy: (id)=> state.orders.some(o=> o.driverId===id && (o.driverStatus==='assigned'||o.driverStatus==='picked')),
     availableForSupplierDriver: (supplierId)=>{ const s=state.suppliers.find(x=>x.id===supplierId); if(!s||!s.selfDelivery) return [];
       return state.orders.filter(o=> o.prepStatus==="ready" && o.driverStatus==="unassigned" && o.items[0] && o.items[0].productId===s.productId); },
     setDeliveryBy: (orderId, who)=>{ const o=state.orders.find(x=>x.id===orderId); if(!o)return;
