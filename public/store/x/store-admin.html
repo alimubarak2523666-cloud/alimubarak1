@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ALI MUBARAK · The Edit — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{--bg:#0A090C;--panel:#141318;--panel2:#1B1A20;--ink:#FFFFFF;--muted:#9A968C;--line:rgba(255,255,255,.10);--gold:#C9A86A;--gold-2:#E7D3A6;--ok:#5BBF8A;--warn:#E0B450;--info:#7C9BE6;--bad:#E06A6A}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -81,7 +81,7 @@
   .sw.on{background:var(--gold)}.sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.sw.on::after{left:22px}
   .gov{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
   .gov .gh{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;background:var(--panel2);flex-wrap:wrap}
-  .gov .gname{font-size:15px;font-weight:600}.gov .gname .ar{color:var(--muted);font-weight:400;font-size:13px;margin-inline-start:8px}
+  .gov .gname{font-size:15px;font-weight:600}.gov .gname .ar{font-family:"IBM Plex Sans Arabic",sans-serif;color:var(--muted);font-weight:400;font-size:13px;margin-inline-start:8px}
   .gov .gprice{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .gov .gprice input{width:74px;height:34px;background:#0F0E12;border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:0 10px;font-size:14px;text-align:center}
   .gov .gprice input:focus{border-color:var(--gold);outline:none}
@@ -699,7 +699,7 @@
   function renderDelivery(){
     document.getElementById('deliveryBox').innerHTML=TE.GOV.map((g,gi)=>`
       <div class="gov"><div class="gh">
-        <div class="gname">${g.n}<span class="ar">${g.ar}</span></div>
+        <div class="gname">${g.n}<span class="ar" lang="ar" dir="rtl">${g.ar}</span></div>
         <div class="gprice"><span style="color:var(--muted);font-size:12px">Price</span>
           <input type="number" step="0.5" min="0" value="${TE.feeFor(g.n)}" onchange="TE.setDelivery('${g.n}',parseFloat(this.value)||0)">
           <span style="color:var(--muted);font-size:12px">KWD</span>
