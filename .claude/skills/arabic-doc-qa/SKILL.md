@@ -41,6 +41,7 @@ it fails, install `libreoffice-writer`). Exit code is 1 when any error is found.
 | `latin-punct` | warn | , ; ? beside Arabic | ، ؛ ؟ |
 | `spelling` | warn | unambiguous slips (الى→إلى، شركه→شركة، اهمية→أهمية) | fix |
 | `tatweel` | warn | stretched words (ـــ) | usually justification; switch to right alignment or fix kashida settings |
+| `unmapped` | info | shaped glyphs drawn fine but without Unicode mapping (typical LibreOffice export) | fine for print; for searchable PDFs export from Word or embed with ToUnicode; word-level checks are skipped on that page, so rely on the visual review |
 | `pre-shaped` | info | text stored as presentation forms | fine visually; search/copy/accessibility suffer |
 | `justified` | info | justified Arabic in Word | check for ugly kashida in the render |
 | `font-not-here` | info | font not installed on this machine | can't verify coverage; ensure the printer/recipient has it or embed |

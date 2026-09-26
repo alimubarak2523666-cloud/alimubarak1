@@ -110,6 +110,8 @@ def check_pdf(path, rep):
     for pno, page in enumerate(doc, 1):
         where = f"p.{pno}"
         tofu = 0
+        unmapped = 0
+        total_ar = 0
         pres = iso = 0
         try:
             traces = page.get_texttrace()
@@ -123,8 +125,11 @@ def check_pdf(path, rep):
                 if AR_ANY.search(c or "") or uni == 0xFFFD:
                     font_ar.setdefault(fname, 0)
                     font_ar[fname] += 1
-                    if gid == 0 or uni == 0xFFFD:
+                    total_ar += 1
+                    if gid == 0:          # .notdef glyph = the box actually drawn
                         tofu += 1
+                    elif uni == 0xFFFD:   # glyph drawn fine, but no Unicode mapping
+                        unmapped += 1
                 if 0xFB50 <= uni <= 0xFEFF:
                     pres += 1
                     if uni in _ISO:
@@ -137,7 +142,12 @@ def check_pdf(path, rep):
                 rep.add("error", "unjoined", f"{int(ratio*100)}% of Arabic letters are isolated forms — letters are not joined", where)
             else:
                 rep.add("info", "pre-shaped", "text stored as presentation forms (pre-shaped) — looks fine but search/copy/accessibility suffer", where)
+        if unmapped:
+            rep.add("info", "unmapped", f"{unmapped} shaped Arabic glyph(s) have no Unicode mapping — they display correctly but copy/search/screen readers get gaps (common with LibreOffice exports)", where)
         text = page.get_text()
+        if total_ar and unmapped / total_ar > 0.05:
+            # text layer too incomplete for word-level checks; rely on the visual review
+            continue
         words = AR_WORD.findall(text)
         all_words += words
         # unjoined letters also show up as long runs of single Arabic letters separated by spaces
