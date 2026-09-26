@@ -128,11 +128,19 @@ def add_par(container, text, font, size, bold=False, align=None, space_after=6, 
     return p
 
 
-def rtl_table(doc, cols):
-    t = doc.add_table(rows=1, cols=cols)
+def rtl_table(doc, widths_cm):
+    """Borderless table whose first column sits on the right. Widths are fixed on
+    the grid and on every cell; Word and LibreOffice ignore cell widths alone."""
+    t = doc.add_table(rows=1, cols=len(widths_cm))
     t.alignment = WD_TABLE_ALIGNMENT.CENTER
+    t.autofit = False
     tblPr = t._tbl.tblPr
     tblPr.append(_el("w:bidiVisual"))  # first column on the right
+    tblPr.append(_el("w:tblLayout", **{"w:type": "fixed"}))
+    for gc, w in zip(t._tbl.tblGrid.findall(qn("w:gridCol")), widths_cm):
+        gc.set(qn("w:w"), str(int(Cm(w).twips)))
+    for cell, w in zip(t.rows[0].cells, widths_cm):
+        cell.width = Cm(w)
     return t
 
 
@@ -158,9 +166,8 @@ def build(spec, out):
     sec._sectPr.append(_el("w:bidi"))
 
     # header: org (right) | ref + dates (left)
-    t = rtl_table(doc, 2)
+    t = rtl_table(doc, [9, 7])
     right, left = t.rows[0].cells
-    right.width, left.width = Cm(10), Cm(6)
     _clear(right); _clear(left)
     add_par(right, spec.get("org", ""), font, size, bold=True, space_after=0)
     if spec.get("org_line2"):
@@ -180,9 +187,8 @@ def build(spec, out):
     # addressee
     # "السيد/ … " on the right, "المحترم" pushed to the left end of the same line
     line = f"{spec.get('addressee_prefix', 'السيد/')} {spec['addressee']}".strip()
-    t = rtl_table(doc, 2)
+    t = rtl_table(doc, [12.5, 3.5])
     a_cell, s_cell = t.rows[0].cells
-    a_cell.width, s_cell.width = Cm(12.5), Cm(3.5)
     _clear(a_cell); _clear(s_cell)
     add_par(a_cell, line, font, size + 1, bold=True, space_after=0)
     if spec.get("addressee_org"):
@@ -208,7 +214,7 @@ def build(spec, out):
             align=WD_ALIGN_PARAGRAPH.CENTER, space_after=10)
 
     # signature on the left (end) side
-    t = rtl_table(doc, 2)
+    t = rtl_table(doc, [8, 8])
     _, sig = t.rows[0].cells
     _clear(sig)
     add_par(sig, spec.get("signer_name", ""), font, size, bold=True, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=0)

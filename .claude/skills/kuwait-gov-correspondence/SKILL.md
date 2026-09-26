@@ -29,7 +29,8 @@ Ask only for what is missing and can't be inferred:
 ## Structure (fixed order)
 
 1. Header: sender name (right) · الرقم / التاريخ (هجري) / الموافق (ميلادي) (left)
-2. Addressee: `السيد/ [المنصب] ... المحترم` (+ organisation line)
+2. Addressee: `السيد/ [المنصب] ... المحترم` (+ organisation line only when the position
+   doesn't already name the body — «وكيل وزارة الأشغال العامة» needs no second line)
 3. `السلام عليكم ورحمة الله وبركاته،` (centred)
 4. `الموضوع: …` (centred, bold, underlined) + `مناقصة رقم: …` if relevant
 5. `تحية طيبة وبعد،`
