@@ -73,10 +73,13 @@ a transform).
   set in `app/[locale]/layout.tsx`; keep it there, server-rendered, so there is
   no LTR flash. Copy lives in `messages/en.json` / `messages/ar.json`; keep
   keys identical in both and never translate ICU placeholders like `{amount}`.
-- **Fonts (Direction B — Cultured Gulf Executive):** English Playfair Display /
-  Inter; Arabic Noto Naskh Arabic (serif) / IBM Plex Sans Arabic (sans). Never
-  let Arabic fall back to Playfair or Inter — that produces fallback glyphs.
-  In the store, Reem Kufi is the Arabic display face.
+- **Arabic font: Cairo** for all new Arabic UI (Google Fonts,
+  `family=Cairo:wght@400;600;700`). English stays Playfair Display / Inter.
+  Never let Arabic fall back to Playfair or Inter. Note: alimubarak1.com's
+  locked tokens still load Noto Naskh Arabic / IBM Plex Sans Arabic, and the
+  store loads Reem Kufi / IBM Plex Sans Arabic — switching an existing page to
+  Cairo means changing its font link and CSS tokens, so do it deliberately and
+  check the render (Cairo runs taller; re-check line-height and button sizes).
 - **The Edit store** (`public/store/`) — plain HTML + inline CSS/JS, currently
   type C. Governorate names come from `theedit-data.js` (`GOV[].ar`).
 - **Kuwait formats:** phone `+965 XXXX XXXX` (8 digits) always `dir="ltr"`;

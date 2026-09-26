@@ -24,7 +24,7 @@ top-right, so the story, emphasis and order must start there).
 ```bash
 pip install python-pptx   # once
 python3 <skill-dir>/scripts/rtl_pptx.py audit IN.pptx                 # find problems
-python3 <skill-dir>/scripts/rtl_pptx.py fix IN.pptx OUT.pptx [--font "IBM Plex Sans Arabic"]
+python3 <skill-dir>/scripts/rtl_pptx.py fix IN.pptx OUT.pptx [--font "Cairo"]
 python3 <skill-dir>/scripts/rtl_pptx.py build outline.json OUT.pptx    # new deck
 ```
 
@@ -39,7 +39,7 @@ python3 <skill-dir>/scripts/rtl_pptx.py build outline.json OUT.pptx    # new dec
 ```json
 {
   "title": "…", "subtitle": "…", "presenter": "…",
-  "font": "IBM Plex Sans Arabic", "latin_font": "Inter",
+  "font": "Cairo", "latin_font": "Inter",
   "accent": "C9A86A", "ink": "1A1A1A", "background": "FFFFFF", "title_background": "0E0D11",
   "slides": [
     {"type": "bullets", "title": "…", "bullets": ["…"], "notes": "…"},
@@ -74,11 +74,12 @@ inside Arabic sentences, no □ boxes.
 - **Numbers inside Arabic sentences:** a signed or unit value (`+38%`,
   `-12%`, `3x`) inside an Arabic line can have its sign moved. Put it on its
   own line, or prefix with U+200E (LEFT-TO-RIGHT MARK) in the source text.
-- **Fonts:** body IBM Plex Sans Arabic (clean, corporate); headings Noto Naskh
-  Arabic for formal/government decks, Reem Kufi or Cairo for brand/marketing
-  decks. Latin: Inter. Avoid Arial/Calibri for Arabic — the result looks like
-  a template. If the recipient's machine won't have the font, say so and
-  export a PDF alongside.
+- **Fonts:** Ali's Arabic font is **Cairo** — use it for all Arabic, headings
+  (Bold) and body (Regular), in every deck unless Ali asks otherwise or a
+  brand skill (e.g. Koshari Bites) specifies its own. Latin: Inter. Avoid Arial/Calibri for Arabic — the result looks like
+  a template. Cairo is free (Google Fonts) but often not installed on
+  ministry/bank PCs — always send a PDF alongside the .pptx, or embed fonts
+  (PowerPoint: Options → Save → Embed fonts).
 - **Density:** Arabic runs ~20–25% longer than English. Cap bullets at ~4 per
   slide and ~12 words each; body ≥ 18pt; line spacing ≥ 1.2.
 - **Terminology:** English acronyms the audience uses (MPW, KBAD, C-UAS, EBITDA,

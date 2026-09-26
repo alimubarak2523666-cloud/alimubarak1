@@ -30,7 +30,7 @@ it fails, install `libreoffice-writer`). Exit code is 1 when any error is found.
 
 | Code | Level | Meaning | Usual fix |
 |---|---|---|---|
-| `tofu` | error | Arabic drawn with a missing glyph (□) | use a font with Arabic (IBM Plex Sans Arabic, Noto Naskh Arabic, Simplified Arabic, Amiri) and re-export |
+| `tofu` | error | Arabic drawn with a missing glyph (□) | use a font with Arabic — Cairo (Ali's font), or Noto Naskh Arabic / Amiri for book body text and re-export |
 | `unjoined` / `letters-apart` | error | letters not connected | the generator doesn't shape Arabic — export from Word/InDesign/LibreOffice, or shape properly; remove letter-spacing |
 | `reversed` | error | text stored backwards (common words appear mirrored) | the PDF was built without bidi — regenerate with a tool that handles RTL |
 | `latin-font` | error | Arabic set in Inter, Playfair, Calibri, etc. | set the complex-script font (Word: Font → Complex scripts) |

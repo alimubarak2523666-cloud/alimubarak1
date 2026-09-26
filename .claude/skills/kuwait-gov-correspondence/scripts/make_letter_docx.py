@@ -23,7 +23,7 @@ letter.json fields (all text in Arabic unless noted):
     attachments       optional list -> "المرفقات:"
     copies            optional list -> "نسخة إلى:"
     digits            "arabic" (١٢٣, default) or "western" for generated fields
-    font              default "Simplified Arabic"; size default 14; line_spacing default 1.0
+    font              default "Cairo" (Ali's Arabic font); size default 13; line_spacing default 0.9 for Cairo, else 1.0
 
 Requires: pip install python-docx hijridate
 """
@@ -111,7 +111,7 @@ def rtl_run(run, font, size, bold=False):
     return run
 
 
-LINE_SPACING = 1.0  # Arabic fonts (Naskh, Simplified Arabic) already carry a tall line gap
+LINE_SPACING = 1.0  # Arabic fonts (Cairo, Naskh) already carry a tall line gap
 
 
 def add_par(container, text, font, size, bold=False, align=None, space_after=6, underline=False, keep_next=False):
@@ -152,10 +152,11 @@ def _clear(cell):
 # ------------------------------------------------------------------ build
 
 def build(spec, out):
-    font = spec.get("font", "Simplified Arabic")
-    size = float(spec.get("size", 14))
+    font = spec.get("font", "Cairo")
+    size = float(spec.get("size", 13))
     global LINE_SPACING
-    LINE_SPACING = float(spec.get("line_spacing", LINE_SPACING))
+    # Cairo's built-in line gap is very tall; 0.9 keeps a one-page letter on one page
+    LINE_SPACING = float(spec.get("line_spacing", 0.9 if font == "Cairo" else LINE_SPACING))
     digits = spec.get("digits", "arabic")
 
     doc = Document()

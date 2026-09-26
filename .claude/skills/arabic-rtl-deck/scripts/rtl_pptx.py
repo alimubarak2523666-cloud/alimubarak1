@@ -9,7 +9,7 @@ the wrong end and Arabic falls back to a random font.
 
 Usage:
     python rtl_pptx.py audit IN.pptx
-    python rtl_pptx.py fix   IN.pptx OUT.pptx [--font "IBM Plex Sans Arabic"]
+    python rtl_pptx.py fix   IN.pptx OUT.pptx [--font "Cairo"]
     python rtl_pptx.py build OUTLINE.json OUT.pptx
 
 Requires: pip install python-pptx
@@ -28,7 +28,7 @@ from pptx.util import Emu, Pt
 
 ARABIC = re.compile(r"[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]")
 LATIN = re.compile(r"[A-Za-z]")
-DEFAULT_AR_FONT = "IBM Plex Sans Arabic"
+DEFAULT_AR_FONT = "Cairo"  # Ali's Arabic font
 DEFAULT_LATIN_FONT = "Inter"
 
 

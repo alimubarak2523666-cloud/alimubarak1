@@ -77,7 +77,7 @@ python3 <skill-dir>/scripts/make_letter_docx.py letter.json OUT.docx
 
 The JSON fields are documented at the top of the script. It handles:
 right-to-left section and paragraphs, Arabic complex-script font on every run
-(default Simplified Arabic 14 — standard in Kuwaiti government offices),
+(default **Cairo** 13 — Ali's Arabic font),
 header table with reference + Hijri (Umm al-Qura via hijridate) + Gregorian
 dates in day/month/year, «المحترم» at the line end, signature block on the
 left, attachments and copies, Arabic-Indic digits in body text while leaving
@@ -91,8 +91,11 @@ the `"hijri"` field.
 After generating: convert to PDF (`soffice --headless --convert-to pdf`) and
 look at the page before delivering — check the reference number isn't
 scrambled, المحترم sits at the left end, nothing spills onto a second page,
-and no □ boxes. Deliver the .docx (for letterhead printing and stamping) and
-mention the PDF preview.
+and no □ boxes. Deliver the .docx (for letterhead printing and stamping) **and the PDF**.
+Cairo is a free Google font that is usually not installed on government PCs:
+if the recipient opens the .docx without it, Word substitutes another font. So
+the PDF (fonts embedded) is what goes by email; the .docx is for Ali's office,
+which should have Cairo installed (fonts.google.com/specimen/Cairo).
 
 ## Templates
 
