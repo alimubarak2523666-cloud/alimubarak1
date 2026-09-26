@@ -60,7 +60,7 @@ answer changes safety, e.g. whether a payment really failed):
 | State | Structure | Example |
 |---|---|---|
 | Empty | what's missing + possible action | «سلتك فارغة» / «تصفّح الإصدار الحالي وأضف ما يعجبك» / [تسوّق الآن] |
-| Fixable error | what failed + cause + action | «رقم الهاتف غير مكتمل. أدخل ٨ أرقام بعد +965.» |
+| Fixable error | what failed + cause + action | «رقم الهاتف غير مكتمل. أدخل رقمًا من {digits} أرقام.» |
 | Success | what completed + next step | «تم استلام طلبك رقم ‎TE-1042‎. سنرسل لك تحديثات التوصيل عبر واتساب.» |
 | Pending | current state + honest expectation | «ننتظر تأكيد الدفع من البنك. لا تُعِد الدفع؛ سنحدّث حالة الطلب تلقائيًا.» |
 | Destructive | what will be deleted + consequence + explicit button | «حذف العنوان "المنزل"؟ لن يظهر في طلباتك القادمة.» [احذف العنوان] [إلغاء] |
@@ -69,6 +69,25 @@ answer changes safety, e.g. whether a payment really failed):
 
 («تم استلام» is fine for a single completed event; the rule is against «تم»
 chains in running text.)
+
+## Complete-screen checklist
+
+A screen is more than its obvious labels. When writing a whole screen or
+flow, include (as separate keys) whatever the UI will need:
+
+- heading per section, and helper/hint text under choices that aren't
+  self-explanatory (e.g. what "payment link" means)
+- placeholders for selects and inputs («اختر المحافظة»، «5XXX XXXX»)
+- required/optional markers («(اختياري)»)
+- for blocking or money-related errors: **title + message + action button**
+  as separate keys, not one long sentence
+- a primary button that names the result, plus a variant with the amount if
+  the design shows it («أكّد الطلب · {total} د.ك»)
+
+Keep direction-sensitive tokens out of translated sentences: put `+965`,
+amounts, order numbers and codes in placeholders (`{phonePrefix}`,
+`{amount}`) so the UI can wrap them in `<bdi>`. A literal «أدخل 8 أرقام بعد
++965.» can render with the plus sign on the wrong side.
 
 ## Workflow
 
