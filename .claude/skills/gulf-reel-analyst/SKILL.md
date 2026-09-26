@@ -19,22 +19,37 @@ post and writes a compact `bundle.md`: caption and metadata, song
 (Gemini), Arabic + English on-screen text (local OCR), a timeline of shots,
 and an overview image.
 
-One-time setup on Ali's machine (Python 3.10+, ffmpeg):
-```bash
-git clone https://github.com/Murtadha-Najem/claude-reel ~/.claude/skills/reel
-cd ~/.claude/skills/reel && pip install -r requirements.txt && python setup_models.py
-```
-- **Instagram cookies:** export with a browser extension while logged in to a
-  *secondary* account → `~/.config/reel/cookies.txt`. Never ask Ali to paste
-  cookie contents into chat.
-- **Gemini key** for speech: `GEMINI_API_KEY` (free tier is enough) or
-  `~/.config/reel/gemini_keys.txt`. Without it, speech is marked "not
-  transcribed" — say so; never invent what was said.
+One-time setup on Ali's computer — run `scripts/setup_reel.sh` in Terminal
+(macOS or Linux). It installs Python 3.10+ and ffmpeg (Homebrew), downloads
+claude-reel to `~/.claude/skills/reel`, installs its libraries into a private
+environment (`~/.claude/skills/reel/.venv`), downloads the audio model, asks
+for the **Gemini API key** (hidden input, checked with Google, saved to
+`~/.config/reel/gemini_keys.txt`, readable only by Ali) and installs the
+**Instagram cookies** file exported with the "Get cookies.txt LOCALLY" browser
+extension (moved to `~/.config/reel/cookies.txt`). Use a *secondary*
+Instagram account for the cookies.
 
-Run: `python ~/.claude/skills/reel/reel.py "<url>"` (add `--dense` when a
-product reveal or gesture matters, `--force-transcribe` if burned-in captions
-look incomplete). Read `bundle.md` fully, open the overview sheet, and use the
-`look.py` commands it prints for any unclear moment.
+```bash
+bash setup_reel.sh            # install or repair
+bash setup_reel.sh --check    # status only
+bash setup_reel.sh --test https://www.instagram.com/reel/XXXX/
+```
+
+Never ask Ali to paste the Gemini key or cookie contents into chat — the
+script handles both locally. Before a run, `bash setup_reel.sh --check` tells
+you what's missing; if cookies are rejected ("Instagram refused the cookies"),
+they've expired — ask Ali to export them again and rerun the script. Without a
+Gemini key, speech is marked "not transcribed" — say so; never invent what was
+said.
+
+Run (always with the engine's own Python):
+```bash
+~/.claude/skills/reel/.venv/bin/python ~/.claude/skills/reel/reel.py "<url>"
+```
+Add `--dense` when a product reveal or gesture matters, `--force-transcribe`
+if burned-in captions look incomplete. Read `bundle.md` fully, open the
+overview sheet, and use the `look.py` commands it prints (with the same
+Python) for any unclear moment.
 
 ## When the engine isn't available
 
