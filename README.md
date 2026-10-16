@@ -62,3 +62,23 @@ Drop these files into `/public/` before the live build will look complete:
 - `ali-portrait-formal-en.jpg` — formal navy suit portrait, hand-on-chin
 - `ali-portrait-warm-ar.jpg` — warm Khaleeji portrait with yellow boutonnière
 - `book-cover.jpg` — *Get Married with the Government* cover artwork (use AS-IS, do not recolor)
+
+## iOS app (Capacitor)
+
+The `ios/` folder is a native Xcode project that wraps the live site
+(`https://alimubarak1.com`) in a WebView. The site needs middleware and
+Netlify functions, so it is loaded remotely rather than bundled.
+`mobile/www/index.html` is the offline fallback page.
+
+On a Mac with Xcode installed:
+
+```bash
+npm install
+npm run ios:sync   # copies config + fallback page into the Xcode project
+npm run ios:open   # opens ios/App in Xcode
+```
+
+In Xcode: select the **App** target → Signing & Capabilities → choose your
+Team, pick a simulator or your iPhone, and press Run. Settings live in
+`capacitor.config.ts` (bundle ID `com.alimubarak1.app`); re-run
+`npm run ios:sync` after changing it.
