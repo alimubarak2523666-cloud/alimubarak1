@@ -4,7 +4,7 @@ A single-page tool for making thumbnails and covers for YouTube, Instagram and T
 
 ## How to use it
 
-1. **Type a request** like `YouTube video: 5 mistakes that kill small businesses in Kuwait, red warning style` and press **Build from request**. The engine picks the platform, layout, colors and the big words from what you typed. Arabic requests produce Arabic, right-to-left thumbnails.
+1. **Type a request** like `YouTube video: 5 mistakes that kill small businesses in Kuwait, red warning style` and press **Build from request**. The engine picks the platform, layout, colors and the big words from what you typed. Arabic requests produce Arabic, right-to-left thumbnails set in the Cairo font.
 2. When it runs inside Claude, **Ask Claude for 3 ideas** returns three different concepts. Click one to apply it.
 3. Adjust the words, colors, font and photo. Upload your own photo; a cut-out PNG with a transparent background gets a white sticker outline.
 4. Turn on **Show platform buttons & crops** to see what YouTube, TikTok and Instagram cover or crop.

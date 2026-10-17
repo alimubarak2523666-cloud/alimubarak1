@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Cairo:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;500;600;700&family=Lalezar&family=Montserrat:wght@600;800;900&family=Noto+Naskh+Arabic:wght@700&family=Playfair+Display:ital,wght@0,600;0,800;1,800&family=Tajawal:wght@500;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;500;600;700&family=Lalezar&family=Montserrat:wght@600;800;900&family=Noto+Naskh+Arabic:wght@700&family=Playfair+Display:ital,wght@0,600;0,800;1,800&family=Tajawal:wght@500;800;900&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 /* Layout: a two-pane studio — controls on the left, a dark "monitor" stage on the right, playbook underneath. Brand: emerald / cream / gold (Direction B). */
@@ -11,8 +11,8 @@
   --emerald:#0e4a3e; --emerald-soft:#e3efe9; --gold:#a17b3a; --gold-soft:#f3e8d2;
   --stage:#121a17; --stage-ink:#e9e3d4; --stage-line:#26332e;
   --good:#1f7a4d; --warn:#a86a00; --bad:#b3261e;
-  --display:"Playfair Display", Georgia, "Noto Naskh Arabic", serif;
-  --body:"Inter", "IBM Plex Sans Arabic", "Helvetica Neue", Arial, sans-serif;
+  --display:"Playfair Display", Georgia, "Cairo", serif;
+  --body:"Inter", "Cairo", "Helvetica Neue", Arial, sans-serif;
   --radius:10px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
@@ -382,7 +382,7 @@ const FONTS = {
   montserrat:{label:"Montserrat Black",            fam:'"Montserrat","Cairo","Arial Black",sans-serif',  w:900, lh:1.1,  upper:false},
   playfair:  {label:"Playfair — editorial serif",  fam:'"Playfair Display","Noto Naskh Arabic",Georgia,serif',w:800,lh:1.12,upper:false},
   lalezar:   {label:"Lalezar — Arabic display",    fam:'"Lalezar","Cairo",sans-serif',                   w:400, lh:1.4,  upper:false},
-  cairo:     {label:"Cairo Black — Arabic",        fam:'"Cairo",sans-serif',                             w:900, lh:1.38, upper:false},
+  cairo:     {label:"Cairo — Arabic (default)",        fam:'"Cairo",sans-serif',                             w:900, lh:1.38, upper:false},
   tajawal:   {label:"Tajawal — Arabic clean",      fam:'"Tajawal",sans-serif',                           w:900, lh:1.38, upper:false},
   naskh:     {label:"Noto Naskh — Arabic serif",   fam:'"Noto Naskh Arabic",serif',                      w:700, lh:1.5,  upper:false},
 };
@@ -417,6 +417,7 @@ const EXAMPLES = [
 const KEY = "thumbEngine.v1";
 let S = structuredClone(DEFAULTS);
 try { const saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) S = {...S, ...saved, colors:{...S.colors, ...(saved.colors||{})}}; } catch(e) {}
+if (S.lang==="ar" && S.font==="lalezar") S.font="cairo";
 const IMG = { sample:null, upload:null, uploadCut:false, bg:null };
 const $ = id => document.getElementById(id);
 
@@ -434,8 +435,8 @@ function photo(){ return S.photo==="none" ? null : (S.photo==="upload" ? IMG.upl
 function photoCut(){ return S.photo==="upload" && IMG.uploadCut; }
 function fontOf(role){
   const ar = S.lang==="ar";
-  if (role==="serif") return ar ? FONTS.naskh : FONTS.playfair;
-  if (role==="ui") return {fam: ar ? '"IBM Plex Sans Arabic","Inter",sans-serif' : '"Inter","IBM Plex Sans Arabic",sans-serif', w:600, lh:1.25, upper:false};
+  if (role==="serif") return ar ? {...FONTS.cairo, w:800} : FONTS.playfair;
+  if (role==="ui") return {fam: ar ? '"Cairo","Inter",sans-serif' : '"Inter","Cairo",sans-serif', w:ar?700:600, lh:1.25, upper:false};
   const f = FONTS[S.font] || FONTS.anton;
   return f;
 }
@@ -480,6 +481,7 @@ function fitText(ctx, text, box, f, opt={}){
 /* Draw fitted lines. style: fill, accent, stroke, strokeW, shadow, band, bandFg, accentBand, align, rtl, italicAccent */
 function drawLines(ctx, fit, x, y, w, f, st){
   const acc = accentSet(); const rtl = S.lang==="ar";
+  if(rtl) st={...st, italicAccent:false};
   const align = st.align || (rtl ? "right" : "left");
   ctx.save(); ctx.textBaseline="middle"; ctx.lineJoin="round"; ctx.miterLimit=2;
   fit.lines.forEach((lineWords,i)=>{
@@ -882,7 +884,7 @@ function buildControls(){
 function setLang(l,user){
   S.lang=l;
   const arFont=["lalezar","cairo","tajawal","naskh"].includes(S.font);
-  if(l==="ar" && !arFont) S.font="lalezar";
+  if(l==="ar") S.font="cairo";
   if(l==="en" && arFont) S.font="anton";
   if(user && l==="ar" && !isAr(S.headline)){ S.headline="أكبر ٥ أخطاء"; S.accent="أخطاء"; S.sub="المشاريع الصغيرة في الكويت"; S.badge="شاهد أولاً"; S.title="ليش أغلب المشاريع الصغيرة في الكويت تسكر بأول سنة؟"; }
   if(user && l==="en" && isAr(S.headline)){ const d=DEFAULTS; Object.assign(S,{headline:d.headline,accent:d.accent,sub:d.sub,badge:d.badge,title:d.title}); }
@@ -909,7 +911,7 @@ function loadFile(file,cb){ if(!file) return; const url=URL.createObjectURL(file
 function hasAlpha(img){ try{ const c=document.createElement("canvas"); c.width=64; c.height=64; const x=c.getContext("2d"); x.drawImage(img,0,0,64,64); const d=x.getImageData(0,0,64,64).data; let t=0; for(let i=3;i<d.length;i+=4) if(d[i]<20) t++; return t>64*64*.08; }catch(e){ return false; } }
 function loadFonts(){
   const fams=[`400 80px "Anton"`,`400 80px "Bebas Neue"`,`400 80px "Archivo Black"`,`900 80px "Montserrat"`,`800 80px "Playfair Display"`,`italic 800 80px "Playfair Display"`,`600 40px "Inter"`,`700 40px "Inter"`,`800 40px "Inter"`];
-  const arf=[`400 80px "Lalezar"`,`900 80px "Cairo"`,`900 80px "Tajawal"`,`700 80px "Noto Naskh Arabic"`,`600 40px "IBM Plex Sans Arabic"`];
+  const arf=[`600 40px "Cairo"`,`700 40px "Cairo"`,`800 80px "Cairo"`,`900 80px "Cairo"`,`400 80px "Lalezar"`,`900 80px "Tajawal"`,`700 80px "Noto Naskh Arabic"`,`600 40px "IBM Plex Sans Arabic"`];
   const list=S.lang==="ar"?[...fams,...arf]:fams;
   return Promise.all(list.map(f=>document.fonts.load(f, S.lang==="ar"?"أب":"AB").catch(()=>{}))).then(()=>{});
 }
